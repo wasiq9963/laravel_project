@@ -48,14 +48,14 @@
           for( response.result )
           {
               console.log(response.result[i].product_name);
-              /*html = '<div class="card" style="width: 18rem;">';
+              html = '<div class="card" style="width: 18rem;">';
               html +='<img class="card-img-top" src={{URL::to('/')}}/images/'+responce.result[i].image+' alt="Card image cap">';
               html +='<div class="card-body">';
               html += '<h5 class="card-title">'+ responce.result[i].product_name +'</h5>';
               html +='<p class="card-text">Price:<b>'+ responce.result[i].price +'</b></p>';
               html +='<a href="#" class="btn btn-dark">Add To Card</a>';
-              html +='</div> </div>';*/
-              html = '<h1>'+response.result[i].product_name+'</h1>';
+              html +='</div> </div>';
+              //html = '<h1>'+response.result[i].product_name+'</h1>';
               $('#card').html(html);
 
             }
