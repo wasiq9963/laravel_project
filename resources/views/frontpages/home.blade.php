@@ -17,7 +17,7 @@
 </div>
 <h1 class="text-center">Products</h1>
 
-<div class="row" id="card" >
+<div class="row my-lg-5 mb-5" id="card" >
 
 </div>
 @section('javascript')
@@ -52,7 +52,7 @@
               //console.log(response.result[i].product_name);
               html += '<div class="col-md-4">';
               html += '<div class="card" style="width: 18rem;">';
-              html +='<img class="card-img-top" src={{URL::to('/')}}/images/'+response.result[i].image+' width="100%" heigth="100%" class="img-thumbnail">';
+              html +='<img class="card-img-top" src={{URL::to('/')}}/images/'+response.result[i].image+' alt="Card image" style="width:100%">';
               html +='<div class="card-body">';
               html += '<h5 class="card-title">'+ response.result[i].product_name +'</h5>';
               html +='<p class="card-text">Price:<b>'+ response.result[i].price +'</b></p>';
