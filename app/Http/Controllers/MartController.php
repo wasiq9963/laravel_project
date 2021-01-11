@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Category;
 use App\Product;
-
+use App\Brand;
+use DB;
 class MartController extends Controller
 {
     public function index(Request $req)
@@ -31,6 +32,17 @@ class MartController extends Controller
                 $products = Product::all();
                 return response()->json(['result' => $products]);
             }
+        }
+    }
+    public function singleproduct(Request $req)
+    {
+        if($req -> ajax())
+        {
+            $id = $req->get('id');
+            $singlepro = DB::table('products')
+            ->join('categories','products.category_id','categories.id')
+            ->join('brands','products.b_id','brands.brand_id')->where('pro_id',$id)->first();
+            return response()->json(['result' => $singlepro]);
         }
     }
 }
