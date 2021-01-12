@@ -156,3 +156,4 @@ Route::get('/customer/map/search','CustomerController@fetchmapsearch');
 Route::get('/mart','MartController@index');
 Route::get('/mart/product','MartController@products');
 Route::get('/mart/singlproduct','MartController@singleproduct');
+Route::get('/mart/add-to-cart','MartController@addtocart');

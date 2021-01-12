@@ -45,4 +45,9 @@ class MartController extends Controller
             return response()->json(['result' => $singlepro]);
         }
     }
+    public function addtocart(Request $req)
+    {
+        
+        dd('hello');
+    }
 }

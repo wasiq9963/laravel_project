@@ -16,11 +16,18 @@
   <div class="col-md-6"></div>
 </div>
 <h1 class="text-center">Products</h1>
-
-<div class="row my-lg-5 mb-5" id="card" >
-
+<div class="row">
+  <div class="col-md-12">
+    <div class="row">
+      <div class="col-md-9">
+        <div class="row" id="card" >
+        </div>
+      </div>
+      <div class="col-md-3" style="background-color: #000">
+      </div>
+    </div>
+  </div>
 </div>
-
 <!-- -----------view Detail MODEL START---------- -->
 <div class="modal fade" id="viewdetailemodal">
   <div class="modal-dialog modal-lg">
@@ -103,12 +110,12 @@
           for( i=0; i<len; i++)
           {
               //console.log(response.result[i].product_name);
-              html += '<div class="col-md-4"  style="padding:0px">';
-              html += '<div class="card" style="width: 18rem;">';
-              html +='<a href="#"><img class="card-img-top imgclick" id="'+response.result[i].pro_id+'" src={{URL::to('/')}}/images/'+response.result[i].image+' alt="Card image" width:"30%" ></a>';
+              html += '<div class="col-md-4 col-sm-4" style="width:100%;padding-bottom: 10px;">';
+              html += '<div class="card" style="width:100%">';
+              html +='<a href="#"><img class="card-img-top imgclick" id="'+response.result[i].pro_id+'" src={{URL::to('/')}}/images/'+response.result[i].image+' alt="Card image" width:"100%" height="250px"></a>';
               html +='<div class="card-body">';
               html +='<input type="hidden" name="did" id="did" value="'+response.result[i].pro_id+'">'
-              html +='<button type="button" id="'+response.result[i].pro_id+'" class="btn btn-dark btn-block btncard">Add To Card</button> ';
+              html +='<button type="button" id="'+response.result[i].pro_id+'" class="btn btn-dark btncard">Add To Card</button> ';
              // html +='<button type="button" id="'+response.result[i].pro_id+'" class="btn btn-primary btn-sm viewdetail">View Detail</button>';
               html +='</div> </div> </div>';
              // html = '<h1>'+response.result[i].product_name+'</h1>';
@@ -121,6 +128,7 @@
       });
       
     }
+    //single product work
   $(document).on('click','.imgclick',function(){
 
    var id = $(this).attr('id');
@@ -139,10 +147,20 @@
       }
     });
   });
+  //card work
   $(document).on('click','.btncard',function(){
 
     var id = $(this).attr('id');
-    alert(id);
+    
+    $.ajax({
+      url: '/mart/add-to-cart',
+      data: {id:id},
+      datatype: 'json',
+      success:function()
+      {
+        alert('ok');
+      }
+    });
   })
 });
 </script>
