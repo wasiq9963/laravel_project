@@ -19,11 +19,42 @@
 <div class="row">
   <div class="col-md-12">
     <div class="row">
-      <div class="col-md-9">
+      <div class="col-md-8">
         <div class="row" id="card" >
         </div>
       </div>
-      <div class="col-md-3" style="background-color: #000">
+      <div class="col-md-4" >
+       
+        <table class="table table-info table-striped">
+          <tr>
+            <th>S.no</th>
+            <th>Item Name</th>
+            <th>Price</th>
+            <th>Qty</th>
+            <th>Action</th>
+          </tr>
+
+          <?php 
+              $i =1;?>
+              @foreach ($result as $item)
+              <tr>
+                <td>{{$i++}}</td>
+                <td>{{$item -> name}}</td>
+                <td id="result"></td> <input type="hidden" id="price" class="form-control" value="{{$item -> price}}">
+                <td><input type="number" min="1" id="qty" class="form-control" value="{{$item -> quantity}}">
+                </td>
+                <td>
+                  <button type="button" id="{{$item -> id}}" class="btn text-primary btn-sm edit"><i class="fa fa-pencil"></i></button>
+                  <button type="button" id="{{$item -> id}}" class="btn text-danger btn-sm remove"><i class="fa fa-remove"></i></button>
+                </td>
+              </tr>
+              @endforeach
+              <tr class="bt-primary">
+                <td colspan="2">Total Items: <span id="result"></span></td>
+                <td colspan="3">Total Amount:</td>
+              </tr>
+        </table>
+            
       </div>
     </div>
   </div>
@@ -112,7 +143,7 @@
               //console.log(response.result[i].product_name);
               html += '<div class="col-md-4 col-sm-4" style="width:100%;padding-bottom: 10px;">';
               html += '<div class="card" style="width:100%">';
-              html +='<a href="#"><img class="card-img-top imgclick" id="'+response.result[i].pro_id+'" src={{URL::to('/')}}/images/'+response.result[i].image+' alt="Card image" width:"100%" height="250px"></a>';
+              html +='<a href="#"><img class="card-img-top imgclick" id="'+response.result[i].pro_id+'" src={{URL::to('/')}}/images/'+response.result[i].image+' alt="Card image" width:"100px" height="100px"></a>';
               html +='<div class="card-body">';
               html +='<input type="hidden" name="did" id="did" value="'+response.result[i].pro_id+'">'
               html +='<button type="button" id="'+response.result[i].pro_id+'" class="btn btn-dark btncard">Add To Card</button> ';
@@ -156,12 +187,61 @@
       url: '/mart/add-to-cart',
       data: {id:id},
       datatype: 'json',
-      success:function()
+      success:function(data)
       {
-        alert('ok');
+        alert(data.result);
       }
     });
-  })
+  });
+
+  //get cart items
+  $.ajax({
+      url: '/mart/get-cart-items',
+      datatype: 'json',
+      success:function(data)
+      {
+        var len = 0;
+        console.log(data.result)
+      }
+    });
+
+    //remove cart
+    $(document).on('click','.remove',function(){
+
+    var id = $(this).attr('id');
+    $.ajax({
+      url: '/mart/remove-cart',
+      data: {id:id},
+      datatype: 'json',
+      success:function(data)
+      {
+        alert(data.result);
+      }
+    });
+});
+
+//price qty calculation
+$(document).on('input','#qty',function(){
+var price;
+var qty;
+price = parseFloat($('#price').val());
+qty = parseFloat($('#qty').val());
+cartcalculation(price,qty);
+
+});
+cartcalculation();
+function cartcalculation(price = '', qty = '')
+{
+  var price;
+  var qty;
+  price = parseFloat($('#price').val());
+  qty = parseFloat($('#qty').val());
+
+var demoResult = price * qty;
+console.log(demoResult);
+$('#result').text(demoResult);
+}
+
 });
 </script>
 

@@ -8,12 +8,14 @@ use App\Category;
 use App\Product;
 use App\Brand;
 use DB;
+use Cart;
 class MartController extends Controller
 {
     public function index(Request $req)
     {
         $categories = Category::all();
-        return view('frontpages.home',['categories' => $categories]);
+        $cartcontent = Cart::getContent();
+        return view('frontpages.home',['categories' => $categories,'result' => $cartcontent]);
     }
 
     public function products(Request $req)
@@ -47,7 +49,38 @@ class MartController extends Controller
     }
     public function addtocart(Request $req)
     {
-        
-        dd('hello');
+        $sessionid = Session()->getId();
+        if ($req -> ajax())
+        {
+            $id = $req->get('id');
+            $product = Product::where('pro_id',$id)->first();
+            $cart = Cart::add([
+                        'id' => $product-> pro_id, 
+                        'name' => $product-> product_name, 
+                        'price' => $product->price,
+                        'quantity' => 1,
+                        ]);
+            return response()->json(['result' => 'done']);
+        }
+    }
+    public function getcartitems(Request $req)
+    {
+        if($req -> ajax())
+        {
+            $sessionid = Session()->getId();
+            $cartcontent = Cart::session($sessionid)->getContent();
+            $count = $cartcontent->count();
+            return response()->json(['result' => $cartcontent,'count' => $count]);
+        }
+    }
+    public function removecart(Request $req)
+    {
+        if ($req -> ajax())
+        {
+            $sessionid = Session()->getId();
+            $id = $req->get('id');
+            Cart::session($sessionid)->remove(5);
+            return response()->json(['result' => 'Remove']);
+        }
     }
 }

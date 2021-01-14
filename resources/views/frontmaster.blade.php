@@ -28,7 +28,7 @@
   </nav>
 
   
-<div class="container" style="margin-top:50px">
+<div class="" style="margin:50px">
   @yield('maincontent')
 </div>
 
