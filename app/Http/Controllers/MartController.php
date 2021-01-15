@@ -53,13 +53,17 @@ class MartController extends Controller
         if ($req -> ajax())
         {
             $id = $req->get('id');
+            $i = 0;
             $product = Product::where('pro_id',$id)->first();
             $cart = Cart::add([
-                        'id' => $product-> pro_id, 
+                        'id' => $i,
+                        'pid' => $product-> pro_id, 
                         'name' => $product-> product_name, 
                         'price' => $product->price,
                         'quantity' => 1,
                         ]);
+
+                        //dd(Cart::getContent());
             return response()->json(['result' => 'done']);
         }
     }
@@ -68,9 +72,9 @@ class MartController extends Controller
         if($req -> ajax())
         {
             $sessionid = Session()->getId();
-            $cartcontent = Cart::session($sessionid)->getContent();
+            $cartcontent = Cart::getContent();
             $count = $cartcontent->count();
-            return response()->json(['result' => $cartcontent,'count' => $count]);
+            return response()->json(['result' => $cartcontent]);
         }
     }
     public function removecart(Request $req)
@@ -79,8 +83,23 @@ class MartController extends Controller
         {
             $sessionid = Session()->getId();
             $id = $req->get('id');
-            Cart::session($sessionid)->remove(5);
+            Cart::remove($id);
             return response()->json(['result' => 'Remove']);
+        }
+    }
+    public function updatecart(Request $req)
+    {
+        if ($req -> ajax())
+        {
+            $id = $req->get('id');
+            $qty = $req->get('qty');
+            Cart::update($id,[
+                'quantity' => array(
+                    'relative' => false,
+                    'value' => $qty,
+                )
+            ]);
+            return response()->json(['result' => 'Cart Updated']);
         }
     }
 }

@@ -159,3 +159,4 @@ Route::get('/mart/singlproduct','MartController@singleproduct');
 Route::get('/mart/add-to-cart','MartController@addtocart');
 Route::get('/mart/get-cart-items','MartController@getcartitems');
 Route::get('/mart/remove-cart','MartController@removecart');
+Route::get('/mart/update-cart','MartController@updatecart');

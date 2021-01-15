@@ -36,23 +36,37 @@
 
           <?php 
               $i =1;?>
+              @if (Cart::getcontent()->count() != 0)
               @foreach ($result as $item)
               <tr>
                 <td>{{$i++}}</td>
                 <td>{{$item -> name}}</td>
-                <td id="result"></td> <input type="hidden" id="price" class="form-control" value="{{$item -> price}}">
-                <td><input type="number" min="1" id="qty" class="form-control" value="{{$item -> quantity}}">
+                <td>{{Cart::get($item -> id)->getPriceSum()}}</td><input type="hidden" id="price" class="form-control" value="{{$item -> price}}">
+                <td>
+                  <div class="input-group mb-3">
+                    <input type="number" min="1" name="qty" id="qty{{$item -> id}}" class="form-control " value="{{$item -> quantity}}">
+                    <div class="input-group-append">
+                      <span ><button type="button" id="{{$item -> id}}" class="btn text-primary btn-sm update"><i class="fa fa-pencil"></i></button></span>
+                    </div>
+                  </div>
+
+                </span>
                 </td>
                 <td>
-                  <button type="button" id="{{$item -> id}}" class="btn text-primary btn-sm edit"><i class="fa fa-pencil"></i></button>
                   <button type="button" id="{{$item -> id}}" class="btn text-danger btn-sm remove"><i class="fa fa-remove"></i></button>
                 </td>
               </tr>
               @endforeach
               <tr class="bt-primary">
-                <td colspan="2">Total Items: <span id="result"></span></td>
-                <td colspan="3">Total Amount:</td>
+                <td colspan="3">Total Items: <b>{{Cart::getContent()->count()}}</b> <br>
+                  Total Quantity: <b>{{Cart::getTotalQuantity()}}</b>
+                </td>
+                <td colspan="2">Total Amount: <b>{{Cart::getTotal()}}</b></td>
               </tr>
+              @endif
+              @if (Cart::getcontent()->count() == 0)
+                  <td colspan="5" class="text-danger text-center">Cart is Empty</td>
+              @endif
         </table>
             
       </div>
@@ -81,7 +95,7 @@
                   <h1 id="proname"></h1>
                     <div class="caption">
 
-                     <h4 id="price"></h4>
+                     <h4 id="proprice"></h4>
                     </div>
                     <div class="d-sm-flex justify-content-between">
                         <div class="occasional">
@@ -171,7 +185,7 @@
       {
         $('#image').attr('src','{{URL::to('/')}}/images/'+data.result.image);
         $('#proname').text(data.result.product_name);
-        $('#price').text('Rs: '+data.result.price);
+        $('#proprice').text('Rs: '+data.result.price);
         $('#catname').text(data.result.category_name);
         $('#brandname').text(data.result.brand_name);
         $('#viewdetailemodal').modal('show');
@@ -201,12 +215,11 @@
       success:function(data)
       {
         var len = 0;
-        console.log(data.result)
-      }
-    });
+        console.log(data.count)      }
+  });
 
     //remove cart
-    $(document).on('click','.remove',function(){
+  $(document).on('click','.remove',function(){
 
     var id = $(this).attr('id');
     $.ajax({
@@ -218,10 +231,27 @@
         alert(data.result);
       }
     });
-});
+  });
+
+  //update cart
+  $(document).on('click','.update',function(){
+
+  var id = $(this).attr('id');
+  var qty = $('#qty'+id).val();
+    $.ajax({
+      url: '/mart/update-cart',
+      data: {id:id, qty:qty},
+      datatype: 'json',
+      success:function(data)
+      {
+        alert(data.result);
+      }
+    });
+  });
+
 
 //price qty calculation
-$(document).on('input','#qty',function(){
+/*$(document).on('input','#qty',function(){
 var price;
 var qty;
 price = parseFloat($('#price').val());
@@ -240,7 +270,7 @@ function cartcalculation(price = '', qty = '')
 var demoResult = price * qty;
 console.log(demoResult);
 $('#result').text(demoResult);
-}
+}*/
 
 });
 </script>
