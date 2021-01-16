@@ -24,15 +24,34 @@ class MartController extends Controller
         if ($req -> ajax())
         {
             $id = $req->get('data');
+            $query = $req->get('query');
             if ($id != '')
             {
-                $products = Product::where('category_id', $id)->get();
-                return response()->json(['result' => $products]);
+                if ($query !='') 
+                {
+                    $products = Product::where('category_id', $id)->
+                    orwhere('product_name','LIKE', '%'.$query.'%')->get();
+                    return response()->json(['result' => $products]);
+                }
+                else
+                {
+                    $products = Product::where('category_id', $id)->get();
+                    return response()->json(['result' => $products]);
+                }
+                
             }
             else
             {
-                $products = Product::all();
-                return response()->json(['result' => $products]);
+                if ($query != '')
+                {
+                    $products = Product::where('product_name','LIKE', '%'.$query.'%')->get();
+                    return response()->json(['result' => $products]);
+                }
+                else
+                {
+                    $products = Product::all();
+                    return response()->json(['result' => $products]);
+                }
             }
         }
     }
@@ -56,8 +75,8 @@ class MartController extends Controller
             $i = 0;
             $product = Product::where('pro_id',$id)->first();
             $cart = Cart::add([
-                        'id' => $i,
-                        'pid' => $product-> pro_id, 
+                        //'id' => $i,
+                        'id' => $product-> pro_id, 
                         'name' => $product-> product_name, 
                         'price' => $product->price,
                         'quantity' => 1,

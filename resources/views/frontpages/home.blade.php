@@ -2,19 +2,6 @@
 @extends('frontmaster')
 @section('maincontent')
     
-<div class="row">
-  <div class="col-md-6">
-    <br>
-    <h3>Categories</h3>
-            <select name="category" id="category" class="form-control">
-            <option value="">Select Category</option>
-            @foreach ($categories as $item)
-                <option value="{{$item -> id}}">{{$item -> category_name}}</option>
-            @endforeach
-        </select>
-  </div>
-  <div class="col-md-6"></div>
-</div>
 <h1 class="text-center">Products</h1>
 <div class="row">
   <div class="col-md-12">
@@ -28,7 +15,7 @@
         <table class="table table-info table-striped">
           <tr>
             <th>S.no</th>
-            <th>Item Name</th>
+            <th>Items</th>
             <th>Price</th>
             <th>Qty</th>
             <th>Action</th>
@@ -130,17 +117,21 @@
 <script>
   $(document).ready(function(){
     fetchproduct();
-    $('#category').change(function(){
-
-      var catid = $(this).val();
-      fetchproduct(catid);
+    $(document).on('keyup','#searchproduct',function(){
+      var query = $(this).val();
+      fetchproduct(null,query);
+    });
+    
+    $('.catid').click(function(){
+      var catid = $(this).data('postId');;
+      fetchproduct(catid,null);
     });
 
-    function fetchproduct(data = '')
+    function fetchproduct(data = '' , query = '')
     {
       $.ajax({
         url: '/mart/product',
-        data: {data:data},
+        data: {data:data, query:query},
         datatype: 'json',
         success:function(response)
         {
@@ -155,12 +146,12 @@
           for( i=0; i<len; i++)
           {
               //console.log(response.result[i].product_name);
-              html += '<div class="col-md-4 col-sm-4" style="width:100%;padding-bottom: 10px;">';
+              html += '<div class="col-md-3 col-sm-3" style="width:100%;padding-bottom: 10px;">';
               html += '<div class="card" style="width:100%">';
               html +='<a href="#"><img class="card-img-top imgclick" id="'+response.result[i].pro_id+'" src={{URL::to('/')}}/images/'+response.result[i].image+' alt="Card image" width:"100px" height="100px"></a>';
               html +='<div class="card-body">';
               html +='<input type="hidden" name="did" id="did" value="'+response.result[i].pro_id+'">'
-              html +='<button type="button" id="'+response.result[i].pro_id+'" class="btn btn-dark btncard">Add To Card</button> ';
+              html +='<button type="button" id="'+response.result[i].pro_id+'" class="btn btn-dark btn-sm btncard">Add To Card</button> ';
              // html +='<button type="button" id="'+response.result[i].pro_id+'" class="btn btn-primary btn-sm viewdetail">View Detail</button>';
               html +='</div> </div> </div>';
              // html = '<h1>'+response.result[i].product_name+'</h1>';
