@@ -7,8 +7,12 @@
   <div class="col-md-12">
     <div class="row">
       <div class="col-md-8">
+        <div>
+          <p id="result" class="text text-danger"></p>
+        </div>
         <div class="row" id="card" >
         </div>
+        
       </div>
       <div class="col-md-4" >
        
@@ -123,7 +127,7 @@
     });
     
     $('.catid').click(function(){
-      var catid = $(this).data('postId');;
+      var catid = $(this).data('postId');
       fetchproduct(catid,null);
     });
 
@@ -158,9 +162,14 @@
               //alert(response.result[i].product_name);
             }
             $('#card').html(html);
-            
+          }
+          else
+          {
+            alert();
+            ('#result').text('No Record');
           }
         }
+        
       });
       
     }

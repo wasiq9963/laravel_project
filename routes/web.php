@@ -160,3 +160,13 @@ Route::get('/mart/add-to-cart','MartController@addtocart');
 Route::get('/mart/get-cart-items','MartController@getcartitems');
 Route::get('/mart/remove-cart','MartController@removecart');
 Route::get('/mart/update-cart','MartController@updatecart');
+
+//=======================================FrontEND Subway
+
+Route::get('/subway','SubwayController@index');
+Route::get('/subway/items','SubwayController@items');
+Route::get('/subway/singleitem','SubwayController@singleitem');
+Route::get('/subway/add-to-cart','SubwayController@addtocart');
+Route::get('/subway/remove-cart','SubwayController@removecart');
+Route::get('/subway/update-cart','SubwayController@updatecart');
+
