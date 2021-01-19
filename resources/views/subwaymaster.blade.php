@@ -4,11 +4,13 @@
   <title>Bootstrap Example</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{asset('style/bootstrap.min.css')}}">
+  <script src="{{asset('assets/plugins/jquery/jquery.min.js')}}"></script>
+  <script src="{{asset('style/popper.min.js')}}"></script>
+  <script src="{{asset('style/bootstrap.min.js')}}"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
 </head>
 <body style="height:1500px">
   <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
@@ -31,7 +33,7 @@
       </a>
       <div class="dropdown-menu">
         @foreach ($categories as $item)
-                <a data-post-id="{{$item -> id}}" class="dropdown-item catid" href="#">{{$item -> category_name}}</a>
+                <a data-post-id="{{$item -> id}}" class="dropdown-item catid" href="#">{{$item -> categoryname}}</a>
             @endforeach
       </div>
     </li>
