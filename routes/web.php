@@ -166,7 +166,9 @@ Route::get('/mart/update-cart','MartController@updatecart');
 Route::get('/subway','SubwayController@index');
 Route::get('/subway/items','SubwayController@items');
 Route::get('/subway/singleitem','SubwayController@singleitem');
+Route::get('/subway/get-cart-items','SubwayController@getcartitems');
 Route::get('/subway/add-to-cart','SubwayController@addtocart');
 Route::get('/subway/remove-cart','SubwayController@removecart');
 Route::get('/subway/update-cart','SubwayController@updatecart');
+Route::get('/subway/customer','SubwayController@customerinfo');
 

@@ -14,23 +14,17 @@
   </style>
 
 @section('maincontent')
-<div class="row">
+<!--<div class="row">
   <div class="col-md-4">
     <form class="form-inline mt-2 mt-md-0">
       <label for="">Contact Number:</label>&nbsp;
-      <input class="form-control mr-sm-2" id="contact" name="contact" type="number" placeholder="Type Number" >
+      <input class="form-control" id="contact" name="contact" type="number" placeholder="Type Number" >
     </form>
   </div>
-  <div class="col-md-4" id="result">
-    
-  </div>
-  <div class="col-md-4" id="result">
-    
-  </div>
-</div>
+</div>-->
  <div class="row" style="margin-top: 10px">
-    <div class="col-md-12">
-      <button type="button" class="btn  btn-outline-success" data-toggle="modal" id="btncustomer">Customer</button>
+    <div class="col-md-4">
+      <button type="button" class="btn  btn-outline-success" data-toggle="modal" id="btncustomer">New Customer</button>
       <button type="button" class="btn  btn-outline-primary">Add Form</button>
 
      <!-- <h3>Categories</h3>
@@ -40,6 +34,12 @@
                   <option value="{{$item -> id}}">{{$item -> categoryname}}</option>
               @endforeach
           </select>-->
+    </div>
+    <div class="col-md-4" id="result">
+    
+    </div>
+    <div class="col-md-4">
+      
     </div>
   </div>
 
@@ -52,7 +52,7 @@
         </div>
         <div class="col-md-4" >
        
-            <table class="table table-striped">
+            <table class="table table-striped carttable">
               <tr class="bg-success">
                 <th>S.no</th>
                 <th>Items</th>
@@ -305,11 +305,11 @@ $(document).ready(function(){
           for( i=0; i<len; i++)
           {
               //console.log(response.result[i].product_name);
-              html += '<div class="col-md-3 col-sm-3" style="width:100%;padding-bottom: 10px;">';
+              html += '<div class="col-md-2 col-sm-2" style="width:100%;padding-bottom: 10px;">';
               html += '<div class="card border-success" style="width:100%">';
               //html += '<img class="card-img-top imgclick" id="'+response.result[i].itemid+'" src="{{URL::to('/')}}/images/BBQ-Chicken.jpg" alt="Card image" width:"50px" height="50px">';
               html +='<a href="#"><img class="card-img-top imgclick" id="'+response.result[i].itemid+'" src={{URL::to('/')}}/images/'+response.result[i].categoryid+'.jpg alt="Card image" width:"100px" height="100px"></a>';
-              html +='<div class="card-body bg-warning">';
+              html +='<div class="card-body bg-warning" style="padding: 5px;">';
               //html +='<p>'+response.result[i].itemname+'</p>';
               html +='<p class="text-success"> Rs: <b>'+response.result[i].price+'</b></p>';
               html +='<input type="hidden" name="did" id="did" value="'+response.result[i].itemid+'">';
@@ -364,7 +364,16 @@ $(document).ready(function(){
             }
         });
     });
-
+//get cart items
+$.ajax({
+      url: '/subway/get-cart-items',
+      datatype: 'json',
+      success:function(data)
+      {
+        var len = 0;
+        console.log(data.result);      
+      }
+  });
     //remove cart
     $(document).on('click','.remove',function(){
 
@@ -403,20 +412,43 @@ $(document).ready(function(){
     });
 
     var data = '';
-    data += '<div class="border rounded border-success bg-warning" style="padding: 10px">'
-    data += '<lable><b>Name:</b> Wasiq Ali</lable> <b>|</b>';
-    data += '<lable><b>Email: </b>wasiq5884@gmail.com</lable> </br>';
-    data += '<lable><b>Phone No: </b>03122609768</lable> <b>|</b>';
-    data += '<lable><b>Address: </b>FB Area</lable>';
-    data += '</div>';
+     /* data += '<table class="border rounded border-success bg-warning" style="padding: 10px">';
+      data += '<tr><th>Phone No</th><td></td><td> 03122609768</td></tr>';
+      data += '<tr><th>Address</th><td></td><td> FB Area Azizabad</td></tr>';
+      data += '<tr><th>Landmark</th><td></td><td> Mukka Chok</td></tr>'; 
+      data+='</table>'; */
+
     //contact work
     $(document).on('keyup','#contact',function(){
       var number = $(this).val();
-      if (number.length == 11)
+      if (number.length == 10)
       {
-        $('#result').html(data);
+        $.ajax({
+          url: '/subway/customer',
+          data: {data:number},
+          datatype: 'json',
+          success:function(response)
+          {
+            if (response.result)
+            {
+              data += '<div class="border rounded border-success bg-warning" style="padding: 10px">'
+              data += '<lable><b>Name:</b> '+ response.result.cus_name +'</lable>&nbsp;&nbsp;&nbsp;&nbsp;';
+              data += '<lable><b>Phone No:</b> '+ response.result.cus_phoneno +'</lable> </br>';
+              data += '<lable><b>Address:</b> '+ response.result.cus_address +'</lable> &nbsp;&nbsp;&nbsp;&nbsp;';
+              data += '<lable><b>Landmark: </b>Mukka Chok</lable> </br>';
+              data += '</div>';
+            }
+            $('#result').html(data);
+            if(response.error)
+            {
+              alert(response.error);
+              $('#customermodal').modal('show');
+            }
+            
+          }
+        });
       }
-      else if((number.length > 11) || (number.length < 11) )
+      else if((number.length > 10) || (number.length < 10) )
       {
         $('#result').html('Incorrect Number');
       }

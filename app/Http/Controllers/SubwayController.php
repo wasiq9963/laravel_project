@@ -8,6 +8,7 @@ use App\Category;
 use App\Item;
 use DB;
 use Cart;
+use App\Customer;
 
 class SubwayController extends Controller
 {
@@ -61,18 +62,32 @@ class SubwayController extends Controller
         if ($req -> ajax())
         {
             $id = $req->get('id');
-            $i = 0;
+            $i = 1;
+            $i = $i+1;
             $item = Item::where('itemid',$id)->first();
             $cart = Cart::add([
-                        //'id' => $i,
-                        'id' => $item-> itemid, 
+                        'id' => $i,
+                        //'id' => $item-> itemid, 
                         'name' => $item-> itemname, 
                         'price' => $item-> price,
                         'quantity' => 1,
                         ]);
 
                         //dd(Cart::getContent());
+            //$cartcontent = Cart::getContent();
             return response()->json(['result' => 'done']);
+        }
+    }
+    public function getcartitems(Request $req)
+    {
+        if($req -> ajax())
+        {
+            $sessionid = Session()->getId();
+            $cartcontent = Cart::getContent();
+            $count = $cartcontent->count();
+            dd($cartcontent);
+            //$id = $cartcontent-> id;
+            return response()->json(['result' => $cartcontent]);
         }
     }
     public function removecart(Request $req)
@@ -98,6 +113,23 @@ class SubwayController extends Controller
                 )
             ]);
             return response()->json(['result' => 'Cart Updated']);
+        }
+    }
+    public function customerinfo(Request $req)
+    {
+        if ($req -> ajax())
+        {
+            $data = $req->get('data');
+            $customer = Customer::where('cus_phoneno',$data)->first();
+
+            if ($customer != '')
+            {
+                return response()->json(['result' => $customer]);
+            }
+            else
+            {
+                return response()->json(['error' => 'Contact Number Not Found Add New Customer']);
+            }
         }
     }
 }

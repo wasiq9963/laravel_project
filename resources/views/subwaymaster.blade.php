@@ -12,7 +12,7 @@
 
 
 </head>
-<body style="height:1500px">
+<body>
   <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <a class="navbar-brand" href="#"><img src="{{asset("images/shop.jpg")}}" class="rounded" style="width:40px;"></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
@@ -36,6 +36,9 @@
                 <a data-post-id="{{$item -> id}}" class="dropdown-item catid" href="#">{{$item -> categoryname}}</a>
             @endforeach
       </div>
+    </li>
+    <li class="nav-item">
+      <input class="form-control mr-sm-2" id="contact" name="contact" type="number" placeholder="Type Contact Number" >
     </li>
       </ul>
       <form class="form-inline mt-2 mt-md-0">
