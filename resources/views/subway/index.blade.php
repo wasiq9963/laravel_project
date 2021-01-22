@@ -60,40 +60,11 @@
                 <th>Qty</th>
                 <th>Action</th>
               </tr>
+              <tbody id="cartitems">
+
+              </tbody>
     
-              <?php 
-                  $i =1;?>
-                  @if (Cart::getcontent()->count() != 0)
-                  @foreach ($result as $item)
-                  <tr class="bg-warning">
-                    <td>{{$i++}}</td>
-                    <td>{{$item -> name}}</td>
-                    <td>{{Cart::get($item -> id)->getPriceSum()}}</td><input type="hidden" id="price" class="form-control" value="{{$item -> price}}">
-                    <td>
-                      <div class="input-group mb-3">
-                        <input type="number" min="1" name="qty" id="qty{{$item -> id}}" class="form-control " value="{{$item -> quantity}}">
-                        <div class="input-group-append">
-                          <button type="button" id="{{$item -> id}}" class="btn btn-primary update"><i class="fa fa-pencil"></i></button>
-                        </div>
-                      </div>
-    
-                    </span>
-                    </td>
-                    <td>
-                      <button type="button" id="{{$item -> id}}" class="btn btn-danger remove"><i class="fa fa-remove"></i></button>
-                    </td>
-                  </tr>
-                  @endforeach
-                  <tr class="bg-success">
-                    <td colspan="3">Total Items: <b>{{Cart::getContent()->count()}}</b> <br>
-                      Total Quantity: <b>{{Cart::getTotalQuantity()}}</b>
-                    </td>
-                    <td colspan="2">Total Amount: <b>{{Cart::getTotal()}}</b></td>
-                  </tr>
-                  @endif
-                  @if (Cart::getcontent()->count() == 0)
-                      <td colspan="5" class="text-danger text-center">Cart is Empty</td>
-                  @endif
+              
             </table>
                 
           </div>
@@ -312,6 +283,7 @@ $(document).ready(function(){
               html +='<div class="card-body bg-warning" style="padding: 5px;">';
               //html +='<p>'+response.result[i].itemname+'</p>';
               html +='<p class="text-success"> Rs: <b>'+response.result[i].price+'</b></p>';
+              html +='<input type="hidden" name="price" id="price" value="'+response.result[i].price+'">';
               html +='<input type="hidden" name="did" id="did" value="'+response.result[i].itemid+'">';
               html +='<button type="button" id="'+response.result[i].itemid+'" class="btn btn-block btn-success btn-sm btncard">Add</button> ';
              // html +='<button type="button" id="'+response.result[i].pro_id+'" class="btn btn-primary btn-sm viewdetail">View Detail</button>';
@@ -349,6 +321,7 @@ $(document).ready(function(){
             }
         });
     });
+    fetchcart();
     //card work
     $(document).on('click','.btncard',function(){
 
@@ -360,20 +333,48 @@ $(document).ready(function(){
             datatype: 'json',
             success:function(data)
             {
+                fetchcart();
                 alert(data.result);
             }
         });
     });
 //get cart items
-$.ajax({
-      url: '/subway/get-cart-items',
-      datatype: 'json',
-      success:function(data)
-      {
-        var len = 0;
-        console.log(data.result);      
-      }
-  });
+function fetchcart()
+{
+  $.ajax({
+          url: '/subway/get-cart-items',
+          datatype: 'json',
+          success:function(data)
+          {
+            var len = 0;
+            var html = '';
+            if (data.result != '')
+            {
+              len = data.result.length;
+            }
+            if (len >0)
+            {
+              $a = 1;
+              var total,qtys,items;
+              for (let i = 0; i < len; i++)
+              {
+                html += '<tr><td>'+$a++  +'</td>';
+                html += '<td>'+data.result[i].item_name+'</td>';
+                html += '<td>'+(data.result[i].price)*(data.result[i].quantity)+'</td>';
+                html += '<td><div class="input-group mb-3">';
+                html += '<input type="number" min="1" name="qty" id="qty'+data.result[i].cartid+'" class="form-control " value="'+data.result[i].quantity+'">';
+                html += '<button type="button" id="'+data.result[i].cartid+'" class="btn btn-primary update"><i class="fa fa-pencil"></i></button>'
+                html += '<td><button type="button" id="'+data.result[i].cartid+'" class="btn btn-danger remove"><i class="fa fa-remove"></i></button></td>';
+                //total += sum(data.result[i].price);
+              }
+                html += '<tr class="bg-success"><td colspan="3">Total Items:</td>';
+                html += '<td colspan="2">Total Price:'+total+'</td></tr>'
+              $('#cartitems').html(html);
+            }
+          }
+      });  
+}
+
     //remove cart
     $(document).on('click','.remove',function(){
 
@@ -384,6 +385,7 @@ $.ajax({
             datatype: 'json',
             success:function(data)
             {
+                fetchcart();
                 alert(data.result);
             }
         });
@@ -400,7 +402,8 @@ $.ajax({
             datatype: 'json',
             success:function(data)
             {
-            alert(data.result);
+              fetchcart();
+              alert(data.result);
             }
         });
     });
