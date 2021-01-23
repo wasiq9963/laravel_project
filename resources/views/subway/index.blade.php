@@ -54,10 +54,10 @@
        
             <table class="table table-striped carttable">
               <tr class="bg-success">
-                <th>S.no</th>
                 <th>Items</th>
                 <th>Price</th>
                 <th>Qty</th>
+                <th>Total</th>
                 <th>Action</th>
               </tr>
               <tbody id="cartitems">
@@ -183,6 +183,154 @@
 </div>
 
 <!-- -----------Customer MODEL END---------- -->
+
+<!-- -----------Detail MODEL START---------- -->
+
+<div class="modal fade" id="detailmodal">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Sub Detail</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form id="proform">
+          @csrf
+          <div class="modal-body">
+            <span id="result"></span>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="exampleInputEmail1">Sub Size</label>
+                          <select class="form-control" name="" id="">
+                              <option value="">Select Sub Size</option>
+                              <option value="">6 Inch</option>
+                              <option value="">12 Inch</option>
+                              <option value="">Salad</option>
+                          </select>
+                    </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="exampleInputEmail1">Extra Topping</label>
+                          <select class="form-control" name="" id="" >
+                              <option value="">Select Extra Topping</option>
+                              <option value="">a</option>
+                              <option value="">b</option>
+                              <option value="">c</option>
+                              <option value="">d</option>
+
+                          </select>
+                    </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="exampleInputEmail1">Bread</label>
+                          <select class="form-control" name="" id="">
+                              <option value="">Select Bread</option>
+                              <option value="">Honey Oat</option>
+                              <option value="">Permesan Oregano</option>
+                              <option value="">Wheat/Brown</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="exampleInputEmail1">Toasted?</label><br>
+                          <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" class="custom-control-input" id="customRadio" name="example" value="customEx" checked>
+                            <label class="custom-control-label" for="customRadio">Yes</label>
+                          </div>
+                          <div class="custom-control custom-radio custom-control-inline">
+                            <input type="radio" class="custom-control-input" id="customRadio2" name="example" value="customEx">
+                            <label class="custom-control-label" for="customRadio2">No</label>
+                          </div>                   
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="exampleInputEmail1">Cheese</label>
+                          <select class="form-control" name="" id="">
+                              <option value="">No</option>
+                              <option value="">White Cheese</option>
+                              <option value="">Yellow Cheese</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="exampleInputEmail1">Extra Cheese</label>
+                          <select class="form-control" name="" id="">
+                              <option value="">No</option>
+                              <option value="">Single Extra</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="exampleInputEmail1">Select Store</label>
+                          <select class="form-control" name="" id="">
+                              <option value="">Select Store</option>
+                              <option value="">Store 1</option>
+                              <option value="">Store 2</option>
+                              <option value="">Store 3</option>
+                              <option value="">Store 4</option>
+                              <option value="">Store 5</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="exampleInputEmail1">Select Store</label>
+                          <select class="form-control" name="" id="">
+                              <option value="">Select Store</option>
+                              <option value="">Store 1</option>
+                              <option value="">Store 2</option>
+                              <option value="">Store 3</option>
+                              <option value="">Store 4</option>
+                              <option value="">Store 5</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <input type="hidden" name="did" id="did">
+        <input type="hidden" name="action" id="action" value="">
+      </form>
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" id='btnsubmit' class="btn btn-primary btnadd"></button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+
+<!-- -----------Detail MODEL END---------- -->
 
  <!-- -----------view Detail MODEL START---------- -->
 <div class="modal fade" id="viewdetailemodal">
@@ -354,21 +502,22 @@ function fetchcart()
             }
             if (len >0)
             {
-              $a = 1;
+              $a = 0;
               var total,qtys,items;
               for (let i = 0; i < len; i++)
               {
-                html += '<tr><td>'+$a++  +'</td>';
-                html += '<td>'+data.result[i].item_name+'</td>';
-                html += '<td>'+(data.result[i].price)*(data.result[i].quantity)+'</td>';
+                $a++;
+                html += '<tr><td>'+data.result[i].item_name+'</td>';
+                html += '<td>'+data.result[i].price+'</td>';
                 html += '<td><div class="input-group mb-3">';
                 html += '<input type="number" min="1" name="qty" id="qty'+data.result[i].cartid+'" class="form-control " value="'+data.result[i].quantity+'">';
-                html += '<button type="button" id="'+data.result[i].cartid+'" class="btn btn-primary update"><i class="fa fa-pencil"></i></button>'
-                html += '<td><button type="button" id="'+data.result[i].cartid+'" class="btn btn-danger remove"><i class="fa fa-remove"></i></button></td>';
-                //total += sum(data.result[i].price);
+                html += '<button type="button" id="'+data.result[i].cartid+'" class="btn btn-primary update"><i class="fa fa-pencil"></i></button> </div>'
+                html += '<td>'+(data.result[i].price)*(data.result[i].quantity)+'</td>';
+                html += '<td><button type="button" id="'+data.result[i].cartid+'" class="btn btn-info btn-sm detail"><i class="fa fa-remove"></i></button>';
+                html += '<button type="button" id="'+data.result[i].cartid+'" class="btn btn-danger btn-sm remove"><i class="fa fa-remove"></i></button></td>';
               }
-                html += '<tr class="bg-success"><td colspan="3">Total Items:</td>';
-                html += '<td colspan="2">Total Price:'+total+'</td></tr>'
+                html += '<tr class="bg-success"><td colspan="3">Total Items: '+ $a +' Total Qty: '+data.qtys+'</td>';
+                html += '<td colspan="2">Total:'+total+'</td></tr>'
               $('#cartitems').html(html);
             }
           }
@@ -413,6 +562,11 @@ function fetchcart()
 
       $('#customermodal').modal('show');
     });
+    //customer work
+    $(document).on('click','.detail',function(){
+
+      $('#detailmodal').modal('show');
+    });
 
     var data = '';
      /* data += '<table class="border rounded border-success bg-warning" style="padding: 10px">';
@@ -426,30 +580,7 @@ function fetchcart()
       var number = $(this).val();
       if (number.length == 10)
       {
-        $.ajax({
-          url: '/subway/customer',
-          data: {data:number},
-          datatype: 'json',
-          success:function(response)
-          {
-            if (response.result)
-            {
-              data += '<div class="border rounded border-success bg-warning" style="padding: 10px">'
-              data += '<lable><b>Name:</b> '+ response.result.cus_name +'</lable>&nbsp;&nbsp;&nbsp;&nbsp;';
-              data += '<lable><b>Phone No:</b> '+ response.result.cus_phoneno +'</lable> </br>';
-              data += '<lable><b>Address:</b> '+ response.result.cus_address +'</lable> &nbsp;&nbsp;&nbsp;&nbsp;';
-              data += '<lable><b>Landmark: </b>Mukka Chok</lable> </br>';
-              data += '</div>';
-            }
-            $('#result').html(data);
-            if(response.error)
-            {
-              alert(response.error);
-              $('#customermodal').modal('show');
-            }
-            
-          }
-        });
+        customerinfo(number);
       }
       else if((number.length > 10) || (number.length < 10) )
       {
@@ -461,6 +592,36 @@ function fetchcart()
       }
     });
 
+    function customerinfo(number='')
+    {
+      $.ajax({
+          url: '/subway/customer',
+          data: {data:number},
+          datatype: 'json',
+          success:function(response)
+          {
+            if (response.result)
+            {
+              if (response.result.cus_phoneno == number)
+              {
+                alert(response.result.id);
+                data += '<div class="border rounded border-success bg-warning" style="padding: 10px">'
+                data += '<lable><b>Name:</b> '+ response.result.cus_name +'</lable>&nbsp;&nbsp;&nbsp;&nbsp;';
+                data += '<lable><b>Phone No:</b> '+ response.result.cus_phoneno +'</lable> </br>';
+                data += '<lable><b>Address:</b> '+ response.result.cus_address +'</lable> &nbsp;&nbsp;&nbsp;&nbsp;';
+                data += '<lable><b>Landmark: </b>Mukka Chok</lable> </br>';
+                data += '</div>';
+                $('#result').html(data);
+              }
+            }
+            else
+            {
+              alert(response.error);
+              $('#customermodal').modal('show');
+            }  
+          }
+        });
+    }
 });
   </script>
 @endsection

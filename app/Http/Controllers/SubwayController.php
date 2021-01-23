@@ -106,7 +106,8 @@ class SubwayController extends Controller
         if($req -> ajax())
         {
             $carts = Cart::all();
-            return response()->json(['result' => $carts]);
+            $totalqty = $carts->sum('quantity');
+            return response()->json(['result' => $carts,'qtys' => $totalqty]);
         }
     }
     public function removecart(Request $req)
