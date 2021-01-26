@@ -195,38 +195,37 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form id="proform">
+      <form id="detail">
           @csrf
           <div class="modal-body">
             <span id="result"></span>
             <div class="row">
               <div class="col-md-12">
-                <div class="row">
+                <!--<div class="row">
                   <div class="col-md-6">
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="exampleInputEmail1">Sub Size</label>
-                          <select class="form-control" name="" id="">
-                              <option value="">Select Sub Size</option>
-                              <option value="">6 Inch</option>
-                              <option value="">12 Inch</option>
-                              <option value="">Salad</option>
+                          <select class="form-control" name="subsize" id="subsize">
+                              <option value="none">Select Sub Size</option>
+                              <option value="6 Inch">6 Inch</option>
+                              <option value="12 Inch">12 Inch</option>
+                              <option value="Salad">Salad</option>
                           </select>
-                    </div>
+                        </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="exampleInputEmail1">Extra Topping</label>
-                          <select class="form-control" name="" id="" >
-                              <option value="">Select Extra Topping</option>
-                              <option value="">a</option>
-                              <option value="">b</option>
-                              <option value="">c</option>
-                              <option value="">d</option>
-
+                          <select class="form-control" name="extratopping" id="extratopping" >
+                              <option value="none">Select Extra Topping</option>
+                              <option value="Italian BMT">Italian BMT</option>
+                              <option value="Spicy Italian">Spicy Italian</option>
+                              <option value="Chicken Teriyaki">Chicken Teriyaki</option>
+                              <option value="Steak & Cheese">Steak & Cheese</option>
                           </select>
-                    </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -235,11 +234,11 @@
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="exampleInputEmail1">Bread</label>
-                          <select class="form-control" name="" id="">
-                              <option value="">Select Bread</option>
-                              <option value="">Honey Oat</option>
-                              <option value="">Permesan Oregano</option>
-                              <option value="">Wheat/Brown</option>
+                          <select class="form-control" name="bread" id="bread">
+                              <option value="none">Select Bread</option>
+                              <option value="Honey Oat">Honey Oat</option>
+                              <option value="Permesan Oregano">Permesan Oregano</option>
+                              <option value="Wheat/Brown">Wheat/Brown</option>
                           </select>
                         </div>
                       </div>
@@ -247,82 +246,169 @@
                         <div class="form-group">
                           <label for="exampleInputEmail1">Toasted?</label><br>
                           <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="customRadio" name="example" value="customEx" checked>
-                            <label class="custom-control-label" for="customRadio">Yes</label>
+                            <input type="radio" id="customRadioInline1" value="Yes" name="toasted" class="custom-control-input">
+                            <label class="custom-control-label" for="customRadioInline1">Yes</label>
                           </div>
                           <div class="custom-control custom-radio custom-control-inline">
-                            <input type="radio" class="custom-control-input" id="customRadio2" name="example" value="customEx">
-                            <label class="custom-control-label" for="customRadio2">No</label>
-                          </div>                   
+                            <input type="radio" id="customRadioInline2" value="No" name="toasted" class="custom-control-input">
+                            <label class="custom-control-label" for="customRadioInline2">No</label>
+                          </div>                  
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                </div>-->
                 <div class="row">
                   <div class="col-md-6">
                     <div class="row">
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="exampleInputEmail1">Cheese</label>
-                          <select class="form-control" name="" id="">
-                              <option value="">No</option>
-                              <option value="">White Cheese</option>
-                              <option value="">Yellow Cheese</option>
+                          <select class="form-control" name="cheese" id="cheese">
+                              <option value="No">No</option>
+                              <option value="White Cheese">White Cheese</option>
+                              <option value="Yellow Cheese">Yellow Cheese</option>
                           </select>
                         </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="exampleInputEmail1">Extra Cheese</label>
-                          <select class="form-control" name="" id="">
-                              <option value="">No</option>
-                              <option value="">Single Extra</option>
+                          <select class="form-control" name="extracheese" id="extracheese">
+                              <option value="No">No</option>
+                              <option value="Single Extra">Single Extra</option>
                           </select>
                         </div>
                       </div>
+                    </div> 
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Extra Meat Topping Is Free</label><br>
+                      <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" id="extra3" name="extra" class="custom-control-input" value="No" checked>
+                        <label class="custom-control-label" for="extra3">No</label>
+                      </div>
+                      <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" id="extra4" name="extra" value="Yes" class="custom-control-input">
+                        <label class="custom-control-label" for="extra4">Yes</label>
+                      </div>                  
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Vegetables?</label><br> 
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input" value="Lettuc" name="vegetable[]" id="vegetable1">
+                        <label class="custom-control-label" for="vegetable1">Lettuc</label>
+                      </div>
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input" value="Tomato" name="vegetable[]" id="vegetable2">
+                        <label class="custom-control-label" for="vegetable2">Tomato</label>
+                      </div>
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input" value="Capsicum" name="vegetable[]" id="vegetable3">
+                        <label class="custom-control-label" for="vegetable3">Capsicum</label>
+                      </div>
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input" value="Onion" name="vegetable[]" id="vegetable4">
+                        <label class="custom-control-label" for="vegetable4">Onion</label>
+                      </div>   
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input" value="Cucumber" name="vegetable[]" id="vegetable5">
+                        <label class="custom-control-label" for="vegetable5">Cucumber</label>
+                      </div>
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input" value="Jalapenos" name="vegetable[]" id="vegetable6">
+                        <label class="custom-control-label" for="vegetable6">Jalapenos</label>
+                      </div>   
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input" value="Olives" name="vegetable[]" id="vegetable7">
+                        <label class="custom-control-label" for="vegetable7">Olives</label>
+                      </div>
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input" value="Coleslaw" name="vegetable[]" id="vegetable8">
+                        <label class="custom-control-label" for="vegetable8">Coleslaw</label>
+                      </div>   
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input" value="Pickles" name="vegetable[]" id="vegetable9">
+                        <label class="custom-control-label" for="vegetable9">Pickles</label>
+                      </div>                  
                     </div>
                   </div>
                   <div class="col-md-6">
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="exampleInputEmail1">Select Store</label>
-                          <select class="form-control" name="" id="">
-                              <option value="">Select Store</option>
-                              <option value="">Store 1</option>
-                              <option value="">Store 2</option>
-                              <option value="">Store 3</option>
-                              <option value="">Store 4</option>
-                              <option value="">Store 5</option>
-                          </select>
-                        </div>
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Sauces?</label><br> 
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input" value="Thousand Island" name="sauces[]" id="customCheck1">
+                        <label class="custom-control-label" for="customCheck1">Thousand Island</label>
                       </div>
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="exampleInputEmail1">Select Store</label>
-                          <select class="form-control" name="" id="">
-                              <option value="">Select Store</option>
-                              <option value="">Store 1</option>
-                              <option value="">Store 2</option>
-                              <option value="">Store 3</option>
-                              <option value="">Store 4</option>
-                              <option value="">Store 5</option>
-                          </select>
-                        </div>
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input" value="Mayonaise" name="sauces[]" id="customCheck2">
+                        <label class="custom-control-label" for="customCheck2">Mayonaise</label>
                       </div>
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input" value="Ketchup" name="sauces[]" id="customCheck3">
+                        <label class="custom-control-label" for="customCheck3">Ketchup</label>
+                      </div>
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input" value="Chilli Garlic" name="sauces[]" id="customCheck4">
+                        <label class="custom-control-label" for="customCheck4">Chilli Garlic</label>
+                      </div>   
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input" value="Southwest" name="sauces[]" id="customCheck5">
+                        <label class="custom-control-label" for="customCheck5">Southwest</label>
+                      </div>
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input" value="Honey mustard" name="sauces[]" id="customCheck6">
+                        <label class="custom-control-label" for="customCheck6">Honey mustard</label>
+                      </div>   
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input" value="Mustard" name="sauces[]" id="customCheck7">
+                        <label class="custom-control-label" for="customCheck7">Mustard</label>
+                      </div>
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input" value="Ceaser garlic" name="sauces[]" id="customCheck8">
+                        <label class="custom-control-label" for="customCheck8">Ceaser garlic</label>
+                      </div>   
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input" value="Sweet onion" name="sauces[]" id="customCheck9">
+                        <label class="custom-control-label" for="customCheck9">Sweet onion</label>
+                      </div>
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input" value="BBQ sauce" name="sauces[]" id="customCheck10">
+                        <label class="custom-control-label" for="customCheck10">BBQ sauce</label>
+                      </div>   
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input" value="Hot sauce" name="sauces[]" id="customCheck11">
+                        <label class="custom-control-label" for="customCheck11">Hot sauce</label>
+                      </div>
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input" value="Olive oil" name="sauces[]" id="customCheck12">
+                        <label class="custom-control-label" for="customCheck12">Olive oil</label>
+                      </div>   
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input" value="Cheesy Mayo" name="sauces[]" id="customCheck13">
+                        <label class="custom-control-label" for="customCheck13">Cheesy Mayo</label>
+                      </div>
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" class="custom-control-input" value="Vinegar Sauce" name="sauces[]" id="customCheck14">
+                        <label class="custom-control-label" for="customCheck14">Vinegar Sauce</label>
+                      </div>                  
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <input type="hidden" name="did" id="did">
+          <input type="hidden" name="id" id="id">
         <input type="hidden" name="action" id="action" value="">
       </form>
       <div class="modal-footer justify-content-between">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="button" id='btnsubmit' class="btn btn-primary btnadd"></button>
+        <button type="button" id='btnsubmit' class="btn btn-primary btnadd">Submit</button>
       </div>
     </div>
     <!-- /.modal-content -->
@@ -509,11 +595,11 @@ function fetchcart()
                 $a++;
                 html += '<tr><td>'+data.result[i].item_name+'</td>';
                 html += '<td>'+data.result[i].price+'</td>';
-                html += '<td><div class="input-group mb-3">';
-                html += '<input type="number" min="1" name="qty" id="qty'+data.result[i].cartid+'" class="form-control " value="'+data.result[i].quantity+'">';
-                html += '<button type="button" id="'+data.result[i].cartid+'" class="btn btn-primary update"><i class="fa fa-pencil"></i></button> </div>'
+                html += '<td><div class="input-group input-group-sm">';
+                html += '<input type="number" min="1" name="qty" id="qty'+data.result[i].cartid+'" class="form-control" value="'+data.result[i].quantity+'">';
+                html += '<button type="button" id="'+data.result[i].cartid+'" class="btn btn-primary btn-sm update"><i class="fa fa-plus"></i></button> </div>'
                 html += '<td>'+(data.result[i].price)*(data.result[i].quantity)+'</td>';
-                html += '<td><button type="button" id="'+data.result[i].cartid+'" class="btn btn-info btn-sm detail"><i class="fa fa-remove"></i></button>';
+                html += '<td><button type="button" id="'+data.result[i].cartid+'" class="btn btn-info btn-sm detail">Detail</button>';
                 html += '<button type="button" id="'+data.result[i].cartid+'" class="btn btn-danger btn-sm remove"><i class="fa fa-remove"></i></button></td>';
               }
                 html += '<tr class="bg-success"><td colspan="3">Total Items: '+ $a +' Total Qty: '+data.qtys+'</td>';
@@ -521,7 +607,7 @@ function fetchcart()
               $('#cartitems').html(html);
             }
           }
-      });  
+      });
 }
 
     //remove cart
@@ -561,11 +647,6 @@ function fetchcart()
     $('#btncustomer').click(function(){
 
       $('#customermodal').modal('show');
-    });
-    //customer work
-    $(document).on('click','.detail',function(){
-
-      $('#detailmodal').modal('show');
     });
 
     var data = '';
@@ -622,6 +703,59 @@ function fetchcart()
           }
         });
     }
+    //detail work
+    $(document).on('click','.detail',function(){
+
+      //$('#detailmodal').modal('show');
+      var id = $(this).attr('id');
+      $('#id').val(id);
+
+      $.ajax({
+        url: '/subway/fetch-sub-detail',
+        data:{data:id},
+        datatype: 'json',
+        success:function(data)
+        {
+          if (data.result)
+          {
+            $('#id').val(data.result.cartitem_id);
+            /*$('#subsize').val(data.result.sub_size);
+            $('#extratopping').val(data.result.extra_topping);
+            $('#bread').val(data.result.bread);
+            $('#toasted').val(data.result.toasted);
+            $('#subsize').val(data.result.sub_size);*/
+            $('#cheese').val(data.result.cheese);
+            $('#extracheese').val(data.result.extra_cheese);
+            /*$('#sauces').val(data.result.sauces);
+            $('#extratopping').val(data.result.extra_topping);*/
+            $('#extra').val(data.result.extra_meat_topping_is_free);
+            $('#detailmodal').modal('show');
+          }
+          if (data.error)
+          {
+            $('#detail')[0].reset();
+            $('#detailmodal').modal('show');  
+          }
+        }
+      });
+
+    });
+    // add sub detail
+    $(document).on('click','.btnadd',function(e){
+      e.preventDefault();
+      $.ajax({
+        url: '/subway/sub-detail',
+        data: $('#detail').serialize(),
+        datatype: 'json',
+        success: function(response)
+        {
+          $('#detail')[0].reset();
+          $('#detailmodal').modal('hide');
+          alert(response.result);
+        }
+      });
+      
+    });
 });
   </script>
 @endsection

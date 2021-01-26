@@ -171,4 +171,9 @@ Route::get('/subway/add-to-cart','SubwayController@addtocart');
 Route::get('/subway/remove-cart','SubwayController@removecart');
 Route::get('/subway/update-cart','SubwayController@updatecart');
 Route::get('/subway/customer','SubwayController@customerinfo');
+//sub detail 
+Route::get('/subway/sub-detail','SubwayController@subdetail');
+Route::get('/subway/fetch-sub-detail','SubwayController@fetchsubdetail');
+
+
 

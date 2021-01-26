@@ -6,10 +6,10 @@ use Illuminate\Http\Request;
 
 use App\Category;
 use App\Item;
-use DB;
 use App\Cart;
 use App\Customer;
-
+use App\Subdetail;
+use DB;
 class SubwayController extends Controller
 {
     public function index(Request $req)
@@ -85,20 +85,6 @@ class SubwayController extends Controller
                     $cart->save();
                     return response()->json(['result' => 'Item Added']);
                 }
-            
-            /*$i = 1;
-            $i = $i+1;
-            $item = Item::where('itemid',$id)->first();
-            $cart = Cart::add([
-                        'id' => $i,
-                        //'id' => $item-> itemid, 
-                        'name' => $item-> itemname, 
-                        'price' => $item-> price,
-                        'quantity' => 1,
-                        ]);
-
-            //dd(Cart::getContent());
-            //$cartcontent = Cart::getContent();*/
         }
     }
     public function getcartitems(Request $req)
@@ -147,6 +133,37 @@ class SubwayController extends Controller
             else
             {
                 return response()->json(['error' => 'Contact Number Not Found Add New Customer']);
+            }
+        }
+    }
+
+    //sub detail add work
+    public function subdetail(Request $req)
+    {
+        //dd($req);
+        $detail = new Subdetail();
+        $detail->cartitem_id = $req->id;
+        $detail->cheese = $req->cheese;
+        $detail->extra_cheese = $req->extracheese;
+        $detail->sauces = implode(',',$req->sauces)   ;
+        $detail->vegetables = implode(',',$req->vegetable);
+        $detail->extra_meat_topping_is_free = $req->extra;
+        $detail->save();
+        return response()->json(['result' => 'Detail Added']);
+    }
+    public function fetchsubdetail(Request $req)
+    {
+        if ($req -> ajax())
+        {
+            $id = $req->get('data');
+            $getdetail = Subdetail::where('cartitem_id',$id)->first();
+            if ($getdetail != '')
+            {
+                return response()->json(['result' => $getdetail]);
+            }
+            else
+            {
+                return response()->json(['error' => 'No Record']);
             }
         }
     }
