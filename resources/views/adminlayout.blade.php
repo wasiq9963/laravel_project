@@ -307,6 +307,14 @@
                   </p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{{url('/subway/orders')}}" class="nav-link">
+                  <i class="nav-icon fas fa-table"></i>
+                  <p>
+                    Orders
+                  </p>
+                </a>
+              </li>
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

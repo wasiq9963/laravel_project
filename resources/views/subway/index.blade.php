@@ -1,4 +1,4 @@
-@extends('subwaymaster');
+@extends('subwaymaster')
 <style>
   /* Chrome, Safari, Edge, Opera */
   input::-webkit-outer-spin-button,
@@ -11,6 +11,12 @@
   input[type=number] {
     -moz-appearance: textfield;
   }
+  .test2 {
+  white-space: nowrap; 
+  width: 100px; 
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
   </style>
 
 @section('maincontent')
@@ -511,17 +517,17 @@ $(document).ready(function(){
           {
               //console.log(response.result[i].product_name);
               html += '<div class="col-md-2 col-sm-2" style="width:100%;padding-bottom: 10px;">';
-              html += '<div class="card border-success" style="width:100%">';
+              html += '<div class="card border-success" id="'+response.result[i].itemid+'" style="width:100%">';
               //html += '<img class="card-img-top imgclick" id="'+response.result[i].itemid+'" src="{{URL::to('/')}}/images/BBQ-Chicken.jpg" alt="Card image" width:"50px" height="50px">';
-              html +='<a href="#"><img class="card-img-top imgclick" id="'+response.result[i].itemid+'" src={{URL::to('/')}}/images/'+response.result[i].categoryid+'.jpg alt="Card image" width:"100px" height="100px"></a>';
+              html +='<a href="#" data-toggle="tooltip" title="'+response.result[i].itemname+'"><img class="card-img-top imgclick" id="'+response.result[i].itemid+'" src={{URL::to('/')}}/images/'+response.result[i].categoryid+'.jpg alt="Card image" width:"100px" height="100px">';
               html +='<div class="card-body bg-warning" style="padding: 5px;">';
-              //html +='<p>'+response.result[i].itemname+'</p>';
-              html +='<p class="text-success"> Rs: <b>'+response.result[i].price+'</b></p>';
+              html +='<h5 class="card-text text-dark test2">'+response.result[i].itemname+'</h5>';
+              html +='<h5 class="text-dark"> Rs: <b>'+response.result[i].price+'</b></h5> </a>';
               html +='<input type="hidden" name="price" id="price" value="'+response.result[i].price+'">';
               html +='<input type="hidden" name="did" id="did" value="'+response.result[i].itemid+'">';
               html +='<button type="button" id="'+response.result[i].itemid+'" class="btn btn-block btn-success btn-sm btncard">Add</button> ';
              // html +='<button type="button" id="'+response.result[i].pro_id+'" class="btn btn-primary btn-sm viewdetail">View Detail</button>';
-              html +='</div> </div> </div>';
+              html +='</div></div></div>';
              // html = '<h1>'+response.result[i].product_name+'</h1>';
               //alert(response.result[i].product_name);
             }
@@ -531,7 +537,8 @@ $(document).ready(function(){
           {
             alert('No Record');
             //('#result').text();
-          }
+          }   $('[data-toggle="tooltip"]').tooltip();   
+
         }
         
       });
@@ -568,7 +575,7 @@ $(document).ready(function(){
             success:function(data)
             {
                 fetchcart();
-                alert(data.result);
+                //alert(data.result);
             }
         });
     });
@@ -588,22 +595,33 @@ function fetchcart()
             }
             if (len >0)
             {
-              $a = 0;
-              var total,qtys,items;
+              var a = 0;
+              var total = 0;
               for (let i = 0; i < len; i++)
               {
-                $a++;
+                a++;
                 html += '<tr><td>'+data.result[i].item_name+'</td>';
                 html += '<td>'+data.result[i].price+'</td>';
-                html += '<td><div class="input-group input-group-sm">';
-                html += '<input type="number" min="1" name="qty" id="qty'+data.result[i].cartid+'" class="form-control" value="'+data.result[i].quantity+'">';
-                html += '<button type="button" id="'+data.result[i].cartid+'" class="btn btn-primary btn-sm update"><i class="fa fa-plus"></i></button> </div>'
+                html += '<td> <div class="input-group number-spinner"><span class="input-group-btn">';
+                html += '<button id="'+data.result[i].cartid+'" class="btn btn-sm btn-outline-info" data-dir="dwn"><span class="fa fa-minus"></span></button></span>';
+                html += '<input type="text" min="1" class="form-control form-control-sm" value="'+data.result[i].quantity+'"><span class="input-group-btn">';
+                html += '<button id="'+data.result[i].cartid+'" class="btn btn-sm btn-outline-info" data-dir="up"><span class="fa fa-plus"></span></button></span></div> </td>';
                 html += '<td>'+(data.result[i].price)*(data.result[i].quantity)+'</td>';
                 html += '<td><button type="button" id="'+data.result[i].cartid+'" class="btn btn-info btn-sm detail">Detail</button>';
                 html += '<button type="button" id="'+data.result[i].cartid+'" class="btn btn-danger btn-sm remove"><i class="fa fa-remove"></i></button></td>';
+                  
+                  var subtotal = (data.result[i].price)*(data.result[i].quantity);
+                  total += subtotal;
               }
-                html += '<tr class="bg-success"><td colspan="3">Total Items: '+ $a +' Total Qty: '+data.qtys+'</td>';
-                html += '<td colspan="2">Total:'+total+'</td></tr>'
+                html += '<tr class="bg-success"><td colspan="3"><b>Total Items:</b> '+ a +' <b>Total Qty:</b> '+data.qtys+'</td>';
+                html += '<td colspan="2"><b>Total:</b> '+total+'</td></tr>';
+                html += '<tr><td colspan="2"><button id="btnclear" class="btn btn-block btn-outline-dark">Clear</button></td>';
+                html += '<td colspan="3"><button id="btnorder" class="btn btn-block btn-outline-primary">Order Place</button></td></tr>';
+              $('#cartitems').html(html);
+            }
+            else
+            {
+              html += '<tr><td class="text-center text-danger" colspan="5">Cart Is Empty</td></tr>'
               $('#cartitems').html(html);
             }
           }
@@ -621,13 +639,47 @@ function fetchcart()
             success:function(data)
             {
                 fetchcart();
-                alert(data.result);
+                //alert(data.result);
             }
         });
     });
 
     //update cart
-    $(document).on('click','.update',function(){
+    //INCREMENT DECREMENT QTY WORK
+    $(document).on('click', '.number-spinner button', function () {    
+      var btn = $(this),
+        oldValue = btn.closest('.number-spinner').find('input').val().trim(),
+        newVal = 0;
+        id = '';
+    
+      if (btn.attr('data-dir') == 'up')
+      {
+        newVal = parseInt(oldValue) + 1;
+        id = btn.attr('id');
+      } 
+      else if (oldValue > 1) 
+      {
+        newVal = parseInt(oldValue) - 1;
+        id = btn.attr('id');
+      } 
+      else
+      {
+        newVal = 1;
+      }
+      btn.closest('.number-spinner').find('input').val(newVal);
+        //update cart
+      $.ajax({
+          url: '/subway/update-cart',
+          data: {id:id, qty:newVal},
+          datatype: 'json',
+          success:function(data)
+          {
+            fetchcart();
+            //alert(data.result);
+          }
+      });
+    });
+    /*$(document).on('click','.update',function(){
 
         var id = $(this).attr('id');
         var qty = $('#qty'+id).val();
@@ -641,6 +693,32 @@ function fetchcart()
               alert(data.result);
             }
         });
+    });*/
+
+    //order place work
+    $(document).on('click','#btnorder',function(){
+      $.ajax({
+        url: '/subway/order-place',
+        datatype: 'json',
+        success:function(data)
+        {
+          fetchcart();
+          alert(data.result);
+        }
+      });
+    });
+
+    //cart clear work
+    $(document).on('click','#btnclear',function(){
+      $.ajax({
+        url: '/subway/cart-clear',
+        datatype: 'json',
+        success:function(data)
+        {
+          fetchcart();
+          //alert(data.result);
+        }
+      });
     });
 
     //customer work
@@ -649,21 +727,14 @@ function fetchcart()
       $('#customermodal').modal('show');
     });
 
-    var data = '';
-     /* data += '<table class="border rounded border-success bg-warning" style="padding: 10px">';
-      data += '<tr><th>Phone No</th><td></td><td> 03122609768</td></tr>';
-      data += '<tr><th>Address</th><td></td><td> FB Area Azizabad</td></tr>';
-      data += '<tr><th>Landmark</th><td></td><td> Mukka Chok</td></tr>'; 
-      data+='</table>'; */
-
     //contact work
     $(document).on('keyup','#contact',function(){
       var number = $(this).val();
-      if (number.length == 10)
+      if (number.length == 11)
       {
         customerinfo(number);
       }
-      else if((number.length > 10) || (number.length < 10) )
+      else if((number.length > 11) || (number.length < 11) )
       {
         $('#result').html('Incorrect Number');
       }
@@ -685,7 +756,8 @@ function fetchcart()
             {
               if (response.result.cus_phoneno == number)
               {
-                alert(response.result.id);
+                //alert(response.result.id);
+                data="";
                 data += '<div class="border rounded border-success bg-warning" style="padding: 10px">'
                 data += '<lable><b>Name:</b> '+ response.result.cus_name +'</lable>&nbsp;&nbsp;&nbsp;&nbsp;';
                 data += '<lable><b>Phone No:</b> '+ response.result.cus_phoneno +'</lable> </br>';
@@ -756,6 +828,30 @@ function fetchcart()
       });
       
     });
-});
+
+    //INCREMENT DECREMENT QTY WORK
+    /*$(document).on('click', '.number-spinner button', function () {    
+      var btn = $(this),
+        oldValue = btn.closest('.number-spinner').find('input').val().trim(),
+        newVal = 0;
+        id = '';
+    
+      if (btn.attr('data-dir') == 'up')
+      {
+        newVal = parseInt(oldValue) + 1;
+        id = btn.attr('id');
+      } 
+      else if (oldValue > 1) 
+        {
+          newVal = parseInt(oldValue) - 1;
+          id = btn.attr('id');
+        } 
+        else
+        {
+          newVal = 1;
+        }
+        btn.closest('.number-spinner').find('input').val(newVal);
+    });*/
+    });
   </script>
 @endsection

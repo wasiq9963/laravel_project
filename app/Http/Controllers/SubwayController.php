@@ -56,6 +56,7 @@ class SubwayController extends Controller
             return response()->json(['result' => $singleitem]);
         }
     }
+    //add to cart
     public function addtocart(Request $req)
     {
         $sessionid = Session()->getId();
@@ -63,7 +64,8 @@ class SubwayController extends Controller
         {
             $id = $req->get('id');
 
-            $cartitem = Cart::where('item_id',$id)->first();
+            $cartitem = Cart::where('item_id',$id)->
+            where('status','temporary')->first();
             if ($cartitem != null)
             {
                 $cart = Cart::where('cartid',$cartitem->cartid)->first();
@@ -82,20 +84,26 @@ class SubwayController extends Controller
                     $cart->item_name = $item-> itemname;
                     $cart->price = $item -> price;
                     $cart->quantity = 1;
+                    $cart->status = 'temporary';
                     $cart->save();
                     return response()->json(['result' => 'Item Added']);
                 }
         }
     }
+    //get cart items
     public function getcartitems(Request $req)
     {
         if($req -> ajax())
         {
-            $carts = Cart::all();
+            $sessionid = Session()->getId();
+            $carts = Cart::where('status','temporary')->
+            where('session_id',$sessionid)->get();
             $totalqty = $carts->sum('quantity');
+            //$total = $carts->sum('quantity * price');
             return response()->json(['result' => $carts,'qtys' => $totalqty]);
         }
     }
+    //delete cart items
     public function removecart(Request $req)
     {
         if ($req -> ajax())
@@ -107,6 +115,7 @@ class SubwayController extends Controller
             return response()->json(['result' => 'Item Removed']);
         }
     }
+    //update cart items
     public function updatecart(Request $req)
     {
         if ($req -> ajax())
@@ -117,6 +126,41 @@ class SubwayController extends Controller
             $cart->quantity = $qty;
             $cart->save();
             return response()->json(['result' => 'Item Updated']);
+        }
+    }
+    //order place work
+    public function orderplace(Request $req)
+    {
+        if ($req -> ajax())
+        {
+            $sessionid = Session()->getId();
+            $cart = Cart::where('status','temporary')->
+            where('session_id',$sessionid)->get();
+
+            foreach ($cart as $value) 
+            {
+                $value->status = 'conform';
+                $value->save();
+            }
+            
+            return response()->json(['result' => 'Order place SuccessFully']);
+        }
+    }
+    //cart clear work
+    public function cartclear(Request $req)
+    {
+        if ($req -> ajax())
+        {            
+            $sessionid = Session()->getId();
+            $cart = Cart::where('session_id',$sessionid)->get();
+
+            foreach ($cart as $value) 
+            {
+                $subdetail = Subdetail::where('cartitem_id',$value->cartid)->delete();            
+            }
+            $cart = Cart::where('session_id',$sessionid)->delete();
+            
+            return response()->json(['result' => 'Cart Clear SuccessFully']);
         }
     }
     public function customerinfo(Request $req)
@@ -166,5 +210,12 @@ class SubwayController extends Controller
                 return response()->json(['error' => 'No Record']);
             }
         }
+    }
+
+    //view orders in admin panel
+    public function orders()
+    {
+        $cart = Cart::where('status','conform')->get();
+        return view('order.ordersinfo',['order' => $cart]);
     }
 }
