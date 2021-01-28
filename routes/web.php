@@ -11,12 +11,12 @@
 |
 */
 
-/*Route::get('/', function () {
-    return view('adminlayout');
+/*Route::get('/home', function () {
+    return view('welcome');
 });*/
 //dashboard
 Route::get('/', function () {
-    return view('dashboard');
+    return view('auth.login');
 });
 
 //=======================================Category
@@ -178,6 +178,17 @@ Route::get('/subway/sub-detail','SubwayController@subdetail');
 Route::get('/subway/fetch-sub-detail','SubwayController@fetchsubdetail');
 
 Route::get('/subway/orders','SubwayController@orders');
+
+
+
+
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index');
+
+
+
 
 
 

@@ -65,14 +65,14 @@ class SubwayController extends Controller
             $id = $req->get('id');
 
             $cartitem = Cart::where('item_id',$id)->
-            where('status','temporary')->first();
+            where('status','temporary')->
+            where('session_id',$sessionid)->first();
             if ($cartitem != null)
             {
                 $cart = Cart::where('cartid',$cartitem->cartid)->first();
                 $cart->quantity = $cartitem->quantity  + 1;
                 $cart->save();
                 return response()->json(['result' => 'Item Updated']);
-                
             }
             else
                 {
