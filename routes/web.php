@@ -185,7 +185,7 @@ Route::get('/subway/orders','SubwayController@orders');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index');
+Route::get('/dashboard', 'HomeController@index');
 
 
 
