@@ -13,13 +13,13 @@
             <div class="card-header">
               <div class="row">
                 <div class="col-sm-6">
-                  <h1 class="card-title">All Categories</h1>
+                  <h1 class="card-title">All Items</h1>
                 </div>
                 <div class="col-sm-6">
                   <ol class="float-right">
                     <li class="breadcrumb-item">
                         <button type="button" class="btn btn-primary" data-toggle="modal" id="addmodal">
-                            <span class="fa fa-plus"></span> Add Category
+                            <span class="fa fa-plus"></span> Add Item
                           </button>
                   </ol>
                 </div>
@@ -30,29 +30,37 @@
             <div class="card-body">
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Category Name</th>
-                    <th>Action</th>
-                </tr>
+                    <tr>
+                        <th>Id</th>
+                        <th>Item Name</th>
+                        <th>Item Price</th>
+                        <th>Category Name</th>
+                        <th>Action</th>
+                    </tr>
                 </thead>
                 <tbody>
-                    @if ($catinfo)
-                        @foreach ($catinfo as $item)
-                        <tr>
-                            <td>{{$item -> id}}</td>
-                            <td>{{$item -> categoryname}}</td>
-                            <td>
-                              <button type="button" class="btn btn-primary btn-xs editmodal"  id="{{$item -> id}}"><span class="fa fa-edit"></span> Edit</button>
-                              <button type="button" class="btn btn-danger btn-xs deletemodal" id="{{$item -> id}}"><span class="fa fa-trash"></span> Delete</button>
-                            </td>
-                          </tr>  
-                        @endforeach
-                    @endif
+                 @if ($iteminfo)
+                    @foreach ($iteminfo as $item)
+                    <tr>
+                        <td>{{$item -> itemid}}</td>
+                        <td>{{$item -> itemname}}</td>
+                        <td>{{$item -> price}}</td>
+                        <td>{{$item -> categoryname}}</td>
+                        <td>
+                            <button type="button" class="btn btn-primary btn-xs editmodal"  id="{{$item -> itemid}}"><span class="fa fa-edit"></span> Edit</button>
+                            <button type="button" class="btn btn-danger btn-xs deletemodal" id="{{$item -> itemid}}"><span class="fa fa-trash"></span> Delete</button>
+                          </td>
+                    </tr>
+                        
+                    @endforeach
+                     
+                 @endif
                 </tbody>
                 <tfoot>
                 <tr>
                     <th>Id</th>
+                    <th>Item Name</th>
+                    <th>Item Price</th>
                     <th>Category Name</th>
                     <th>Action</th>
                 </tr>
@@ -72,8 +80,8 @@
 
 <!-- -----------INSERT AND UPDATE MODEL START---------- -->
 
-<div class="modal fade" id="catmodal">
-    <div class="modal-dialog">
+<div class="modal fade" id="promodal">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title"></h4>
@@ -81,17 +89,37 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        <form id="catform">
+        <form id="proform">
             @csrf
             <div class="modal-body">
               <span id="result"></span>
               <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Category Name</label>
-                        <input type="text" name="catname" id="catname" class="form-control" value="{{old('catname')}}" id="exampleInputEmail1" placeholder="Enter Category">
+                        <label for="exampleInputEmail1">Item Name</label>
+                        <input type="text" name="product_name" id="product_name" class="form-control" value="{{old('product_name')}}" placeholder="Enter Product Name">
+                    </div>
+                    <div class="form-group">
+                          <label for="exampleInputEmail1">Item Price</label>
+                          <input type="number" name="product_price" id="product_price" class="form-control" value="{{old('product_price')}}" placeholder="Enter Product Price">
+                    </div>
+                    <div class="form-group">
+                          <label for="exampleInputEmail1">Select Category</label>
+                          <select class="form-control" name="category" id="category">
+                              <option value="">Select Category</option>
+                              @if ($catinfo)
+                                  @foreach ($catinfo as $item)
+                                      <option value="{{$item -> id}}">{{$item -> categoryname}}</option>
+                                      
+                                  @endforeach
+                                  
+                              @endif
+                          </select>
                     </div>
                 </div>
+                <!--<div class="col-md-4">
+                    <img src="" id="proimg" class="img-thumbnail" width="250" height="250">
+                </div>-->
               </div>
             </div>
             <input type="hidden" name="did" id="did">
@@ -111,7 +139,7 @@
 
 <!-- -----------DELETE MODEL START---------- -->
 
-<div class="modal fade" id="catdeletemodal">
+<div class="modal fade" id="prodeletemodal">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -151,27 +179,32 @@ $(document).ready(function(){
 
 // Set insert model
     $('#addmodal').click(function(){
-        $('#catmodal').modal('show');
-        $('.modal-title').text('Add Category');
+        $('#promodal').modal('show');
+        $('.modal-title').text('Add Item');
         $('#btnsubmit').html('Insert Record');
         $('#action').val('Add');
+        $('#proform')[0].reset();
     });
 
 // Set update model
     $('#example1 tbody').on('click','.editmodal',function(){
         
-        var catuid;
-        catuid = $(this).attr('id');
+        var prouid;
+        prouid = $(this).attr('id');
         $.ajax({
-            url: '/category/edit/' + catuid,
+            url: '/item/edit/' + prouid,
             datatype: 'json',
             success:function(data)
             {
-                $('#catname').val(data.result.categoryname);
-                $('#did').val(catuid);
+                $('#product_name').val(data.result.itemname);
+                $('#product_price').val(data.result.price);
+                //$('#stor_image').html("<img src={{URL::to('/')}}/images/" + data.result.image + " width='70' class='img-thumbnail'>");
+                //$('#stor_image').append('<input type="hidden" name="hidden_image" value="'+data.result.image+'"/>');
+                $('#category').val(data.result.categoryid);
+                $('#did').val(prouid);
 
-                $('#catmodal').modal('show');
-                $('.modal-title').text('Update Category');
+                $('#promodal').modal('show');
+                $('.modal-title').text('Update Item');
                 $('#btnsubmit').html('Update Record');
                 $('#action').val('Edit');
             }
@@ -185,16 +218,21 @@ $(document).ready(function(){
 
         if ($('#action').val() == 'Add')
         {
-            route_url = '/category/add';            
+            route_url = '/item/add';            
         }
         if ($('#action').val() == 'Edit')
         {
-            route_url = '/category/update';            
+            route_url = '/item/update';            
         }
+        var form_data = new FormData(document.getElementById('proform'));
+        console.log(form_data);
         $.ajax({
             type: 'POST',
             url: route_url,
-            data: $('#catform').serialize(),
+            data: form_data,
+            contentType: false,
+            cache: false,
+            processData: false,
             datatype: 'json',
             success: function(response)
             { 
@@ -211,9 +249,9 @@ $(document).ready(function(){
                 if (response.success)
                 {
                     html = '<div class = "alert alert-success">' +response.success+ '</div>';
-                    $('#catform')[0].reset();
+                    $('#proform')[0].reset();
                     setTimeout(function(){
-                    $('#catmodal').modal('hide');
+                    $('#promodal').modal('hide');
                     location.reload();
                     },2000); 
                 }
@@ -225,17 +263,17 @@ $(document).ready(function(){
 
 //Set delete modal
   $('#example1 tbody').on('click','.deletemodal',function(){
-    $('#catdeletemodal').modal('show');
-    var catid;
-    catid = $(this).attr('id');
+    $('#prodeletemodal').modal('show');
+    var prodid;
+    prodid = $(this).attr('id');
     $('#deletebtn').click(function(){
         $.ajax({
-            url: '/category/delete/' + catid,
+            url: '/item/delete/' + prodid,
             success:function(data)
             {
             setTimeout(function()
             {
-                $('#catdeletemodal').modal('hide');
+                $('#prodeletemodal').modal('hide');
                 location.reload();
                 alert('Data Deleted');
             },2000);           
@@ -246,6 +284,25 @@ $(document).ready(function(){
 });
 });
 </script>
+
+<script>
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#proimg')
+                    .attr('src', e.target.result)
+                    .width(250)
+                    .height(250)
+					.css( "visibility", "visible" );
+					
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>   
 
 
 @endsection

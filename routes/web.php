@@ -12,11 +12,14 @@
 */
 
 /*Route::get('/home', function () {
-    return view('welcome');
+    return view('home');
 });*/
+Route::get('/login', function () {
+    return view('auth.login');
+});
 //dashboard
 Route::get('/', function () {
-    return view('auth.login');
+    return view('subway.subwaydashboard');
 });
 
 //=======================================Category
@@ -64,6 +67,20 @@ Route::get('/product/delete/{id}','ProductController@delete');
 //update
 Route::get('/product/edit/{id}','ProductController@editfetch');
 Route::post('/product/update','ProductController@update');
+
+//=======================================Product
+//insert
+//Route::get('/product/add','ProductController@insertform');
+Route::post('/item/add','ItemController@insert');
+
+//fetch
+Route::get('/item','ItemController@fetch');
+//delete
+Route::get('/item/delete/{id}','ItemController@delete');
+
+//update
+Route::get('/item/edit/{id}','ItemController@editfetch');
+Route::post('/item/update','ItemController@update');
 
 //========================================Department
 
@@ -179,6 +196,8 @@ Route::get('/subway/fetch-sub-detail','SubwayController@fetchsubdetail');
 
 Route::get('/subway/orders','SubwayController@orders');
 
+//subway customer 
+Route::post('/subwaycustomer/add','SubwayController@customerinsert');
 
 
 

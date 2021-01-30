@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Item extends Model
+class Subwaycustomer extends Model
 {
-    protected $primaryKey = 'itemid';
+    //
 }

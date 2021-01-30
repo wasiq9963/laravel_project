@@ -34,7 +34,7 @@ class CategoryController extends Controller
             //dd('hello');
 
             $category = new Category;
-            $category->category_name = $req->catname;
+            $category->categoryname = $req->catname;
             $category->save();
 
             //$req->session()->flash('msgsuccess','Record Inserted Successfully');
@@ -68,7 +68,7 @@ class CategoryController extends Controller
             //dd('hello');
             $id = $req->did;
             $category = Category::find($id);
-            $category->category_name = $req->catname;
+            $category->categoryname = $req->catname;
             $category->save();
 
             //$req->session()->flash('msgsuccess','Record Updated Successfully');

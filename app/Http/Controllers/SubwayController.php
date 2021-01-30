@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Validator;
 
 use Illuminate\Http\Request;
 
@@ -9,6 +10,7 @@ use App\Item;
 use App\Cart;
 use App\Customer;
 use App\Subdetail;
+use App\Subwaycustomer;
 use DB;
 class SubwayController extends Controller
 {
@@ -163,23 +165,6 @@ class SubwayController extends Controller
             return response()->json(['result' => 'Cart Clear SuccessFully']);
         }
     }
-    public function customerinfo(Request $req)
-    {
-        if ($req -> ajax())
-        {
-            $data = $req->get('data');
-            $customer = Customer::where('cus_phoneno',$data)->first();
-
-            if ($customer != '')
-            {
-                return response()->json(['result' => $customer]);
-            }
-            else
-            {
-                return response()->json(['error' => 'Contact Number Not Found Add New Customer']);
-            }
-        }
-    }
 
     //sub detail add work
     public function subdetail(Request $req)
@@ -217,5 +202,69 @@ class SubwayController extends Controller
     {
         $cart = Cart::where('status','conform')->get();
         return view('order.ordersinfo',['order' => $cart]);
+    }
+
+    //subway customer insert
+    public function customerinsert(Request $req)
+    {
+        $insertform = array(
+            'name' => 'required',
+            'mobile_number' => 'required',
+            'landline_number' => 'required',
+            'contact_person' => 'required',
+            'landmark' => 'required',
+            'address' => 'required',
+            'store' => 'required',
+            'area' => 'required',
+            'example' => 'required',
+
+
+            /*[
+                'txt_name.required' => 'Full Name Is Required',
+                'txt_phoneno.required' => 'Phone No Is Required',
+                'txt_email.required' => 'Email Is Required',
+                'txt_address.required' => 'Address Is Required',
+                'txt_ntn.required' => 'NTN Number Is Required',
+                'txt_openbalance.required' => 'Upening Balance is Required Is Required',
+            ]*/
+        );
+        $validator = Validator::make($req->all(),$insertform);
+
+        if ($validator -> passes())
+        {
+            $customerinser = new Subwaycustomer();
+            $customerinser->name = $req->name;
+            $customerinser->mobile_number = $req->mobile_number;
+            $customerinser->landline_number = $req->landline_number;
+            $customerinser->contact_person = $req->contact_person;
+            $customerinser->delivery_address = $req->address;
+            $customerinser->landmark = $req->landmark;
+            $customerinser->store = $req->store;
+            $customerinser->area = $req->area;
+            $customerinser->foodorder = $req->example;
+            $customerinser->save();
+            return response()->json(['success' => 'Record Inserted Successfully']);
+        }
+        else
+        {
+            return response()->json(['errors' =>$validator->errors()->all()]);
+        }
+    }
+    public function customerinfo(Request $req)
+    {
+        if ($req -> ajax())
+        {
+            $data = $req->get('data');
+            $customer = Subwaycustomer::where('mobile_number',$data)->first();
+
+            if ($customer != '')
+            {
+                return response()->json(['result' => $customer]);
+            }
+            else
+            {
+                return response()->json(['error' => 'Contact Number Not Found Add New Customer']);
+            }
+        }
     }
 }

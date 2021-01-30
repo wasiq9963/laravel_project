@@ -90,23 +90,34 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form id="proform">
+      <form id="customerform">
           @csrf
           <div class="modal-body">
-            <span id="result"></span>
+            <span id="cusresult"></span>
             <div class="row">
               <div class="col-md-12">
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label for="exampleInputEmail1">Mobile Number</label>
-                      <input type="number" name="" id="" class="form-control" value="923123456789" placeholder="Enter Mobile Number">
+                      <label for="exampleInputEmail1">Name</label>
+                      <input type="text" name="name" id="" class="form-control" value="" placeholder="Enter Name">
                     </div>
                   </div>
                   <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="exampleInputEmail1">Landline Number</label>
-                      <input type="number" name="" id="" class="form-control" value="01236315347" placeholder="Enter Landline Number">
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="exampleInputEmail1">Mobile Number</label>
+                          <input type="number" name="mobile_number" id="" class="form-control" value="" placeholder="Enter Mobile Number">
+                        </div>
+                      </div>
+
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label for="exampleInputEmail1">Landline Number</label>
+                          <input type="number" name="landline_number" id="" class="form-control" value="" placeholder="Enter Landline Number">
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -114,17 +125,17 @@
                   <div class="col-md-6">
                         <div class="form-group">
                           <label for="exampleInputEmail1">Contact Person</label>
-                          <input type="number" name="" id="" class="form-control" value="923123456789" placeholder="Enter Contact Person">
+                          <input type="number" name="contact_person" id="" class="form-control" value="" placeholder="Enter Contact Person">
                         </div>
                         <div class="form-group">
                           <label for="exampleInputEmail1">Landmark</label>
-                          <input type="text" name="" id="" class="form-control" value="abc Area" placeholder="Enter Landmark">
+                          <input type="text" name="landmark" id="" class="form-control" value="" placeholder="Enter Landmark">
                         </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="exampleInputEmail1">Delivery Address</label>
-                      <textarea name="" class="form-control" id="" cols="30" rows="5" placeholder="Type Delivert Address">FB Area Azizabad Karachi</textarea>
+                      <textarea name="address" class="form-control" id="" cols="30" rows="5" placeholder="Type Delivert Address"></textarea>
                     </div>
                   </div>
                 </div>
@@ -134,25 +145,25 @@
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="exampleInputEmail1">Select Store</label>
-                          <select class="form-control" name="" id="">
+                          <select class="form-control" name="store" id="">
                               <option value="">Select Store</option>
-                              <option value="">Store 1</option>
-                              <option value="">Store 2</option>
-                              <option value="">Store 3</option>
-                              <option value="">Store 4</option>
-                              <option value="">Store 5</option>
+                              <option value="Store 1">Store 1</option>
+                              <option value="Store 2">Store 2</option>
+                              <option value="Store 3">Store 3</option>
+                              <option value="Store 4">Store 4</option>
+                              <option value="Store 5">Store 5</option>
                           </select>
                     </div>
                       </div>
                       <div class="col-md-6">
                         <div class="form-group">
                           <label for="exampleInputEmail1">Select Area</label>
-                          <select class="form-control" name="" id="" >
+                          <select class="form-control" name="area" id="" >
                               <option value="">Select Area</option>
-                              <option value="">a</option>
-                              <option value="">b</option>
-                              <option value="">c</option>
-                              <option value="">d</option>
+                              <option value="a">a</option>
+                              <option value="b">b</option>
+                              <option value="c">c</option>
+                              <option value="d">d</option>
 
                           </select>
                     </div>
@@ -163,11 +174,11 @@
                     <div class="form-group">
                       <label for="exampleInputEmail1">Foodpanda Order?</label><br>
                       <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" class="custom-control-input" id="customRadio" name="example" value="customEx" checked>
+                        <input type="radio" class="custom-control-input" id="customRadio" name="example" value="Yes" checked>
                         <label class="custom-control-label" for="customRadio">Yes</label>
                       </div>
                       <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" class="custom-control-input" id="customRadio2" name="example" value="customEx">
+                        <input type="radio" class="custom-control-input" id="customRadio2" name="example" value="No">
                         <label class="custom-control-label" for="customRadio2">No</label>
                       </div>                   
                     </div>
@@ -475,7 +486,7 @@
       <!-- /.modal-content -->
     </div>
     <!-- /.modal-dialog -->
-  </div>
+</div>
   <!-- -----------view Detail MODEL END---------- -->
   
   <script>
@@ -538,8 +549,8 @@ $(document).ready(function(){
           {
             alert('No Record');
             //('#result').text();
-          }   $('[data-toggle="tooltip"]').tooltip();   
-
+          }   
+          $('[data-toggle="tooltip"]').tooltip();
         }
         
       });
@@ -614,8 +625,8 @@ function fetchcart()
                   var subtotal = (data.result[i].price)*(data.result[i].quantity);
                   total += subtotal;
               }
-                html += '<tr class="bg-success"><td colspan="3"><b>Total Items:</b> '+ a +' <b>Total Qty:</b> '+data.qtys+'</td>';
-                html += '<td colspan="2"><b>Total:</b> '+total+'</td></tr>';
+                html += '<tr class="bg-success"><td colspan="3"><h5>Total Items:</b> '+ a +' Total Qty: '+data.qtys+'</h5></td>';
+                html += '<td colspan="2"><h5>Total: '+total+'</h5></td></tr>';
                 html += '<tr><td colspan="2"><button id="btnclear" class="btn btn-block btn-outline-dark">Clear</button></td>';
                 html += '<td colspan="3"><button id="btnorder" class="btn btn-block btn-outline-primary">Order Place</button></td></tr>';
               $('#cartitems').html(html);
@@ -722,12 +733,6 @@ function fetchcart()
       });
     });
 
-    //customer work
-    $('#btncustomer').click(function(){
-
-      $('#customermodal').modal('show');
-    });
-
     //contact work
     $(document).on('keyup','#contact',function(){
       var number = $(this).val();
@@ -755,15 +760,15 @@ function fetchcart()
           {
             if (response.result)
             {
-              if (response.result.cus_phoneno == number)
+              if (response.result.mobile_number == number)
               {
                 //alert(response.result.id);
                 data="";
                 data += '<div class="border rounded border-success bg-warning" style="padding: 10px">'
-                data += '<lable><b>Name:</b> '+ response.result.cus_name +'</lable>&nbsp;&nbsp;&nbsp;&nbsp;';
-                data += '<lable><b>Phone No:</b> '+ response.result.cus_phoneno +'</lable> </br>';
-                data += '<lable><b>Address:</b> '+ response.result.cus_address +'</lable> &nbsp;&nbsp;&nbsp;&nbsp;';
-                data += '<lable><b>Landmark: </b>Mukka Chok</lable> </br>';
+                data += '<lable><b>Name:</b> '+ response.result.name +'</lable>&nbsp;&nbsp;&nbsp;&nbsp;';
+                data += '<lable><b>Phone No:</b> '+ response.result.mobile_number +'</lable> </br>';
+                data += '<lable><b>Landmark: </b>'+ response.result.landmark +'</lable> &nbsp;&nbsp;&nbsp;&nbsp;';
+                data += '<lable><b>Address:</b> '+ response.result.delivery_address +'</lable> </br>';
                 data += '</div>';
                 $('#result').html(data);
               }
@@ -772,10 +777,52 @@ function fetchcart()
             {
               alert(response.error);
               $('#customermodal').modal('show');
+              $('#btnsubmit').html('Insert Record');
             }  
           }
         });
     }
+// Set customer insert model
+  $('#btncustomer').click(function(){
+    $('#customermodal').modal('show');
+    $('#btnsubmit').html('Insert Record');
+    $('#action').val('Add');
+  });
+    //insert request using ajax
+  $('#btnsubmit').click(function(e){
+    e.preventDefault();
+      $.ajax({
+        type: 'POST',
+        url: '/subwaycustomer/add',
+        data: $('#customerform').serialize(),
+        datatype: 'json',
+        success: function(response)
+        {
+          var html = '';
+          if (response.errors) 
+          {
+            html = "<div class ='alert alert-danger'>";
+            for (var count = 0; count < response.errors.length; count++) 
+            {
+              html += '<p>' +response.errors[count] + '</p>';  
+            }
+            html += '</div>';
+          }
+          if (response.success)
+          {
+            html = '<div class = "alert alert-success">' +response.success+ '</div>';
+            $('#customerform')[0].reset();
+            setTimeout(function(){
+              $('#customermodal').modal('hide');
+            },2000); 
+          }
+            $('#cusresult').html(html);
+            
+        }
+
+      });
+  });
+
     //detail work
     $(document).on('click','.detail',function(){
 

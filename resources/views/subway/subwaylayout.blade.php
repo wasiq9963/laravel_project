@@ -153,23 +153,6 @@
           <i class="fas fa-th-large"></i>
         </a>
       </li>
-      <li class="nav-item dropdown">
-        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-            {{ Auth::user()->name }} <span class="caret"></span>
-        </a>
-
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="{{ route('logout') }}"
-               onclick="event.preventDefault();
-                             document.getElementById('logout-form').submit();">
-                {{ __('Logout') }}
-            </a>
-
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                @csrf
-            </form>
-        </div>
-    </li>
     </ul>
   </nav>
   <!-- /.navbar -->
@@ -190,10 +173,9 @@
           <img src="{{asset('assets/dist/img/user2-160x160.jpg')}}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">{{ Auth::user()->name }}</a>
+          <a href="#" class="d-block">Wasiq Ali</a>
         </div>
       </div>
-
       <!-- SidebarSearch Form -->
       <div class="form-inline">
         <div class="input-group" data-widget="sidebar-search">
@@ -213,7 +195,7 @@
                with font-awesome or any other icon font library -->
           
                <li class="nav-item">
-                <a href="{{url('/dashboard')}}" class="nav-link">
+                <a href="{{url('/')}}" class="nav-link">
                   <i class="nav-icon fas fa-tachometer-alt"></i>
                   <p>
                     Dashboard
@@ -230,97 +212,26 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{url('/brand')}}" class="nav-link">
+                <a href="{{url('/item')}}" class="nav-link">
                   <i class="nav-icon fas fa-table"></i>
                   <p>
-                    Brand
+                    Items
                   </p>
                 </a>
               </li>
-              <li class="nav-item">
-                <a href="{{url('/product')}}" class="nav-link">
+              <!--<li class="nav-item">
+                <a href="{{url('/subwaycustomers')}}" class="nav-link">
                   <i class="nav-icon fas fa-table"></i>
                   <p>
-                    Product
+                    Customers
                   </p>
                 </a>
-              </li>
+              </li>-->
               <li class="nav-item">
-                <a href="{{url('/department')}}" class="nav-link">
+                <a href="{{url('/subway')}}" class="nav-link">
                   <i class="nav-icon fas fa-table"></i>
                   <p>
-                    Department
-                  </p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{url('/employee')}}" class="nav-link">
-                  <i class="nav-icon fas fa-table"></i>
-                  <p>
-                    Employee
-                  </p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{url('/shift')}}" class="nav-link">
-                  <i class="nav-icon fas fa-table"></i>
-                  <p>
-                    Shift
-                  </p>
-                </a>
-              </li>
-
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon fas fa-tachometer-alt"></i>
-                  <p>
-                    Supplier
-                    <i class="right fas fa-angle-left"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="{{url('/supplier')}}" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Add Supplier</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{url('/supplier/map')}}" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Suppliers Locations</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">
-                  <i class="nav-icon fas fa-tachometer-alt"></i>
-                  <p>
-                    Customer
-                    <i class="right fas fa-angle-left"></i>
-                  </p>
-                </a>
-                <ul class="nav nav-treeview">
-                  <li class="nav-item">
-                    <a href="{{url('/customer')}}" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Add Customer</p>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="{{url('/customer/map')}}" class="nav-link">
-                      <i class="far fa-circle nav-icon"></i>
-                      <p>Customers Locations</p>
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="nav-item">
-                <a href="{{url('/mart')}}" class="nav-link">
-                  <i class="nav-icon fas fa-table"></i>
-                  <p>
-                    Mart
+                    Subway
                   </p>
                 </a>
               </li>
