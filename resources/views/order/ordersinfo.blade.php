@@ -24,11 +24,14 @@
             <div class="card-body">
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
-                <tr>
-                  <th>Sno</th>
-                  <th>Brand Name</th>
-                  <th>Category Name</th>
-                </tr>
+                  <tr>
+                    <th>Sno</th>
+                    <th>Store</th>
+                    <th>Quantities</th>
+                    <th>Total Amount</th>
+                    <th>Order Date</th>
+                    <th>Progress</th>
+                  </tr>
                 </thead>
                 <tbody>
                   @if ($order)
@@ -36,17 +39,27 @@
                     @foreach ($order as $item)
                     <tr>
                       <td>{{$a++}}</td>
-                      <td>{{$item -> price}}</td>
+                      <td>XYZ Store</td>
                       <td>{{$item -> quantity}}</td>
+                      <td>{{$item -> total_amount}}</td>
+                      <td>{{$item -> orderdate}}</td>
+                      <td>
+                        <div class="progress-bar bg-primary" style="width:100%">
+                          Delivering
+                        </div>
+                      </div></td>
                     </tr>
                     @endforeach
                   @endif
                 </tbody>
                 <tfoot>
                 <tr>
-                    <th>Id</th>
-                    <th>Brand Name</th>
-                    <th>Category Name</th>
+                  <th>Sno</th>
+                  <th>Store</th>
+                  <th>Quantities</th>
+                  <th>Total Amount</th>
+                  <th>Order Date</th>
+                  <th>Progress</th>
                 </tr>
                 </tfoot>
               </table>

@@ -628,7 +628,7 @@ function fetchcart()
                 html += '<tr class="bg-success"><td colspan="3"><h5>Total Items:</b> '+ a +' Total Qty: '+data.qtys+'</h5></td>';
                 html += '<td colspan="2"><h5>Total: '+total+'</h5></td></tr>';
                 html += '<tr><td colspan="2"><button id="btnclear" class="btn btn-block btn-outline-dark">Clear</button></td>';
-                html += '<td colspan="3"><button id="btnorder" class="btn btn-block btn-outline-primary">Order Place</button></td></tr>';
+                html += '<td colspan="3"><button id="btnorder" data-id="'+total+'" class="btn btn-block btn-outline-primary">Order Place</button></td></tr>';
               $('#cartitems').html(html);
             }
             else
@@ -709,9 +709,12 @@ function fetchcart()
 
     //order place work
     $(document).on('click','#btnorder',function(){
+      var totalamount = $(this).data('id');
+      //console.log(totalamount);
       $.ajax({
         url: '/subway/order-place',
         datatype: 'json',
+        data:{data:totalamount},
         success:function(data)
         {
           fetchcart();

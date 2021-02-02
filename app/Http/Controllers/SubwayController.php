@@ -11,6 +11,8 @@ use App\Cart;
 use App\Customer;
 use App\Subdetail;
 use App\Subwaycustomer;
+use App\Order;
+use App\Orderdetail;
 use DB;
 class SubwayController extends Controller
 {
@@ -135,19 +137,66 @@ class SubwayController extends Controller
     {
         if ($req -> ajax())
         {
-            $sessionid = Session()->getId();
-            $cart = Cart::where('status','temporary')->
-            where('session_id',$sessionid)->get();
-
-            foreach ($cart as $value) 
+            //order insert work
+            $data = $req->get('data');
+            $order = new Order;
+            $order->status = 'Delivering';
+            $order->total_amount = $data;
+            $order->save();
+            if ($order)
             {
-                $value->status = 'conform';
-                $value->save();
+                //get cart item and update status
+                $sessionid = Session()->getId();
+                $cart = Cart::where('status','temporary')->
+                where('session_id',$sessionid)->get();
+                foreach ($cart as $value) 
+                {
+                    $value->status = 'conform';
+                    $value->save();
+
+                    //insert orderdetail work
+                    $orderdetail = new Orderdetail;
+                    $orderdetail->orderid = $order->id;
+                    $orderdetail->cartid = $value->cartid;
+                    $orderdetail->orderdate = date('Y-m-d');
+                    $orderdetail->save();
+                }
+                return response()->json(['result' => 'Order place SuccessFully']);
             }
-            
-            return response()->json(['result' => 'Order place SuccessFully']);
+            else
+            {
+                return response()->json(['result' => 'Order Not place']);
+            } 
         }
     }
+    //view orders in admin panel
+    public function orders()
+    {
+        //$orderdetail = Orderdetail::where('orderdate',date('Y-m-d'))->distinct()->get('orderid');
+        //$orderdetail = DB::table('Orderdetails')->join('orders','Orderdetails.orderid','orders.id')->
+        //join('carts','Orderdetails.cartid','carts.cartid')->where('orderdate',date('Y-m-d'))->distinct()->get(['orderid','total_amount','orderdate']);
+        $orderdetail = DB::select("SELECT
+        orderdetails.id,
+        orderdetails.orderid,
+        orderdetails.cartid,
+        orderdetails.orderdate,
+        orders.`status`,
+        orders.total_amount,
+        orders.id,
+        carts.cartid,
+        carts.cart_date,
+        carts.item_id,
+        carts.quantity,
+        carts.price
+        FROM
+        orderdetails
+        INNER JOIN orders ON orders.id = orderdetails.orderid
+        INNER JOIN carts ON carts.cartid = orderdetails.cartid    
+        ");
+        
+        return view('order.ordersinfo',['order' => $orderdetail]);
+    }
+
     //cart clear work
     public function cartclear(Request $req)
     {
@@ -196,14 +245,6 @@ class SubwayController extends Controller
             }
         }
     }
-
-    //view orders in admin panel
-    public function orders()
-    {
-        $cart = Cart::where('status','conform')->get();
-        return view('order.ordersinfo',['order' => $cart]);
-    }
-
     //subway customer insert
     public function customerinsert(Request $req)
     {
