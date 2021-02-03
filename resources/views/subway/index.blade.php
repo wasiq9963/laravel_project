@@ -714,7 +714,6 @@ function fetchcart()
       $.ajax({
         url: '/subway/order-place',
         datatype: 'json',
-        data:{data:totalamount},
         success:function(data)
         {
           fetchcart();

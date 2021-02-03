@@ -137,64 +137,88 @@ class SubwayController extends Controller
     {
         if ($req -> ajax())
         {
-            //order insert work
-            $data = $req->get('data');
-            $order = new Order;
-            $order->status = 'Delivering';
-            $order->total_amount = $data;
-            $order->save();
-            if ($order)
-            {
-                //get cart item and update status
-                $sessionid = Session()->getId();
-                $cart = Cart::where('status','temporary')->
-                where('session_id',$sessionid)->get();
-                foreach ($cart as $value) 
-                {
-                    $value->status = 'conform';
-                    $value->save();
+            //get cart item and update status
+            $sessionid = Session()->getId();
+            $cart = Cart::where('status','temporary')->
+            where('session_id',$sessionid)->get();
 
-                    //insert orderdetail work
-                    $orderdetail = new Orderdetail;
-                    $orderdetail->orderid = $order->id;
-                    $orderdetail->cartid = $value->cartid;
-                    $orderdetail->orderdate = date('Y-m-d');
-                    $orderdetail->save();
-                }
-                return response()->json(['result' => 'Order place SuccessFully']);
-            }
-            else
+            $orderid = Order::max('orderid');
+
+            foreach ($cart as $value) 
             {
-                return response()->json(['result' => 'Order Not place']);
-            } 
+                //order insert work
+                //$data = $req->get('data');
+                $order = new Order;
+                $order->orderid = $orderid+1;
+                $order->itemid = $value->item_id;
+                $order->itemname = $value->item_name;
+                $order->price = $value->price;
+                $order->quantity = $value->quantity;
+                $order->itemdate = $value->cart_date; 
+                $order->status = 'New Order';
+                $order->save();
+
+                if ($order)
+                {
+                    $subdetail = Subdetail::where('cartitem_id',$value->cartid)->first();
+                    if ($subdetail != null)
+                    {
+                        $cartdetaail = Cart::where('cartid',$subdetail->cartitem_id)->first();
+
+                        $orderdetail = new Orderdetail;
+                        $orderdetail->itemid = $cartdetaail->item_id;
+                        $orderdetail->cheese = $subdetail->cheese;
+                        $orderdetail->extra_cheese = $subdetail->extra_cheese;
+                        $orderdetail->sauces = $subdetail->sauces;
+                        $orderdetail->vegetables = $subdetail->vegetables;
+                        $orderdetail->extra_meat_topping_is_free = $subdetail->extra_meat_topping_is_free;
+                        $orderdetail->save();
+                    }
+                }
+
+                $value->status = 'conform';
+                $value->save();
+            }
+            return response()->json(['result' => 'Order place SuccessFully']);
         }
     }
     //view orders in admin panel
     public function orders()
     {
-        //$orderdetail = Orderdetail::where('orderdate',date('Y-m-d'))->distinct()->get('orderid');
-        //$orderdetail = DB::table('Orderdetails')->join('orders','Orderdetails.orderid','orders.id')->
-        //join('carts','Orderdetails.cartid','carts.cartid')->where('orderdate',date('Y-m-d'))->distinct()->get(['orderid','total_amount','orderdate']);
         $orderdetail = DB::select("SELECT
-        orderdetails.id,
-        orderdetails.orderid,
-        orderdetails.cartid,
-        orderdetails.orderdate,
-        orders.`status`,
-        orders.total_amount,
         orders.id,
-        carts.cartid,
-        carts.cart_date,
-        carts.item_id,
-        carts.quantity,
-        carts.price
+        orders.orderid,
+        orders.itemid,
+        orders.itemname,
+        SUM(orders.quantity) as quantity,
+        SUM(orders.price * orders.quantity) as price,
+        orders.itemdate,
+        orders.`status`
         FROM
-        orderdetails
-        INNER JOIN orders ON orders.id = orderdetails.orderid
-        INNER JOIN carts ON carts.cartid = orderdetails.cartid    
+        orders
+        GROUP BY(orders.orderid)
+            
         ");
         
         return view('order.ordersinfo',['order' => $orderdetail]);
+    }
+    //order fetch
+    public function orderdetail(Request $req)
+    {
+        if($req -> ajax())
+        {
+            $id = $req->get('id');
+            //$itemid = $req->get('itemid');
+
+            $orderdetail = Order::where('orderid',$id)->get();
+                //orderdetail fetch
+                foreach ($orderdetail as $value)
+                {
+                    $detailorder = Orderdetail::where('itemid',$value->itemid)->get();
+                    return response()->json(['result' => $orderdetail,'orderdetail'=>$detailorder]);
+
+                }
+        }
     }
 
     //cart clear work
@@ -214,7 +238,6 @@ class SubwayController extends Controller
             return response()->json(['result' => 'Cart Clear SuccessFully']);
         }
     }
-
     //sub detail add work
     public function subdetail(Request $req)
     {

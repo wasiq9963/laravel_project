@@ -25,12 +25,13 @@
               <table id="example1" class="table table-bordered table-striped">
                 <thead>
                   <tr>
-                    <th>Sno</th>
+                    <th>Order No</th>
                     <th>Store</th>
                     <th>Quantities</th>
                     <th>Total Amount</th>
                     <th>Order Date</th>
                     <th>Progress</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -38,16 +39,24 @@
                   <?php $a = 1; ?>
                     @foreach ($order as $item)
                     <tr>
-                      <td>{{$a++}}</td>
+                      <td>{{$item -> orderid}}</td>
                       <td>XYZ Store</td>
                       <td>{{$item -> quantity}}</td>
-                      <td>{{$item -> total_amount}}</td>
-                      <td>{{$item -> orderdate}}</td>
+                      <td>{{$item -> price}}</td>
+                      <td>{{$item -> itemdate}}</td>
                       <td>
-                        <div class="progress-bar bg-primary" style="width:100%">
-                          Delivering
+                        @if ($item -> status == 'New Order')
+                        <div class="badge badge-info">
+                          {{$item -> status}}
+                        </div> 
+                        @endif
+                        @if ($item -> status == 'old')
+                        <div class="badge badge-warning">
+                          {{$item -> status}}
                         </div>
-                      </div></td>
+                        @endif
+                        </td>
+                        <td><button id="{{$item -> orderid}}" data-id="{{$item -> itemid}}" class="btn btn-block btn-primary btn-sm detail">Detail</button></td>
                     </tr>
                     @endforeach
                   @endif
@@ -60,6 +69,7 @@
                   <th>Total Amount</th>
                   <th>Order Date</th>
                   <th>Progress</th>
+                  <th>Action</th>
                 </tr>
                 </tfoot>
               </table>
@@ -72,6 +82,30 @@
       </div>
       <!-- /.row -->
     </div>
+    <!-- -----------View MODEL START---------- -->
+
+<div class="modal fade " id="orderdetailmodel">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Order Detail</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+          <div class="modal-body">
+            <table id="detail" class="table table-border">
+              
+            </table>
+          </div>            
+      <div class="modal-footer justify-content-between">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
     <!-- /.container-fluid -->
   </section>
 
@@ -79,4 +113,70 @@
 
 @section('javascript')
     @parent
+    <script>
+      $(document).ready(function(){
+        $('#example1 tbody').on('click','.detail',function(){
+          var id = $(this).attr('id');
+          var itemid = $(this).data('id');
+          //console.log(id);
+
+          $.ajax({
+            url: '/subway/orderdetail',
+            data: {id:id},
+            datatype: 'json',
+            success:function(data)
+            {
+              console.log(data.orderdetail);
+              var len=0;
+              var html = '';
+              if (data.result != null)
+              {
+                len = data.result.length;
+              }
+              if (len > 0)
+              {
+                html += '<tr>';
+                html += '<th>Order Id: '+data.result[0].orderid+'</th>';
+                html += '<th colspan="3">Order Date: '+data.result[0].itemdate+'</th>';
+                html +='</tr>';
+
+                html += '<tr>';
+                html += '<th>ItemName</th>';
+                html += '<th>Quantity</th>';
+                html += '<th>Price</th>';
+                html +='</tr>';
+                var sno=0;
+                var total = 0;
+                var qty = 0;
+                for (let i = 0; i < len; i++) 
+                {
+                  sno++;
+                  html += '<tr>';
+                  html += '<td>'+data.result[i].itemname+'</th>';
+                  html += '<td>'+data.result[i].quantity+'</th>';
+                  html += '<td>'+data.result[i].price+'</th>';
+                  html +='</tr>';
+
+                  var subtotal = data.result[i].quantity * data.result[i].price;
+                  total += subtotal; 
+                  qty += data.result[i].quantity;
+                }
+                html += '<tr>';
+                html += '<th>items: '+ sno +'</th>';
+                html += '<th>Quantity: '+qty+'</th>';
+                html += '<th>Total: '+total+'</th>';
+                html +='</tr>';
+
+
+                $('#detail').html(html);
+              }
+              $('#orderdetailmodel').modal('show');
+
+            }
+          })
+
+
+        });
+      });
+    </script>
 @endsection
