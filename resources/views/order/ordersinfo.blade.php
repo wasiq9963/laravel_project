@@ -126,7 +126,9 @@
             datatype: 'json',
             success:function(data)
             {
+              console.log(data.result);
               console.log(data.orderdetail);
+
               var len=0;
               var html = '';
               if (data.result != null)
@@ -150,16 +152,23 @@
                 var qty = 0;
                 for (let i = 0; i < len; i++) 
                 {
-                  sno++;
-                  html += '<tr>';
-                  html += '<td>'+data.result[i].itemname+'</th>';
-                  html += '<td>'+data.result[i].quantity+'</th>';
-                  html += '<td>'+data.result[i].price+'</th>';
-                  html +='</tr>';
+                  //fetch sub detail
+                      sno++;
+                      html += '<tr>';
+                      html += '<td>'+data.result[i].itemname+'</td>';
+                      html += '<td>'+data.result[i].quantity+'</td>';
+                      html += '<td>'+data.result[i].price+'</td>';
+                      html +='</tr>';
 
-                  var subtotal = data.result[i].quantity * data.result[i].price;
-                  total += subtotal; 
-                  qty += data.result[i].quantity;
+                      html += '<tr>';
+                      html += '<th>Sub Detail</th>';
+                      html += '<td colspan="2"> Cheese:'+data.orderdetail.cheese+'</td>';
+                      html +='</tr>';
+
+                      var subtotal = data.result[i].quantity * data.result[i].price;
+                      total += subtotal; 
+                      qty += data.result[i].quantity;
+                    
                 }
                 html += '<tr>';
                 html += '<th>items: '+ sno +'</th>';

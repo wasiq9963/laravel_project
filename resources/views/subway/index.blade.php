@@ -421,7 +421,8 @@
               </div>
             </div>
           </div>
-          <input type="hidden" name="id" id="id">
+          <input type="hidden" name="cartid" id="cartid">
+          <input type="hidden" name="itemid" id="itemid">
         <input type="hidden" name="action" id="action" value="">
       </form>
       <div class="modal-footer justify-content-between">
@@ -615,12 +616,12 @@ function fetchcart()
                 html += '<tr><td>'+data.result[i].item_name+'</td>';
                 html += '<td>'+data.result[i].price+'</td>';
                 html += '<td> <div class="input-group number-spinner"><span class="input-group-btn">';
-                html += '<button id="'+data.result[i].cartid+'" class="btn btn-sm btn-outline-info" data-dir="dwn"><span class="fa fa-minus"></span></button></span>';
+                html += '<button id="'+data.result[i].id+'" class="btn btn-sm btn-outline-info" data-dir="dwn"><span class="fa fa-minus"></span></button></span>';
                 html += '<input type="text" min="1" class="form-control form-control-sm" value="'+data.result[i].quantity+'"><span class="input-group-btn">';
-                html += '<button id="'+data.result[i].cartid+'" class="btn btn-sm btn-outline-info" data-dir="up"><span class="fa fa-plus"></span></button></span></div> </td>';
+                html += '<button id="'+data.result[i].id+'" class="btn btn-sm btn-outline-info" data-dir="up"><span class="fa fa-plus"></span></button></span></div> </td>';
                 html += '<td>'+(data.result[i].price)*(data.result[i].quantity)+'</td>';
-                html += '<td><button type="button" id="'+data.result[i].cartid+'" class="btn btn-info btn-sm detail">Detail</button>';
-                html += '<button type="button" id="'+data.result[i].cartid+'" class="btn btn-danger btn-sm remove"><i class="fa fa-remove"></i></button></td>';
+                html += '<td><button type="button" id="'+data.result[i].cartid+'" data-id="'+data.result[i].item_id+'" class="btn btn-info btn-sm detail">Detail</button>';
+                html += '<button type="button" id="'+data.result[i].id+'" class="btn btn-danger btn-sm remove"><i class="fa fa-remove"></i></button></td>';
                   
                   var subtotal = (data.result[i].price)*(data.result[i].quantity);
                   total += subtotal;
@@ -829,12 +830,15 @@ function fetchcart()
     $(document).on('click','.detail',function(){
 
       //$('#detailmodal').modal('show');
-      var id = $(this).attr('id');
-      $('#id').val(id);
+      var cartid = $(this).attr('id');
+      var itemid = $(this).data('id');
+      $('#cartid').val(cartid);
+      $('#itemid').val(itemid);
+
 
       $.ajax({
         url: '/subway/fetch-sub-detail',
-        data:{data:id},
+        data:{cartid:cartid, itemid:itemid},
         datatype: 'json',
         success:function(data)
         {

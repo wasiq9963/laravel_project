@@ -70,10 +70,11 @@ class SubwayController extends Controller
 
             $cartitem = Cart::where('item_id',$id)->
             where('status','temporary')->
+            where('username','wasiq')->
             where('session_id',$sessionid)->first();
             if ($cartitem != null)
             {
-                $cart = Cart::where('cartid',$cartitem->cartid)->first();
+                $cart = Cart::where('id',$cartitem->id)->first();
                 $cart->quantity = $cartitem->quantity  + 1;
                 $cart->save();
                 return response()->json(['result' => 'Item Updated']);
@@ -82,6 +83,7 @@ class SubwayController extends Controller
                 {
                     $item = Item::where('itemid',$id)->first();//fetch item price and name
                     $cart = new Cart;
+                    $cart->cartid = 1;
                     $cart->session_id = $sessionid;
                     $cart->cart_date = date("Y-m-d");
                     $cart->item_id = $id;
@@ -89,6 +91,7 @@ class SubwayController extends Controller
                     $cart->price = $item -> price;
                     $cart->quantity = 1;
                     $cart->status = 'temporary';
+                    $cart->username = 'wasiq';
                     $cart->save();
                     return response()->json(['result' => 'Item Added']);
                 }
@@ -101,6 +104,7 @@ class SubwayController extends Controller
         {
             $sessionid = Session()->getId();
             $carts = Cart::where('status','temporary')->
+            where('username','wasiq')->
             where('session_id',$sessionid)->get();
             $totalqty = $carts->sum('quantity');
             //$total = $carts->sum('quantity * price');
@@ -114,7 +118,7 @@ class SubwayController extends Controller
         {
             $sessionid = Session()->getId();
             $id = $req->get('id');
-            $cartitem = Cart::where('cartid',$id);
+            $cartitem = Cart::where('id',$id);
             $cartitem->delete();
             return response()->json(['result' => 'Item Removed']);
         }
@@ -126,7 +130,7 @@ class SubwayController extends Controller
         {
             $id = $req->get('id');
             $qty = $req->get('qty');
-            $cart = Cart::where('cartid',$id)->first();
+            $cart = Cart::where('id',$id)->first();
             $cart->quantity = $qty;
             $cart->save();
             return response()->json(['result' => 'Item Updated']);
@@ -207,17 +211,26 @@ class SubwayController extends Controller
     {
         if($req -> ajax())
         {
+            $data = '';
             $id = $req->get('id');
             //$itemid = $req->get('itemid');
 
             $orderdetail = Order::where('orderid',$id)->get();
                 //orderdetail fetch
-                foreach ($orderdetail as $value)
+            foreach ($orderdetail as $value)
+            {
+                $detailorder = Orderdetail::where('itemid',$value->itemid)->first();
+                if ($detailorder != null)
                 {
-                    $detailorder = Orderdetail::where('itemid',$value->itemid)->get();
-                    return response()->json(['result' => $orderdetail,'orderdetail'=>$detailorder]);
-
+                    $data = $detailorder;
                 }
+                else
+                {
+                    $data ='No Detail';
+                }
+            }
+            return response()->json(['result' => $orderdetail,'orderdetail'=>$data]);
+
         }
     }
 
@@ -229,9 +242,10 @@ class SubwayController extends Controller
             $sessionid = Session()->getId();
             $cart = Cart::where('session_id',$sessionid)->get();
 
+            //dd($cart);
             foreach ($cart as $value) 
             {
-                $subdetail = Subdetail::where('cartitem_id',$value->cartid)->delete();            
+                $subdetail = Subdetail::where('cartid',$value->cartid)->delete();            
             }
             $cart = Cart::where('session_id',$sessionid)->delete();
             
@@ -243,7 +257,8 @@ class SubwayController extends Controller
     {
         //dd($req);
         $detail = new Subdetail();
-        $detail->cartitem_id = $req->id;
+        $detail->cartid = $req->cartid;
+        $detail->itemid = $req->itemid;
         $detail->cheese = $req->cheese;
         $detail->extra_cheese = $req->extracheese;
         $detail->sauces = implode(',',$req->sauces)   ;
@@ -256,8 +271,10 @@ class SubwayController extends Controller
     {
         if ($req -> ajax())
         {
-            $id = $req->get('data');
-            $getdetail = Subdetail::where('cartitem_id',$id)->first();
+            $cartid = $req->get('cartid');
+            $itemid = $req->get('itemid');
+
+            $getdetail = Subdetail::where('itemid',$itemid)->first();
             if ($getdetail != '')
             {
                 return response()->json(['result' => $getdetail]);
