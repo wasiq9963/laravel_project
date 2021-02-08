@@ -13,6 +13,7 @@ use App\Subdetail;
 use App\Subwaycustomer;
 use App\Order;
 use App\Orderdetail;
+use App\Store;
 use DB;
 class SubwayController extends Controller
 {
@@ -20,7 +21,11 @@ class SubwayController extends Controller
     {
         $categories = Category::all();
         //$cartcontent = Cart::getContent();
-        return view('subway.index',['categories' => $categories]);
+
+        //fetch store
+        $store = Store::all();
+        
+        return view('subway.index',['categories' => $categories, 'store' => $store]);
     }
     public function items(Request $req)
     {
@@ -63,7 +68,7 @@ class SubwayController extends Controller
     //add to cart
     public function addtocart(Request $req)
     {
-        $sessionid = Session()->getId();
+        $sessionid =Session()->getId();
         if ($req -> ajax())
         {
             $id = $req->get('id');
@@ -80,10 +85,13 @@ class SubwayController extends Controller
                 return response()->json(['result' => 'Item Updated']);
             }
             else
+            {
+                $cartdetail = Cart::where('session_id',$sessionid)->first();
+                if ($cartdetail != null)
                 {
                     $item = Item::where('itemid',$id)->first();//fetch item price and name
                     $cart = new Cart;
-                    $cart->cartid = 1;
+                    $cart->cartid = $cartdetail->cartid;
                     $cart->session_id = $sessionid;
                     $cart->cart_date = date("Y-m-d");
                     $cart->item_id = $id;
@@ -95,6 +103,25 @@ class SubwayController extends Controller
                     $cart->save();
                     return response()->json(['result' => 'Item Added']);
                 }
+                else
+                {
+                    $cartdetaail = Cart::max('cartid');
+
+                    $item = Item::where('itemid',$id)->first();//fetch item price and name
+                    $cart = new Cart;
+                    $cart->cartid = $cartdetaail+1;
+                    $cart->session_id = $sessionid;
+                    $cart->cart_date = date("Y-m-d");
+                    $cart->item_id = $id;
+                    $cart->item_name = $item-> itemname;
+                    $cart->price = $item -> price;
+                    $cart->quantity = 1;
+                    $cart->status = 'temporary';
+                    $cart->username = 'wasiq';
+                    $cart->save();
+                    return response()->json(['result' => 'Item Added']);
+                }
+            }
         }
     }
     //get cart items
@@ -141,6 +168,7 @@ class SubwayController extends Controller
     {
         if ($req -> ajax())
         {
+            $store = $req->get('data');
             //get cart item and update status
             $sessionid = Session()->getId();
             $cart = Cart::where('status','temporary')->
@@ -155,33 +183,54 @@ class SubwayController extends Controller
                 $order = new Order;
                 $order->orderid = $orderid+1;
                 $order->itemid = $value->item_id;
+                $order->store = $store;
                 $order->itemname = $value->item_name;
                 $order->price = $value->price;
                 $order->quantity = $value->quantity;
                 $order->itemdate = $value->cart_date; 
                 $order->status = 'New Order';
                 $order->save();
+                $itemdelete = Cart::where('item_id',$value->item_id)->
+                where('session_id',$sessionid)->delete();
+
+                //dd($value->item_id);
 
                 if ($order)
                 {
-                    $subdetail = Subdetail::where('cartitem_id',$value->cartid)->first();
+                    $subdetail = Subdetail::where('itemid',$value->item_id)->
+                    where('session_id',$sessionid)->first();
+
+                    //dd($subdetail);
                     if ($subdetail != null)
                     {
-                        $cartdetaail = Cart::where('cartid',$subdetail->cartitem_id)->first();
-
                         $orderdetail = new Orderdetail;
-                        $orderdetail->itemid = $cartdetaail->item_id;
+                        $orderdetail->orderid = $order->orderid;
+                        $orderdetail->itemid = $subdetail->itemid;
                         $orderdetail->cheese = $subdetail->cheese;
                         $orderdetail->extra_cheese = $subdetail->extra_cheese;
                         $orderdetail->sauces = $subdetail->sauces;
                         $orderdetail->vegetables = $subdetail->vegetables;
                         $orderdetail->extra_meat_topping_is_free = $subdetail->extra_meat_topping_is_free;
                         $orderdetail->save();
+                        $subdetail->delete();
                     }
+                    else
+                    {
+                        $orderdetail = new Orderdetail;
+                        $orderdetail->orderid = $order->orderid;
+                        $orderdetail->itemid = $value->item_id;
+                        $orderdetail->cheese = 'No';
+                        $orderdetail->extra_cheese = 'No';
+                        $orderdetail->sauces = 'No';
+                        $orderdetail->vegetables = 'No';
+                        $orderdetail->extra_meat_topping_is_free = 'No';
+                        $orderdetail->save();
+                    }
+                   // $subdetail = Subdetail::where('session_id',$sessionid)->delete();
                 }
 
-                $value->status = 'conform';
-                $value->save();
+                //$value->status = 'conform';
+                //$value->delete();
             }
             return response()->json(['result' => 'Order place SuccessFully']);
         }
@@ -193,6 +242,7 @@ class SubwayController extends Controller
         orders.id,
         orders.orderid,
         orders.itemid,
+        orders.store,
         orders.itemname,
         SUM(orders.quantity) as quantity,
         SUM(orders.price * orders.quantity) as price,
@@ -211,25 +261,13 @@ class SubwayController extends Controller
     {
         if($req -> ajax())
         {
-            $data = '';
             $id = $req->get('id');
-            //$itemid = $req->get('itemid');
+            $orderdetail = DB::table('orders1')->
+            join('orderdetails','orderdetails.orderid','orders.orderid')->
+            join('orders','orders.orderid','orderdetails.orderid')->
+            where('orders.orderid',$id)->get();
 
-            $orderdetail = Order::where('orderid',$id)->get();
-                //orderdetail fetch
-            foreach ($orderdetail as $value)
-            {
-                $detailorder = Orderdetail::where('itemid',$value->itemid)->first();
-                if ($detailorder != null)
-                {
-                    $data = $detailorder;
-                }
-                else
-                {
-                    $data ='No Detail';
-                }
-            }
-            return response()->json(['result' => $orderdetail,'orderdetail'=>$data]);
+            return response()->json(['result' => $orderdetail]);
 
         }
     }
@@ -256,9 +294,11 @@ class SubwayController extends Controller
     public function subdetail(Request $req)
     {
         //dd($req);
+        $sessionid = Session()->getId();
         $detail = new Subdetail();
         $detail->cartid = $req->cartid;
         $detail->itemid = $req->itemid;
+        $detail->session_id = $sessionid;
         $detail->cheese = $req->cheese;
         $detail->extra_cheese = $req->extracheese;
         $detail->sauces = implode(',',$req->sauces)   ;
@@ -271,10 +311,13 @@ class SubwayController extends Controller
     {
         if ($req -> ajax())
         {
+            $sessionid = Session()->getId();
+
             $cartid = $req->get('cartid');
             $itemid = $req->get('itemid');
 
-            $getdetail = Subdetail::where('itemid',$itemid)->first();
+            $getdetail = Subdetail::where('itemid',$itemid)->
+            where('session_id',$sessionid)->first();
             if ($getdetail != '')
             {
                 return response()->json(['result' => $getdetail]);

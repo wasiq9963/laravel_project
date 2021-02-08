@@ -40,7 +40,7 @@
                     @foreach ($order as $item)
                     <tr>
                       <td>{{$item -> orderid}}</td>
-                      <td>XYZ Store</td>
+                      <td>{{$item -> store}}</td>
                       <td>{{$item -> quantity}}</td>
                       <td>{{$item -> price}}</td>
                       <td>{{$item -> itemdate}}</td>
@@ -127,7 +127,6 @@
             success:function(data)
             {
               console.log(data.result);
-              console.log(data.orderdetail);
 
               var len=0;
               var html = '';
@@ -162,7 +161,7 @@
 
                       html += '<tr>';
                       html += '<th>Sub Detail</th>';
-                      html += '<td colspan="2"> Cheese:'+data.orderdetail.cheese+'</td>';
+                      html += '<td colspan="2"> Cheese:</td>';
                       html +='</tr>';
 
                       var subtotal = data.result[i].quantity * data.result[i].price;

@@ -1,4 +1,5 @@
 @extends('subwaymaster')
+
 <style>
   /* Chrome, Safari, Edge, Opera */
   input::-webkit-outer-spin-button,
@@ -42,7 +43,8 @@
               @endforeach
           </select>-->
     </div>
-    <div class="col-md-4" id="result">
+    <div class="col-md-4" >
+      <p class="font-weight-bold text-danger" id="result"></p>
     
     </div>
     <div class="col-md-4">
@@ -60,6 +62,21 @@
         <div class="col-md-4" >
        
             <table class="table table-striped carttable">
+              <tr>
+                <td colspan="2">Select Store</td>
+                <td colspan="3">
+                  <select name="store" id="store" class="form-control">
+                    <option value="">Select Store</option>
+                    @if ($store)
+                      @foreach ($store as $item)
+                        <option value="{{$item -> storename}}">{{$item -> storename}}</option>
+                      @endforeach
+                        
+                    @endif
+                  </select>
+                  <p id="storeresult" class="font-weight-bold text-danger"></p>
+                </td>
+              </tr>
               <tr class="bg-success">
                 <th>Items</th>
                 <th>Price</th>
@@ -589,6 +606,22 @@ $(document).ready(function(){
             {
                 fetchcart();
                 //alert(data.result);
+                const Toast = Swal.mixin({
+                toast: true,
+                position: 'top',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener('mouseenter', Swal.stopTimer)
+                  toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+              })
+
+              Toast.fire({
+                icon: 'success',
+                title: data.result
+              })
             }
         });
     });
@@ -651,8 +684,24 @@ function fetchcart()
             datatype: 'json',
             success:function(data)
             {
-                fetchcart();
-                //alert(data.result);
+              fetchcart();
+              //alert(data.result);
+              const Toast = Swal.mixin({
+                toast: true,
+                position: 'top',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener('mouseenter', Swal.stopTimer)
+                  toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+              })
+
+              Toast.fire({
+                icon: 'success',
+                title: data.result
+              })
             }
         });
     });
@@ -689,6 +738,22 @@ function fetchcart()
           {
             fetchcart();
             //alert(data.result);
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener('mouseenter', Swal.stopTimer)
+                  toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+              })
+
+              Toast.fire({
+                icon: 'success',
+                title: data.result
+              })
           }
       });
     });
@@ -711,16 +776,41 @@ function fetchcart()
     //order place work
     $(document).on('click','#btnorder',function(){
       var totalamount = $(this).data('id');
-      //console.log(totalamount);
-      $.ajax({
-        url: '/subway/order-place',
-        datatype: 'json',
-        success:function(data)
-        {
-          fetchcart();
-          alert(data.result);
-        }
-      });
+      var store = $('#store').val();
+
+      if (store == '')
+      {
+        $('#storeresult').text('Please Select Sore First');
+      }
+      else
+      {
+          $.ajax({
+          url: '/subway/order-place',
+          data:{data:store},
+          datatype: 'json',
+          success:function(data)
+          {
+            fetchcart();
+            //alert(data.result);
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener('mouseenter', Swal.stopTimer)
+                  toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+              })
+
+              Toast.fire({
+                icon: 'success',
+                title: data.result
+              })
+          }
+        });
+      }
     });
 
     //cart clear work
@@ -732,6 +822,22 @@ function fetchcart()
         {
           fetchcart();
           //alert(data.result);
+          const Toast = Swal.mixin({
+                toast: true,
+                position: 'top',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener('mouseenter', Swal.stopTimer)
+                  toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+              })
+
+              Toast.fire({
+                icon: 'success',
+                title: data.result
+              })
         }
       });
     });

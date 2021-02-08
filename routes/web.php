@@ -197,6 +197,22 @@ Route::get('/subway/fetch-sub-detail','SubwayController@fetchsubdetail');
 Route::get('/subway/orders','SubwayController@orders');
 Route::get('/subway/orderdetail','SubwayController@orderdetail');
 
+//=======================================Subway Store 
+Route::get('/store','StoreController@index');
+
+//insert route
+//Route::get('/category/add','CategoryController@insertform');
+Route::post('/store/add','StoreController@insert');
+
+//update route
+Route::get('/store/edit/{id}','StoreController@edit');
+Route::post('/store/update','StoreController@update');
+
+//delete route
+Route::get('/store/delete/{id}','StoreController@delete');
+
+
+
 //subway customer 
 Route::post('/subwaycustomer/add','SubwayController@customerinsert');
 
