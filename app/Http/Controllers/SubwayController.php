@@ -262,10 +262,30 @@ class SubwayController extends Controller
         if($req -> ajax())
         {
             $id = $req->get('id');
-            $orderdetail = DB::table('orders1')->
-            join('orderdetails','orderdetails.orderid','orders.orderid')->
-            join('orders','orders.orderid','orderdetails.orderid')->
-            where('orders.orderid',$id)->get();
+            /*$orderdetail = DB::table('orders')->
+            Join('orderdetails','orders.orderid','orderdetails.orderid','orderdetails.itemid','orders.itemid')->
+            where('orders.orderid',$id)->get();*/
+
+            $orderdetail = DB::select("SELECT
+            orders.orderid,
+            orders.itemid,
+            orders.store,
+            orders.itemname,
+            orders.quantity,
+            orders.price,
+            orders.itemdate,
+            orderdetails.cheese,
+            orderdetails.extra_cheese,
+            orderdetails.sauces,
+            orderdetails.vegetables,
+            orderdetails.extra_meat_topping_is_free
+            FROM
+            orders
+            INNER JOIN orderdetails ON orders.orderid = orderdetails.orderid AND orderdetails.itemid = orders.itemid
+            WHERE
+            orders.orderid = $id        
+                ");
+
 
             return response()->json(['result' => $orderdetail]);
 
@@ -295,17 +315,66 @@ class SubwayController extends Controller
     {
         //dd($req);
         $sessionid = Session()->getId();
-        $detail = new Subdetail();
-        $detail->cartid = $req->cartid;
-        $detail->itemid = $req->itemid;
-        $detail->session_id = $sessionid;
-        $detail->cheese = $req->cheese;
-        $detail->extra_cheese = $req->extracheese;
-        $detail->sauces = implode(',',$req->sauces)   ;
-        $detail->vegetables = implode(',',$req->vegetable);
-        $detail->extra_meat_topping_is_free = $req->extra;
-        $detail->save();
-        return response()->json(['result' => 'Detail Added']);
+
+        $cartid = $req->get('cartid');
+        $itemid = $req->get('itemid');
+        $subdetail = Subdetail::where('cartid',$cartid)->where('itemid',$itemid)->
+        where('session_id',$sessionid)->first();
+        if ($subdetail != null)
+        {
+            $subdetail->cartid = $req->cartid;
+            $subdetail->itemid = $req->itemid;
+            $subdetail->session_id = $sessionid;
+            $subdetail->cheese = $req->cheese;
+            $subdetail->extra_cheese = $req->extracheese;
+            if ($req->sauces == null)
+            {
+                $subdetail->sauces = 'No';
+            }
+            else
+            {
+                $subdetail->sauces = implode(',',$req->sauces);
+            }
+            if ($req->vegetable == null) 
+            {
+                $subdetail->vegetables = 'No';
+            }
+            else
+            {
+                $subdetail->vegetables = implode(',',$req->vegetable);
+            }
+            $subdetail->extra_meat_topping_is_free = $req->extra;
+            $subdetail->save();
+            return response()->json(['result' => 'Detail Updated']);
+        }
+        else
+        {
+            $detail = new Subdetail();
+            $detail->cartid = $req->cartid;
+            $detail->itemid = $req->itemid;
+            $detail->session_id = $sessionid;
+            $detail->cheese = $req->cheese;
+            $detail->extra_cheese = $req->extracheese;
+            if ($req->sauces == null)
+            {
+                $detail->sauces = 'No';
+            }
+            else
+            {
+                $detail->sauces = implode(',',$req->sauces);
+            }
+            if ($req->vegetable == null) 
+            {
+                $detail->vegetables = 'No';
+            }
+            else
+            {
+                $detail->vegetables = implode(',',$req->vegetable);
+            }
+            $detail->extra_meat_topping_is_free = $req->extra;
+            $detail->save();
+            return response()->json(['result' => 'Detail Added']);
+        }
     }
     public function fetchsubdetail(Request $req)
     {

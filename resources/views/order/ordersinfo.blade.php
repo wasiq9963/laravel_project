@@ -85,7 +85,7 @@
     <!-- -----------View MODEL START---------- -->
 
 <div class="modal fade " id="orderdetailmodel">
-  <div class="modal-dialog modal-md">
+  <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title">Order Detail</h4>
@@ -160,8 +160,12 @@
                       html +='</tr>';
 
                       html += '<tr>';
-                      html += '<th>Sub Detail</th>';
-                      html += '<td colspan="2"> Cheese:</td>';
+                      html += '<td colspan="3"> <b>Sub Detail</b> ';
+                      html += '<b>Cheese:</b> '+data.result[i].cheese;
+                      html += ' <b>ExtraCheese:</b> '+data.result[i].extra_cheese;
+                      html += ' <b>Sauces:</b> '+data.result[i].sauces;
+                      html += ' <b>Vegetables:</b> '+data.result[i].vegetables;
+                      html += ' <b>Extra Meat:</b> '+data.result[i].extra_meat_topping_is_free+'</td>';
                       html +='</tr>';
 
                       var subtotal = data.result[i].quantity * data.result[i].price;

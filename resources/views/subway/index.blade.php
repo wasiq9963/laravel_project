@@ -233,7 +233,7 @@
       <form id="detail">
           @csrf
           <div class="modal-body">
-            <span id="result"></span>
+            <span id="subresult"></span>
             <div class="row">
               <div class="col-md-12">
                 <!--<div class="row">
@@ -321,11 +321,11 @@
                     <div class="form-group">
                       <label for="exampleInputEmail1">Extra Meat Topping Is Free</label><br>
                       <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" id="extra3" name="extra" class="custom-control-input" value="No" checked>
+                        <input type="radio" id="extra3" id="extra" name="extra" class="custom-control-input" value="No" checked>
                         <label class="custom-control-label" for="extra3">No</label>
                       </div>
                       <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" id="extra4" name="extra" value="Yes" class="custom-control-input">
+                        <input type="radio" id="extra4" id="extra" name="extra" value="Yes" class="custom-control-input">
                         <label class="custom-control-label" for="extra4">Yes</label>
                       </div>                  
                     </div>
@@ -336,39 +336,39 @@
                     <div class="form-group">
                       <label for="exampleInputEmail1">Vegetables?</label><br> 
                       <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input" value="Lettuc" name="vegetable[]" id="vegetable1">
+                        <input type="checkbox" class="custom-control-input data" value="Lettuc" name="vegetable[]" id="vegetable1">
                         <label class="custom-control-label" for="vegetable1">Lettuc</label>
                       </div>
                       <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input" value="Tomato" name="vegetable[]" id="vegetable2">
+                        <input type="checkbox" class="custom-control-input data" value="Tomato" name="vegetable[]" id="vegetable2">
                         <label class="custom-control-label" for="vegetable2">Tomato</label>
                       </div>
                       <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input" value="Capsicum" name="vegetable[]" id="vegetable3">
+                        <input type="checkbox" class="custom-control-input data" value="Capsicum" name="vegetable[]" id="vegetable3">
                         <label class="custom-control-label" for="vegetable3">Capsicum</label>
                       </div>
                       <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input" value="Onion" name="vegetable[]" id="vegetable4">
+                        <input type="checkbox" class="custom-control-input data" value="Onion" name="vegetable[]" id="vegetable4">
                         <label class="custom-control-label" for="vegetable4">Onion</label>
                       </div>   
                       <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input" value="Cucumber" name="vegetable[]" id="vegetable5">
+                        <input type="checkbox" class="custom-control-input data" value="Cucumber" name="vegetable[]" id="vegetable5">
                         <label class="custom-control-label" for="vegetable5">Cucumber</label>
                       </div>
                       <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input" value="Jalapenos" name="vegetable[]" id="vegetable6">
+                        <input type="checkbox" class="custom-control-input data" value="Jalapenos" name="vegetable[]" id="vegetable6">
                         <label class="custom-control-label" for="vegetable6">Jalapenos</label>
                       </div>   
                       <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input" value="Olives" name="vegetable[]" id="vegetable7">
+                        <input type="checkbox" class="custom-control-input data" value="Olives" name="vegetable[]" id="vegetable7">
                         <label class="custom-control-label" for="vegetable7">Olives</label>
                       </div>
                       <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input" value="Coleslaw" name="vegetable[]" id="vegetable8">
+                        <input type="checkbox" class="custom-control-input data" value="Coleslaw" name="vegetable[]" id="vegetable8">
                         <label class="custom-control-label" for="vegetable8">Coleslaw</label>
                       </div>   
                       <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input" value="Pickles" name="vegetable[]" id="vegetable9">
+                        <input type="checkbox" class="custom-control-input data" value="Pickles" name="vegetable[]" id="vegetable9">
                         <label class="custom-control-label" for="vegetable9">Pickles</label>
                       </div>                  
                     </div>
@@ -667,7 +667,7 @@ function fetchcart()
             }
             else
             {
-              html += '<tr><td class="text-center text-danger" colspan="5">Cart Is Empty</td></tr>'
+              html += '<tr><td class="font-weight-bold text-center text-danger" colspan="5">Cart Is Empty</td></tr>'
               $('#cartitems').html(html);
             }
           }
@@ -790,6 +790,7 @@ function fetchcart()
           datatype: 'json',
           success:function(data)
           {
+            $("#storeresult").load(location.href + " #storeresult");
             fetchcart();
             //alert(data.result);
             const Toast = Swal.mixin({
@@ -807,7 +808,7 @@ function fetchcart()
               Toast.fire({
                 icon: 'success',
                 title: data.result
-              })
+              });
           }
         });
       }
@@ -951,16 +952,37 @@ function fetchcart()
           if (data.result)
           {
             $('#id').val(data.result.cartitem_id);
-            /*$('#subsize').val(data.result.sub_size);
-            $('#extratopping').val(data.result.extra_topping);
-            $('#bread').val(data.result.bread);
-            $('#toasted').val(data.result.toasted);
-            $('#subsize').val(data.result.sub_size);*/
             $('#cheese').val(data.result.cheese);
             $('#extracheese').val(data.result.extra_cheese);
+            var b=data.result.sauces;
+            var arr = b.split(",");
+            //alert(arr.length);
+            for(i=0;i<arr.length;i++)
+            {console.log(arr[i]);
+              $('[name="sauces[]"]').each(function(){
+              //alert(arr[i]);
+                if($(this).val()==arr[i])
+                {
+                  $(this).prop('checked', true);
+                }
+              })
+            }
+            var a=data.result.vegetables;
+            var arrv = a.split(",");
+            //alert(arr.length);
+            for(x=0;x<arrv.length;x++)
+            {
+              $('[name="vegetable[]"]').each(function(){
+              //alert(arr[i]);
+                if($(this).val()==arrv[x])
+                {
+                  $(this).prop('checked', true);
+                }
+              })
+            }
             /*$('#sauces').val(data.result.sauces);
             $('#extratopping').val(data.result.extra_topping);*/
-            $('#extra').val(data.result.extra_meat_topping_is_free);
+            $('[name="extra"]').val(data.result.extra_meat_topping_is_free).prop("checked", true);
             $('#detailmodal').modal('show');
           }
           if (data.error)
@@ -981,10 +1003,17 @@ function fetchcart()
         datatype: 'json',
         success: function(response)
         {
-          $('#detail')[0].reset();
-          $('#detailmodal').modal('hide');
-          alert(response.result);
+          html = '<div class = "alert alert-success">' +response.result+ '</div>';
+          $('#subresult').html(html);
+
+                    $('#detail')[0].reset();
+                    setTimeout(function(){
+                    $('#detailmodal').modal('hide');
+                    $("#subresult").load(location.href + " #subresult");
+                    },2000);
+
         }
+        
       });
       
     });
