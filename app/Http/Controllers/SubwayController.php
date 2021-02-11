@@ -183,6 +183,7 @@ class SubwayController extends Controller
                 $order = new Order;
                 $order->orderid = $orderid+1;
                 $order->itemid = $value->item_id;
+                $order->customerid = 1;
                 $order->store = $store;
                 $order->itemname = $value->item_name;
                 $order->price = $value->price;
@@ -267,6 +268,7 @@ class SubwayController extends Controller
             where('orders.orderid',$id)->get();*/
 
             $orderdetail = DB::select("SELECT
+            orders.id,
             orders.orderid,
             orders.itemid,
             orders.store,
@@ -274,14 +276,19 @@ class SubwayController extends Controller
             orders.quantity,
             orders.price,
             orders.itemdate,
+            orders.`status`,
             orderdetails.cheese,
             orderdetails.extra_cheese,
             orderdetails.sauces,
             orderdetails.vegetables,
-            orderdetails.extra_meat_topping_is_free
+            orderdetails.extra_meat_topping_is_free,
+            subwaycustomers.`name`,
+            subwaycustomers.mobile_number,
+            subwaycustomers.delivery_address
             FROM
             orders
             INNER JOIN orderdetails ON orders.orderid = orderdetails.orderid AND orderdetails.itemid = orders.itemid
+            INNER JOIN subwaycustomers ON orders.customerid = subwaycustomers.id
             WHERE
             orders.orderid = $id        
                 ");
