@@ -258,11 +258,11 @@ class SubwayController extends Controller
         return view('order.ordersinfo',['order' => $orderdetail]);
     }
     //order fetch
-    public function orderdetail(Request $req)
+    public function orderdetail(Request $req,$id)
     {
-        if($req -> ajax())
-        {
-            $id = $req->get('id');
+        //dd($id);
+            
+            //$id = $req->get('id');
             /*$orderdetail = DB::table('orders')->
             Join('orderdetails','orders.orderid','orderdetails.orderid','orderdetails.itemid','orders.itemid')->
             where('orders.orderid',$id)->get();*/
@@ -292,11 +292,9 @@ class SubwayController extends Controller
             WHERE
             orders.orderid = $id        
                 ");
+            return response()->json($orderdetail);
 
-
-            return response()->json(['result' => $orderdetail]);
-
-        }
+        
     }
 
     //cart clear work
@@ -466,5 +464,9 @@ class SubwayController extends Controller
                 return response()->json(['error' => 'Contact Number Not Found Add New Customer']);
             }
         }
+    }
+    public function report($id)
+    {
+        return view('subway.report',['id' =>$id]);
     }
 }

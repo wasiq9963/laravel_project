@@ -56,7 +56,9 @@
                         </div>
                         @endif
                         </td>
-                        <td><button id="{{$item -> orderid}}" data-id="{{$item -> itemid}}" class="btn btn-block btn-primary btn-sm detail">Detail</button></td>
+                        <td>
+                          <a href="{{url('subway/report/'.$item -> orderid)}}" class="btn btn-info">print</a>
+                          <button id="{{$item -> orderid}}" data-id="{{$item -> itemid}}" class="btn btn-block btn-primary btn-sm detail">Detail</button></td>
                     </tr>
                     @endforeach
                   @endif

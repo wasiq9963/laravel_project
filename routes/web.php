@@ -195,7 +195,8 @@ Route::get('/subway/sub-detail','SubwayController@subdetail');
 Route::get('/subway/fetch-sub-detail','SubwayController@fetchsubdetail');
 
 Route::get('/subway/orders','SubwayController@orders');
-Route::get('/subway/orderdetail','SubwayController@orderdetail');
+Route::get('/subway/orderdetail/{id}','SubwayController@orderdetail');
+Route::get('/subway/report/{id}','SubwayController@report');
 
 //=======================================Subway Store 
 Route::get('/store','StoreController@index');
