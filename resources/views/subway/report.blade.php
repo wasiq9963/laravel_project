@@ -87,7 +87,7 @@
       async function loadReport() {
         // load report definition from the file
         const reportResponse = await fetch(
-          '{{asset('assets/proreport.rdlx-json')}}'
+          '{{asset('assets/report.rdlx-json')}}'
           // 'proreport.rdlx-json'
         );
         const report = await reportResponse.json();

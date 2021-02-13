@@ -169,6 +169,7 @@ class SubwayController extends Controller
         if ($req -> ajax())
         {
             $store = $req->get('data');
+            $customerid = $req->get('id');
             //get cart item and update status
             $sessionid = Session()->getId();
             $cart = Cart::where('status','temporary')->
@@ -183,7 +184,7 @@ class SubwayController extends Controller
                 $order = new Order;
                 $order->orderid = $orderid+1;
                 $order->itemid = $value->item_id;
-                $order->customerid = 1;
+                $order->customerid = $customerid;
                 $order->store = $store;
                 $order->itemname = $value->item_name;
                 $order->price = $value->price;

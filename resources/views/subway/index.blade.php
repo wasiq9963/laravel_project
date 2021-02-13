@@ -43,8 +43,9 @@
               @endforeach
           </select>-->
     </div>
-    <div class="col-md-4" >
+    <div class="col-md-4">
       <p class="font-weight-bold text-danger" id="result"></p>
+      <div id="info"></div>
     
     </div>
     <div class="col-md-4">
@@ -60,7 +61,6 @@
           </div>
         </div>
         <div class="col-md-4" >
-       
             <table class="table table-striped carttable">
               <tr>
                 <td colspan="2">Select Store</td>
@@ -75,6 +75,7 @@
                     @endif
                   </select>
                   <p id="storeresult" class="font-weight-bold text-danger"></p>
+                  <input type="hidden" id="cusname">
                 </td>
               </tr>
               <tr class="bg-success">
@@ -777,16 +778,36 @@ function fetchcart()
     $(document).on('click','#btnorder',function(){
       var totalamount = $(this).data('id');
       var store = $('#store').val();
+      var cusid = $('#cusname').val();
 
-      if (store == '')
+      if (store == '' )
       {
         $('#storeresult').text('Please Select Sore First');
+      }
+      else if(cusid == '')
+      {
+        const Toast = Swal.mixin({
+                toast: true,
+                position: 'top',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener('mouseenter', Swal.stopTimer)
+                  toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+              })
+
+              Toast.fire({
+                icon: 'info',
+                title: 'Please select Customer'
+              });
       }
       else
       {
           $.ajax({
           url: '/subway/order-place',
-          data:{data:store},
+          data:{data:store,id:cusid},
           datatype: 'json',
           success:function(data)
           {
@@ -809,6 +830,11 @@ function fetchcart()
                 icon: 'success',
                 title: data.result
               });
+              $("#info").load(location.href + " #info");
+              $('#store').val('');
+              $('#cusname').val('');
+              $('#contact').val('');
+              
           }
         });
       }
@@ -849,10 +875,15 @@ function fetchcart()
       if (number.length == 11)
       {
         customerinfo(number);
+        $("#result").load(location.href + " #result");
+
       }
       else if((number.length > 11) || (number.length < 11) )
       {
         $('#result').html('Incorrect Number');
+        $("#info").load(location.href + " #info");
+        $("#cusname").val('');
+
       }
       else
       {
@@ -880,12 +911,28 @@ function fetchcart()
                 data += '<lable><b>Landmark: </b>'+ response.result.landmark +'</lable> &nbsp;&nbsp;&nbsp;&nbsp;';
                 data += '<lable><b>Address:</b> '+ response.result.delivery_address +'</lable> </br>';
                 data += '</div>';
-                $('#result').html(data);
+                $('#info').html(data);
+                $('#cusname').val(response.result.id);
               }
             }
             else
             {
-              alert(response.error);
+              const Toast = Swal.mixin({
+                toast: true,
+                position: 'top',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener('mouseenter', Swal.stopTimer)
+                  toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+              })
+
+              Toast.fire({
+                icon: 'info',
+                title: response.error
+              });
               $('#customermodal').modal('show');
               $('#btnsubmit').html('Insert Record');
             }  
