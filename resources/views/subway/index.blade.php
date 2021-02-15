@@ -1,4 +1,4 @@
-@extends('subwaymaster')
+@extends('subway.subwaymaster')
 
 <style>
   /* Chrome, Safari, Edge, Opera */

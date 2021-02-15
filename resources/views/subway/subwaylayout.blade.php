@@ -17,7 +17,7 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="{{asset('assets/dist/css/adminlte.min.css')}}">
   <!-- Toastr -->
-  <link rel="stylesheet" href="{{asset('assets/plugins/toastr/toastr.min.css')}}">
+  <script src="{{asset('style/popper.min.js')}}"></script>
   <!-- DataTables -->
   <link rel="stylesheet" href="{{asset('assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css')}}">
   <link rel="stylesheet" href="{{asset('assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css')}}">
@@ -199,6 +199,15 @@
                   <i class="nav-icon fas fa-tachometer-alt"></i>
                   <p>
                     Dashboard
+                  </p>
+                </a>
+              </li>
+
+              <li class="nav-item">
+                <a href="{{url('/user')}}" class="nav-link">
+                  <i class="nav-icon fas fa-table"></i>
+                  <p>
+                    User
                   </p>
                 </a>
               </li>

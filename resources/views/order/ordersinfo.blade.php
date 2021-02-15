@@ -8,7 +8,6 @@
       <div class="row">
         <div class="col-12">
           <!-- /.card -->
-
           <div class="card">
             <div class="card-header">
               <div class="row">
@@ -46,7 +45,7 @@
                       <td>{{$item -> itemdate}}</td>
                       <td>
                         @if ($item -> status == 'New Order')
-                        <div class="badge badge-info">
+                        <div class="badge badge-success">
                           {{$item -> status}}
                         </div> 
                         @endif
@@ -57,8 +56,8 @@
                         @endif
                         </td>
                         <td>
-                          <a href="{{url('subway/report/'.$item -> orderid)}}" class="btn btn-info">print</a>
-                          <button id="{{$item -> orderid}}" data-id="{{$item -> itemid}}" class="btn btn-block btn-primary btn-sm detail">Detail</button></td>
+                          <a href="{{url('subway/report/'.$item -> orderid)}}" class="btn btn-block btn-primary btn-sm">print</a>
+                          <!--<button id="{{$item -> orderid}}" data-id="{{$item -> itemid}}" class="btn btn-block btn-primary btn-sm detail">Detail</button></td>-->
                     </tr>
                     @endforeach
                   @endif
@@ -116,8 +115,8 @@
 @section('javascript')
     @parent
     <script>
-      $(document).ready(function(){
-        $('#example1 tbody').on('click','.detail',function(){
+       /*$(document).ready(function(){
+       $('#example1 tbody').on('click','.detail',function(){
           var id = $(this).attr('id');
           var itemid = $(this).data('id');
           //console.log(id);
@@ -191,6 +190,6 @@
 
 
         });
-      });
+      });*/
     </script>
 @endsection

@@ -212,7 +212,18 @@ Route::post('/store/update','StoreController@update');
 //delete route
 Route::get('/store/delete/{id}','StoreController@delete');
 
+//=======================================User
+Route::get('/user','UserController@index');
 
+//Insert route
+Route::post('/user/add','UserController@add');
+
+//delete route
+Route::get('/user/delete/{id}','UserController@delete');
+
+//update route
+Route::get('/user/edit/{id}','UserController@editfetch');
+Route::post('/user/update','UserController@update');
 
 //subway customer 
 Route::post('/subwaycustomer/add','SubwayController@customerinsert');
