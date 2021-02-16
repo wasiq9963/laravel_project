@@ -12,7 +12,7 @@
             <div class="card-header">
               <div class="row">
                 <div class="col-sm-4">
-                  <h1 class="card-title">Conform Orders</h1>
+                  <h1 class="card-title">Active Orders</h1>
                 </div>
                 <div class="col-sm-4">
                 </div>
@@ -56,7 +56,7 @@
                         @endif
                         </td>
                         <td>
-                          <a href="{{url('subway/report/'.$item -> orderid)}}" class="btn btn-block btn-primary btn-sm">print</a>
+                          <a href="{{url('order/report/'.$item -> orderid)}}" class="btn btn-block btn-primary btn-sm">print</a>
                           <!--<button id="{{$item -> orderid}}" data-id="{{$item -> itemid}}" class="btn btn-block btn-primary btn-sm detail">Detail</button></td>-->
                     </tr>
                     @endforeach

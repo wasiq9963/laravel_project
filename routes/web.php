@@ -13,12 +13,23 @@
 
 /*Route::get('/home', function () {
     return view('home');
-});*/
-Route::get('/login', function () {
-    return view('auth.login');
 });
-//dashboard
 Route::get('/', function () {
+    return view('auth.login');
+});*/
+Route::get('/', function () {
+			
+    if (Auth::guest())
+    {
+        return view('auth.login');
+    }else{
+
+        return view('subway.subwaydashboard');
+    }
+});
+
+//dashboard
+Route::get('/dashboard', function () {
     return view('subway.subwaydashboard');
 });
 
@@ -194,9 +205,9 @@ Route::get('/subway/customer','SubwayController@customerinfo');
 Route::get('/subway/sub-detail','SubwayController@subdetail');
 Route::get('/subway/fetch-sub-detail','SubwayController@fetchsubdetail');
 
-Route::get('/subway/orders','SubwayController@orders');
-Route::get('/subway/orderdetail/{id}','SubwayController@orderdetail');
-Route::get('/subway/report/{id}','SubwayController@report');
+Route::get('/order','OrderController@orders');
+Route::get('/orderdetail/{id}','OrderController@orderdetail');
+Route::get('/order/report/{id}','OrderController@report');
 
 //=======================================Subway Store 
 Route::get('/store','StoreController@index');
@@ -233,7 +244,7 @@ Route::post('/subwaycustomer/add','SubwayController@customerinsert');
 
 Auth::routes();
 
-Route::get('/dashboard', 'HomeController@index');
+//Route::get('/dashboard', 'HomeController@index');
 
 
 

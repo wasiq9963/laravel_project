@@ -57,7 +57,7 @@
         const headers = new Headers();
         
               const dataRequest = new Request(
-                '{{url('subway/orderdetail/'.$id)}}',      
+                '{{url('/orderdetail/'.$id)}}',      
                  {
                   headers: headers,
                  }

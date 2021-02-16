@@ -10,6 +10,11 @@ use DB;
 
 class ItemController extends Controller
 {
+    //auth name set work
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function fetch(Request $req)
     {
         $catinfo = Category::all();

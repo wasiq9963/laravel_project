@@ -9,6 +9,11 @@ use App\Category;
 
 class CategoryController extends Controller
 {
+    //auth name set work
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         $catinfo = Category::all();

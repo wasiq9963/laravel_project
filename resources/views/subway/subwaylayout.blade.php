@@ -153,6 +153,23 @@
           <i class="fas fa-th-large"></i>
         </a>
       </li>
+      <li class="nav-item dropdown">
+        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+            {{ Auth::user()->name }} <span class="caret"></span>
+        </a>
+
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="{{ route('logout') }}"
+               onclick="event.preventDefault();
+                             document.getElementById('logout-form').submit();">
+                {{ __('Logout') }}
+            </a>
+
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
+        </div>
+    </li>
     </ul>
   </nav>
   <!-- /.navbar -->
@@ -173,7 +190,7 @@
           <img src="{{asset('assets/dist/img/user2-160x160.jpg')}}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block">Wasiq Ali</a>
+          <a href="#" class="d-block">{{ Auth::user()->name }}</a>
         </div>
       </div>
       <!-- SidebarSearch Form -->
@@ -193,73 +210,20 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-          
-               <li class="nav-item">
-                <a href="{{url('/')}}" class="nav-link">
-                  <i class="nav-icon fas fa-tachometer-alt"></i>
-                  <p>
-                    Dashboard
-                  </p>
-                </a>
-              </li>
 
-              <li class="nav-item">
-                <a href="{{url('/user')}}" class="nav-link">
-                  <i class="nav-icon fas fa-table"></i>
-                  <p>
-                    User
-                  </p>
-                </a>
-              </li>
-
-              <li class="nav-item">
-                <a href="{{url('/category')}}" class="nav-link">
-                  <i class="nav-icon fas fa-table"></i>
-                  <p>
-                    Category
-                  </p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{url('/item')}}" class="nav-link">
-                  <i class="nav-icon fas fa-table"></i>
-                  <p>
-                    Items
-                  </p>
-                </a>
-              </li>
-              <!--<li class="nav-item">
-                <a href="{{url('/subwaycustomers')}}" class="nav-link">
-                  <i class="nav-icon fas fa-table"></i>
-                  <p>
-                    Customers
-                  </p>
-                </a>
-              </li>-->
-              <li class="nav-item">
-                <a href="{{url('/subway')}}" class="nav-link">
-                  <i class="nav-icon fas fa-table"></i>
-                  <p>
-                    Subway
-                  </p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{url('/subway/orders')}}" class="nav-link">
-                  <i class="nav-icon fas fa-table"></i>
-                  <p>
-                    Orders
-                  </p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="{{url('/store')}}" class="nav-link">
-                  <i class="nav-icon fas fa-table"></i>
-                  <p>
-                    Store
-                  </p>
-                </a>
-              </li>
+               <?php
+              $menulist = DB::table('manues')->where('role','=',Auth::user()->role)->get();
+                ?>
+                @foreach ($menulist as $item)
+                <li class="nav-item">
+                  <a href="{{url($item -> route)}}" class="nav-link">
+                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                    <p>
+                      {{$item -> mainmenu}}
+                    </p>
+                  </a>
+                </li>
+                @endforeach
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

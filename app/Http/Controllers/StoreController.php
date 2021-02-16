@@ -9,6 +9,11 @@ use App\Store;
 
 class StoreController extends Controller
 {
+    //auth name set work
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         $storeinfo = Store::all();

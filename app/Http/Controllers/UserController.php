@@ -5,9 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    //auth name set work
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     public function index()
     {
         $user = User::all();
@@ -35,7 +41,7 @@ class UserController extends Controller
             $userinsert = new User;
             $userinsert->name = $req->txt_name;
             $userinsert->email = $req->txt_email;
-            $userinsert->password = $req->password;
+            $userinsert->password = Hash::make($req->password);
             $userinsert->role = $req->role;
             $userinsert->save();
             return response()->json(['success' => 'User Added Successfully']);
@@ -78,7 +84,7 @@ class UserController extends Controller
             $userinsert = User::where('id',$id)->first();
             $userinsert->name = $req->txt_name;
             $userinsert->email = $req->txt_email;
-            $userinsert->password = $req->password;
+            $userinsert->password = Hash::make($req->password);
             $userinsert->role = $req->role;
             $userinsert->save();
             return response()->json(['success' => 'User Updated Successfully']);
