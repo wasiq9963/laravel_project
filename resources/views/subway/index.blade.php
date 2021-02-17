@@ -33,7 +33,6 @@
  <div class="row" style="margin-top: 10px">
     <div class="col-md-4">
       <button type="button" class="btn  btn-outline-success" data-toggle="modal" id="btncustomer">New Customer</button>
-      <button type="button" class="btn  btn-outline-primary">Add Form</button>
 
      <!-- <h3>Categories</h3>
               <select name="category" id="category" class="form-control">
@@ -486,10 +485,6 @@
                                    <li>
                                   Category :<span id="catname"> </span></li>
                               </ul>
-                              <span>Quantity :</span><input type="number" class="form-control" min="1" name="qty" value="1"><br>
-                              <button type="submit" class="btn btn-info">
-                                <i class="fa fa-cart-plus" aria-hidden="true"> Add To Card</i>
-                            </button>
                           </div>
   
                       </div>
@@ -550,7 +545,7 @@ $(document).ready(function(){
               html += '<div class="col-md-2 col-sm-2" style="width:100%;padding-bottom: 10px;">';
               html += '<div class="card border-success" id="'+response.result[i].itemid+'" style="width:100%">';
               //html += '<img class="card-img-top imgclick" id="'+response.result[i].itemid+'" src="{{URL::to('/')}}/images/BBQ-Chicken.jpg" alt="Card image" width:"50px" height="50px">';
-              html +='<a href="#" data-toggle="tooltip" title="'+response.result[i].itemname+'"><img class="card-img-top imgclick" id="'+response.result[i].itemid+'" src={{URL::to('/')}}/images/'+response.result[i].categoryid+'.jpg alt="Card image" width:"100px" height="100px">';
+              html +='<a href="#" data-toggle="tooltip" title="'+response.result[i].itemname+'"><img class="card-img-top imgclick" id="'+response.result[i].itemid+'" src={{URL::to('/')}}/images/'+response.result[i].image+' alt="Card image" width:"100px" height="100px">';
               html +='<div class="card-body bg-warning" style="padding: 5px;">';
               html +='<h5 class="card-text text-dark test2">'+response.result[i].itemname+'</h5>';
               html +='<h5 class="text-dark"> Rs: <b>'+response.result[i].price+'</b></h5> </a>';
@@ -585,7 +580,7 @@ $(document).ready(function(){
             datatype: 'json',
             success: function(data)
             {
-                $('#image').attr('src','{{URL::to('/')}}/images/'+data.result.categoryid+'.jpg');
+                $('#image').attr('src','{{URL::to('/')}}/images/'+data.result.image);
                 $('#itemname').text(data.result.itemname);
                 $('#itemprice').text('Rs: '+data.result.price);
                 $('#catname').text(data.result.categoryname);

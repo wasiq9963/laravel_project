@@ -34,6 +34,7 @@
                         <th>Id</th>
                         <th>Item Name</th>
                         <th>Item Price</th>
+                        <th>Image</th>
                         <th>Category Name</th>
                         <th>Action</th>
                     </tr>
@@ -45,6 +46,7 @@
                         <td>{{$item -> itemid}}</td>
                         <td>{{$item -> itemname}}</td>
                         <td>{{$item -> price}}</td>
+                        <td><img src="{{URL::to('/')}}/images/{{$item -> image}}" width="50" class="img-thumbnail"></td>
                         <td>{{$item -> categoryname}}</td>
                         <td>
                             <button type="button" class="btn btn-primary btn-xs editmodal"  id="{{$item -> itemid}}"><span class="fa fa-edit"></span> Edit</button>
@@ -61,6 +63,7 @@
                     <th>Id</th>
                     <th>Item Name</th>
                     <th>Item Price</th>
+                    <th>Image</th>
                     <th>Category Name</th>
                     <th>Action</th>
                 </tr>
@@ -94,15 +97,23 @@
             <div class="modal-body">
               <span id="result"></span>
               <div class="row">
-                <div class="col-md-12">
+                <div class="col-md-8">
                     <div class="form-group">
                         <label for="exampleInputEmail1">Item Name</label>
-                        <input type="text" name="product_name" id="product_name" class="form-control" value="{{old('product_name')}}" placeholder="Enter Product Name">
+                        <input type="text" name="item_name" id="item_name" class="form-control" value="{{old('product_name')}}" placeholder="Enter Product Name">
                     </div>
                     <div class="form-group">
                           <label for="exampleInputEmail1">Item Price</label>
-                          <input type="number" name="product_price" id="product_price" class="form-control" value="{{old('product_price')}}" placeholder="Enter Product Price">
+                          <input type="number" name="item_price" id="item_price" class="form-control" value="{{old('product_price')}}" placeholder="Enter Product Price">
                     </div>
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Upload Item Image</label>
+                      <div class="custom-file">
+                          <input type="file" name="item_image" class="custom-file-input" id="item_image" onChange="readURL(this)">
+                          <label class="custom-file-label" for="exampleInputFile">Choose file</label>
+                      </div>
+                      <span id="stor_image"></span>
+                  </div>
                     <div class="form-group">
                           <label for="exampleInputEmail1">Select Category</label>
                           <select class="form-control" name="category" id="category">
@@ -117,9 +128,9 @@
                           </select>
                     </div>
                 </div>
-                <!--<div class="col-md-4">
+                <div class="col-md-4">
                     <img src="" id="proimg" class="img-thumbnail" width="250" height="250">
-                </div>-->
+                </div>
               </div>
             </div>
             <input type="hidden" name="did" id="did">
@@ -196,10 +207,10 @@ $(document).ready(function(){
             datatype: 'json',
             success:function(data)
             {
-                $('#product_name').val(data.result.itemname);
-                $('#product_price').val(data.result.price);
-                //$('#stor_image').html("<img src={{URL::to('/')}}/images/" + data.result.image + " width='70' class='img-thumbnail'>");
-                //$('#stor_image').append('<input type="hidden" name="hidden_image" value="'+data.result.image+'"/>');
+                $('#item_name').val(data.result.itemname);
+                $('#item_price').val(data.result.price);
+                $('#stor_image').html("<img src={{URL::to('/')}}/images/" + data.result.image + " width='70' class='img-thumbnail'>");
+                $('#stor_image').append('<input type="hidden" name="hidden_image" value="'+data.result.image+'"/>');
                 $('#category').val(data.result.categoryid);
                 $('#did').val(prouid);
 

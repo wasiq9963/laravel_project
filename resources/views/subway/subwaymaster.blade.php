@@ -26,7 +26,7 @@
           <a class="nav-link" href="{{url('/subway')}}">Home <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Cart</a>
+          <a class="nav-link" href="{{url('/')}}">Dashboard</a>
         </li>
         <!-- Dropdown -->
     <li class="nav-item dropdown">

@@ -29,8 +29,9 @@ class ItemController extends Controller
     public function insert(Request $req)
     {
         $validator = Validator::make($req -> all(),[
-            'product_name' => 'required',
-            'product_price' => 'required',
+            'item_name' => 'required',
+            'item_price' => 'required',
+            'item_image' => 'required|image|max:2048',
             'category'=> 'required'
         ]);
 
@@ -38,13 +39,14 @@ class ItemController extends Controller
         {
             //dd($req->all());
             //image upload work
-            /*$image = $req->file('product_image');
+            $image = $req->file('item_image');
             $new_name = rand() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images'), $new_name);*/
+            $image->move(public_path('images'), $new_name);
 
             $item = new Item;
-            $item->itemname = $req->product_name;
-            $item->price = $req->product_price;
+            $item->itemname = $req->item_name;
+            $item->price = $req->item_price;
+            $item->image = $new_name;
             $item->categoryid = $req->category;
             $item->save();
             //$req->session()->flash('msgsuccess','Record Inserted Successfully');
@@ -61,48 +63,29 @@ class ItemController extends Controller
     public function delete(Request $req, $id)
     {
         $iteminfo = Item::where('itemid',$id)->first();
-        /*if (!$proinfo) 
-        {
-            $req->session()->flash('msgdanger','Record Not found');
-            return redirect('/product');
-        }*/
         $iteminfo->delete();
-        //$req->session()->flash('msgsuccess','Record Deleted successfully');
-        //return redirect('/product');
     }
     //update work
     public function editfetch(Request $req,$id)
     {
-        //fetch category and set in dropdown
-       // $catinfo = Category::all();
-        //$brandinfo = Brand::all();
-
         if (request() -> ajax())
         {
             $iteminfo = Item::where('itemid',$id)->first();
             return response()->json(['result' => $iteminfo]);
         }  
-        /*if (!$proinfo) 
-        {
-            $req->session()->flash('msgdanger','Record Not found');
-            return redirect('/product');
-        }
-
-        */return view('product.productedit',['catinfo' => $catinfo,'brandinfo' => $brandinfo])->with(compact('proinfo'));
     }
     public function update(Request $req)
     {
         $id = $req->did;
-        /*$image_name = $req->hidden_image;
-        $image = $req->file('product_image');
+        $image_name = $req->hidden_image;
+        $image = $req->file('item_image');
         if ($image != '')
         {
             $validator = Validator::make($req -> all(),[
-                'product_name' => 'required',
-                'product_price' => 'required',
-                'product_image' => 'required|image|max:2048',
-                'category'=> 'required',
-                'brand'=> 'required'
+                'item_name' => 'required',
+                'item_price' => 'required',
+                'item_image' => 'required|image|max:2048',
+                'category'=> 'required'
             ]);
     
             if ($validator -> fails())
@@ -115,25 +98,23 @@ class ItemController extends Controller
         else
         {
             $validator = Validator::make($req -> all(),[
-                'product_name' => 'required',
-                'product_price' => 'required',
-                'category'=> 'required',
-                'brand'=> 'required'
+                'item_name' => 'required',
+                'item_price' => 'required',
+                'category'=> 'required'
             ]);
     
             if ($validator -> fails())
             {
                 return response()->json(['errors' => $validator->errors()->all()]);
             }
-        }*/
+        }
 
             $itempdate = Item::where('itemid',$id)->first();
-            $itempdate->itemname = $req->product_name;
-            $itempdate->price = $req->product_price;
+            $itempdate->itemname = $req->item_name;
+            $itempdate->price = $req->item_price;
+            $itempdate->image = $image_name;
             $itempdate->categoryid = $req->category;
             $itempdate->save();
-           // $req->session()->flash('msgsuccess','Record Updated Successfully');
-            //return redirect('/product');
             return response()->json(['success' => 'Record Updated Successfully']);
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Order;
 use App\Orderdetail;
 use App\Subwaycustomer;
+use App\Store;
 
 use DB;
 
@@ -16,26 +17,54 @@ class OrderController extends Controller
     {
         $this->middleware('auth');
     }
-    //view orders in admin panel
-    public function orders()
+    public function index(Type $var = null)
     {
-        $orderdetail = DB::select("SELECT
-        orders.id,
-        orders.orderid,
-        orders.itemid,
-        orders.store,
-        orders.itemname,
-        SUM(orders.quantity) as quantity,
-        SUM(orders.price * orders.quantity) as price,
-        orders.itemdate,
-        orders.`status`
-        FROM
-        orders
-        GROUP BY(orders.orderid)
-            
-        ");
-        
-        return view('order.ordersinfo',['order' => $orderdetail]);
+        $store = Store::all();
+        return view('order.ordersinfo',['store' =>$store]);
+
+    }
+    //view orders in admin panel
+    public function orders(Request $req)
+    {
+
+        $data = $req->get('query');
+        if ($data != '')
+        {
+            $orderdetail = DB::select("SELECT
+            orders.id,
+            orders.orderid,
+            orders.itemid,
+            orders.store,
+            orders.itemname,
+            SUM(orders.quantity) as quantity,
+            SUM(orders.price * orders.quantity) as price,
+            orders.itemdate,
+            orders.status
+            FROM
+            orders 
+            GROUP BY(orders.orderid) WHERE (orders.store) = zam zama
+            ");
+            return response()->json(['order' => $orderdetail]);
+        }
+        else
+        {
+            $orderdetail = DB::select("SELECT
+            orders.id,
+            orders.orderid,
+            orders.itemid,
+            orders.store,
+            orders.itemname,
+            SUM(orders.quantity) as quantity,
+            SUM(orders.price * orders.quantity) as price,
+            orders.itemdate,
+            orders.status
+            FROM
+            orders
+            GROUP BY(orders.orderid) 
+            ");
+            return response()->json(['order' => $orderdetail]);
+        }  
+      
     }
 
     //order fetch
