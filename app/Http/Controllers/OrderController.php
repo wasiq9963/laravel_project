@@ -7,6 +7,7 @@ use App\Order;
 use App\Orderdetail;
 use App\Subwaycustomer;
 use App\Store;
+use Auth;
 
 use DB;
 
@@ -16,6 +17,10 @@ class OrderController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+
+        
+
+
     }
     public function index(Type $var = null)
     {
@@ -28,26 +33,49 @@ class OrderController extends Controller
     {
 
         $data = $req->get('query');
-        if ($data != '')
+        if (Auth::user()->role == 'Admin')
         {
-            $orderdetail = DB::select("SELECT
-            orders.id,
-            orders.orderid,
-            orders.itemid,
-            orders.store,
-            orders.itemname,
-            SUM(orders.quantity) as quantity,
-            SUM(orders.price * orders.quantity) as price,
-            orders.itemdate,
-            orders.status
-            FROM
-            orders 
-            GROUP BY(orders.orderid) WHERE (orders.store) = zam zama
-            ");
-            return response()->json(['order' => $orderdetail]);
+            if ($data != '')
+            {
+                $orderdetail = DB::select("SELECT
+                orders.id,
+                orders.orderid,
+                orders.itemid,
+                orders.store,
+                orders.itemname,
+                SUM(orders.quantity) as quantity,
+                SUM(orders.price * orders.quantity) as price,
+                orders.itemdate,
+                orders.status
+                FROM
+                orders
+                WHERE orders.store = '$data'
+                GROUP BY(orders.orderid) 
+                ");
+                return response()->json(['order' => $orderdetail]);
+            }
+            else
+            {
+                $orderdetail = DB::select("SELECT
+                orders.id,
+                orders.orderid,
+                orders.itemid,
+                orders.store,
+                orders.itemname,
+                SUM(orders.quantity) as quantity,
+                SUM(orders.price * orders.quantity) as price,
+                orders.itemdate,
+                orders.status
+                FROM
+                orders
+                GROUP BY(orders.orderid) 
+                ");
+                return response()->json(['order' => $orderdetail]);
+            }
         }
         else
         {
+            $data = Auth::user()->store;
             $orderdetail = DB::select("SELECT
             orders.id,
             orders.orderid,
@@ -60,10 +88,12 @@ class OrderController extends Controller
             orders.status
             FROM
             orders
+            WHERE orders.store = '$data'
             GROUP BY(orders.orderid) 
             ");
-            return response()->json(['order' => $orderdetail]);
-        }  
+                return response()->json(['order' => $orderdetail]);
+        }
+          
       
     }
 

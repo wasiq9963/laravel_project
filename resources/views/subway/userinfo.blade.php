@@ -35,6 +35,7 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Role</th>
+                    <th>Store</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -46,11 +47,12 @@
                             <td>{{$item -> name}}</td>
                             <td>{{$item -> email}}</td>
                             <td>{{$item -> role}}</td>
+                            <td>{{$item -> store}}</td>
                             <td>
                               <button type="button" class="btn btn-primary btn-xs editmodal"  id="{{$item -> id}}"><span class="fa fa-edit"></span> Edit</button>
                               <button type="button" class="btn btn-danger btn-xs deletemodal" id="{{$item -> id}}"><span class="fa fa-trash"></span> Delete</button>
                             </td>
-                          </tr>  
+                          </tr> 
                         @endforeach
                     @endif
                 </tbody>
@@ -60,6 +62,7 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Role</th>
+                    <th>Store</th>
                     <th>Action</th>
                 </tr>
                 </tfoot>
@@ -116,6 +119,17 @@
                         <option value="StoreAdmin">Store Admin </option>
                     </select>
             </div>
+            <div class="form-group">
+              <label for="">Store</label>
+              <select name="store" id="store" class="form-control">
+                  <option value="">Select Store</option>
+                  @foreach ($store as $item)
+                    <option value="{{$item -> storename}}">{{$item -> storename}}</option>
+                      
+                  @endforeach
+                  
+              </select>
+      </div>
         </div>
             <input type="hidden" name="did" id="did">
           <input type="hidden" name="action" id="action" value="">
@@ -194,6 +208,8 @@ $(document).ready(function(){
                 $('#txt_email').val(data.result.email);
                 $('#password').val(data.result.password);
                 $('#role').val(data.result.role);
+                $('#store').val(data.result.store);
+
                 $('#did').val(userid);
 
                 $('#usermodal').modal('show');

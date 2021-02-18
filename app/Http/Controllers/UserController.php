@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\Manue;
+use App\Store;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 
@@ -16,8 +18,11 @@ class UserController extends Controller
     }
     public function index()
     {
+        //store fetch
+        $store = Store::all();
+
         $user = User::all();
-        return view('subway.userinfo',['user' => $user]);
+        return view('subway.userinfo',['user' => $user, 'store' => $store]);
     }
 
     public function add(Request $req)
@@ -26,13 +31,17 @@ class UserController extends Controller
             'txt_name' => 'required', 'string', 'max:255',
             'txt_email' => 'required', 'string', 'email', 'max:255', 'unique:users',
             'password' => 'required', 'string', 'min:8','max:25',
-            'role' => 'required'
+            'role' => 'required',
+            'store' => 'required'
+
         ],
         [
             'txt_name.required' => '*Name Is Required',
             'txt_email.required' => '*Email Is Required',
             'password.required' => '*Password Is Required',
-            'role.required' => 'Please select User Type'
+            'role.required' => 'Please select User Type',
+            'store.required' => 'Please select store'
+
         ]);
 
 
@@ -43,6 +52,8 @@ class UserController extends Controller
             $userinsert->email = $req->txt_email;
             $userinsert->password = Hash::make($req->password);
             $userinsert->role = $req->role;
+            $userinsert->store = $req->store;
+
             $userinsert->save();
             return response()->json(['success' => 'User Added Successfully']);
         }
@@ -69,13 +80,17 @@ class UserController extends Controller
             'txt_name' => 'required', 'string', 'max:255',
             'txt_email' => 'required', 'string', 'email', 'max:255', 'unique:users',
             'password' => 'required', 'string', 'min:8','max:25',
-            'role' => 'required'
+            'role' => 'required',
+            'store' => 'required'
+
         ],
         [
             'txt_name.required' => '*Name Is Required',
             'txt_email.required' => '*Email Is Required',
             'password.required' => '*Password Is Required',
-            'role.required' => 'Please select User Type'
+            'role.required' => 'Please select User Type',
+            'store.required' => 'Please select store'
+
         ]);
 
         if ($validator -> passes()) 
@@ -86,6 +101,7 @@ class UserController extends Controller
             $userinsert->email = $req->txt_email;
             $userinsert->password = Hash::make($req->password);
             $userinsert->role = $req->role;
+            $userinsert->store = $req->store;
             $userinsert->save();
             return response()->json(['success' => 'User Updated Successfully']);
         }
