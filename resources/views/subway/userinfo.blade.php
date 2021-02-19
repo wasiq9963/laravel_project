@@ -117,6 +117,8 @@
                         <option value="OrderBooker">Order Booker</option>
                         <option value="Admin">Admin</option>
                         <option value="StoreAdmin">Store Admin </option>
+                        <option value="Testing demo">Testing demo </option>
+
                     </select>
             </div>
             <div class="form-group">

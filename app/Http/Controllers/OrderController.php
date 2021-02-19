@@ -17,21 +17,11 @@ class OrderController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-
+    }
+    public function index(Request $req)
+    {
+        $store = Store::all();  
         
-
-
-    }
-    public function index(Type $var = null)
-    {
-        $store = Store::all();
-        return view('order.ordersinfo',['store' =>$store]);
-
-    }
-    //view orders in admin panel
-    public function orders(Request $req)
-    {
-
         $data = $req->get('query');
         if (Auth::user()->role == 'Admin')
         {
@@ -52,7 +42,9 @@ class OrderController extends Controller
                 WHERE orders.store = '$data'
                 GROUP BY(orders.orderid) 
                 ");
-                return response()->json(['order' => $orderdetail]);
+                return view('order.ordersinfo',['order' => $orderdetail,'store' =>$store]);
+
+                //return response()->json(['order' => $orderdetail]);
             }
             else
             {
@@ -70,7 +62,9 @@ class OrderController extends Controller
                 orders
                 GROUP BY(orders.orderid) 
                 ");
-                return response()->json(['order' => $orderdetail]);
+                return view('order.ordersinfo',['order' => $orderdetail,'store' =>$store]);
+
+                //return response()->json(['order' => $orderdetail]);
             }
         }
         else
@@ -91,8 +85,16 @@ class OrderController extends Controller
             WHERE orders.store = '$data'
             GROUP BY(orders.orderid) 
             ");
-                return response()->json(['order' => $orderdetail]);
+            return view('order.ordersinfo',['order' => $orderdetail,'store' =>$store]);
+                //return response()->json(['order' => $orderdetail]);
         }
+
+        //return view('order.ordersinfo',['store' =>$store]);
+    }
+    //view orders in admin panel
+    public function orders(Request $req)
+    {
+        
           
       
     }

@@ -199,13 +199,15 @@
     }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
     $('#example2').DataTable({
       "paging": true,
-      "lengthChange": false,
-      "searching": false,
+      "lengthChange": true,
+      "lengthMenu": [25, 50, 75, 100 ],
+      "searching": true,
       "ordering": true,
       "info": true,
       "autoWidth": false,
       "responsive": true,
     });
+    
   });
 </script>
 

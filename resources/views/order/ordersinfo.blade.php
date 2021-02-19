@@ -36,7 +36,7 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <table id="example1" class="table table-bordered table-striped">
+              <table id="example2" class="table table-bordered table-striped">
                 <thead>
                   <tr>
                     <th>Order No</th>
@@ -48,8 +48,33 @@
                     <th>Action</th>
                   </tr>
                 </thead>
-                <tbody id="orders">
-                    
+                <tbody>
+                  @if ($order)
+                  <?php $a = 1; ?>
+                    @foreach ($order as $item)
+                    <tr>
+                      <td>{{$item -> orderid}}</td>
+                      <td>{{$item -> store}}</td>
+                      <td>{{$item -> quantity}}</td>
+                      <td>{{$item -> price}}</td>
+                      <td>{{$item -> itemdate}}</td>
+                      <td>
+                        @if ($item -> status == 'New Order')
+                        <div class="badge badge-success">
+                          {{$item -> status}}
+                        </div> 
+                        @endif
+                        @if ($item -> status == 'old')
+                        <div class="badge badge-warning">
+                          {{$item -> status}}
+                        </div>
+                        @endif
+                        </td>
+                        <td>
+                          <a target="_blank" href="{{url('order/report/'.$item -> orderid)}}" class="btn btn-block btn-primary btn-sm">print</a>
+                    </tr>
+                    @endforeach
+                  @endif
                 </tbody>
                 <tfoot>
                 <tr>
@@ -105,7 +130,12 @@
  @parent
 <script>
 $(document).ready(function(){
-  fetch();
+  setTimeout(function()
+  {
+        location.reload();
+  },60000);
+
+  /*fetch();
   $('#store').change(function(){
     var store = $(this).val();
     fetch(store);
@@ -142,19 +172,21 @@ $(document).ready(function(){
             {
               html += '<td><div class="badge badge-warning">'+response.order[i].status+'</div></td>';
             }
-            html += '<td><a href="{{url('order/report')}}/'+response.order[i].orderid+'" class="btn btn-block btn-sm btn-info">Print</a></td>'
+            html += '<td><a target="_blank" href="{{url('order/report')}}/'+response.order[i].orderid+'" class="btn btn-block btn-sm btn-info">Print</a></td>';
+            html += '</tr>'
           }
-          $('#orders').html(html);
+          $("#example2 tbody").append(html);
+
         }
         else
         {
           html += '<tr><td class="font-weight-bold text-center text-danger" colspan="7">No Record Found</td></tr>'
-          $('#orders').html(html);
+          $("#example2 tbody").append(html);
         }
       }
 
     });
-  }
+  }*/
 });
 
 </script>
