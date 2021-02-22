@@ -37,15 +37,7 @@
       #viewer-host {
         margin: 0 auto;
         width: 100%;
-        height: 600px;
-      }
-    </style>
-  </head>
-  <style>
-      #viewer-host {
-        margin: 0 auto;
-        width: 100%;
-        height: 600px;
+        height: 650px;
       }
     </style>
   </head>

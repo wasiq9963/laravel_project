@@ -8,6 +8,8 @@ use App\Orderdetail;
 use App\Subwaycustomer;
 use App\Store;
 use Auth;
+use DataTables;
+
 
 use DB;
 
@@ -94,47 +96,68 @@ class OrderController extends Controller
     //view orders in admin panel
     public function orders(Request $req)
     {
-        
-          
-      
-    }
-
-    //order fetch
-    public function orderdetail(Request $req,$id)
-    {
-        //dd($id);
-            
-            //$id = $req->get('id');
-            /*$orderdetail = DB::table('orders')->
-            Join('orderdetails','orders.orderid','orderdetails.orderid','orderdetails.itemid','orders.itemid')->
-            where('orders.orderid',$id)->get();*/
-
-            $orderdetail = DB::select("SELECT
+        $query = $req->get('query');
+        if ($req->ajax()) {
+            $data = DB::select("SELECT
             orders.id,
             orders.orderid,
             orders.itemid,
             orders.store,
             orders.itemname,
-            orders.quantity,
-            orders.price,
+            SUM(orders.quantity) as quantity,
+            SUM(orders.price * orders.quantity) as price,
             orders.itemdate,
-            orders.`status`,
-            orderdetails.cheese,
-            orderdetails.extra_cheese,
-            orderdetails.sauces,
-            orderdetails.vegetables,
-            orderdetails.extra_meat_topping_is_free,
-            subwaycustomers.`name`,
-            subwaycustomers.mobile_number,
-            subwaycustomers.delivery_address
+            orders.status
             FROM
             orders
-            INNER JOIN orderdetails ON orders.orderid = orderdetails.orderid AND orderdetails.itemid = orders.itemid
-            INNER JOIN subwaycustomers ON orders.customerid = subwaycustomers.id
-            WHERE
-            orders.orderid = $id        
-                ");
-            return response()->json($orderdetail);
+            WHERE orders.store = '$query'
+            GROUP BY(orders.orderid) 
+            ");
+            return Datatables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function($row){
+     
+                           $btn = '<a target="_blank" href="" class="btn btn-block btn-primary btn-sm"><i class="fa fa-print"></i> Print</a>
+                           ';
+       
+                            return $btn;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+        }
+        
+        return view('order.ordersinfo');
+    }
+
+    //order fetch
+    public function orderdetail(Request $req,$id)
+    {
+        $orderdetail = DB::select("SELECT
+        orders.id,
+        orders.orderid,
+        orders.itemid,
+        orders.store,
+        orders.itemname,
+        orders.quantity,
+        orders.price,
+        orders.itemdate,
+        orders.`status`,
+        orderdetails.cheese,
+        orderdetails.extra_cheese,
+        orderdetails.sauces,
+        orderdetails.vegetables,
+        orderdetails.extra_meat_topping_is_free,
+        subwaycustomers.`name`,
+        subwaycustomers.mobile_number,
+            subwaycustomers.delivery_address
+        FROM
+        orders
+        INNER JOIN orderdetails ON orders.orderid = orderdetails.orderid AND orderdetails.itemid = orders.itemid
+        INNER JOIN subwaycustomers ON orders.customerid = subwaycustomers.id
+        WHERE
+        orders.orderid = $id        
+        ");
+        return response()->json($orderdetail);
     }
     public function report($id)
     {
