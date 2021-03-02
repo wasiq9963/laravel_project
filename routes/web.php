@@ -22,31 +22,33 @@ Route::get('/', function () {
     if (Auth::guest())
     {
         return view('auth.login');
-    }else{
-
-        return view('subway.subwaydashboard');
+    }
+    else
+    {
+        return Redirect::action('DashboardController@index');
     }
 });
+/*Route::get('/report', function () {
+        return view('subway.slip');
 
+});*/
 //dashboard
-Route::get('/dashboard', function () {
-    return view('subway.subwaydashboard');
-});
+Route::get('dashboard','DashboardController@index');
 
 //=======================================Category
 //for fetch
-Route::get('/category', 'CategoryController@index');
+Route::get('category', 'CategoryController@index');
 
 //insert route
-//Route::get('/category/add','CategoryController@insertform');
-Route::post('/category/add','CategoryController@insert');
+//Route::get('category/add','CategoryController@insertform');
+Route::post('category/add','CategoryController@insert');
 
 //update route
-Route::get('/category/edit/{id}','CategoryController@edit');
-Route::post('/category/update','CategoryController@update');
+Route::get('category/edit/{id}','CategoryController@edit');
+Route::post('category/update','CategoryController@update');
 
 //delete route
-Route::get('/category/delete/{id}','CategoryController@catdelete');
+Route::get('category/delete/{id}','CategoryController@catdelete');
 
 //=======================================Brand
 
@@ -79,19 +81,19 @@ Route::get('/product/delete/{id}','ProductController@delete');
 Route::get('/product/edit/{id}','ProductController@editfetch');
 Route::post('/product/update','ProductController@update');
 
-//=======================================Product
+//=======================================Items
 //insert
 //Route::get('/product/add','ProductController@insertform');
-Route::post('/item/add','ItemController@insert');
+Route::post('item/add','ItemController@insert');
 
 //fetch
-Route::get('/item','ItemController@fetch');
+Route::get('item','ItemController@fetch');
 //delete
-Route::get('/item/delete/{id}','ItemController@delete');
+Route::get('item/delete/{id}','ItemController@delete');
 
 //update
-Route::get('/item/edit/{id}','ItemController@editfetch');
-Route::post('/item/update','ItemController@update');
+Route::get('item/edit/{id}','ItemController@editfetch');
+Route::post('item/update','ItemController@update');
 
 //========================================Department
 
@@ -191,57 +193,54 @@ Route::get('/mart/update-cart','MartController@updatecart');
 
 //=======================================FrontEND Subway
 
-Route::get('/subway','SubwayController@index');
-Route::get('/subway/items','SubwayController@items');
-Route::get('/subway/singleitem','SubwayController@singleitem');
-Route::get('/subway/get-cart-items','SubwayController@getcartitems');
-Route::get('/subway/add-to-cart','SubwayController@addtocart');
-Route::get('/subway/remove-cart','SubwayController@removecart');
-Route::get('/subway/update-cart','SubwayController@updatecart');
-Route::get('/subway/order-place','SubwayController@orderplace');
-Route::get('/subway/cart-clear','SubwayController@cartclear');
-Route::get('/subway/customer','SubwayController@customerinfo');
-//sub detail 
-Route::get('/subway/sub-detail','SubwayController@subdetail');
-Route::get('/subway/fetch-sub-detail','SubwayController@fetchsubdetail');
+Route::get('subway','SubwayController@index');
+Route::get('subway/items','SubwayController@items');
+Route::get('subway/singleitem','SubwayController@singleitem');
+Route::get('subway/get-cart-items','SubwayController@getcartitems');
+Route::get('subway/add-to-cart','SubwayController@addtocart');
+Route::get('subway/remove-cart','SubwayController@removecart');
+Route::get('subway/update-cart','SubwayController@updatecart');
+Route::get('subway/order-place','SubwayController@orderplace');
+Route::get('subway/cart-clear','SubwayController@cartclear');
+Route::get('subway/customer','SubwayController@customerinfo');
+//subway customer 
+Route::post('subwaycustomer/add','SubwayController@customerinsert');
 
-Route::get('/order','OrderController@index');
-Route::get('/order/info','OrderController@orders');
-Route::get('/orderdetail/{id}','OrderController@orderdetail');
-Route::get('/order/report/{id}','OrderController@report');
+//sub detail 
+Route::get('subway/sub-detail','SubwayController@subdetail');
+Route::get('subway/fetch-sub-detail','SubwayController@fetchsubdetail');
+
+Route::get('order','OrderController@index');
+Route::get('order/info','OrderController@orders');
+Route::get('orderdetail/{id}','OrderController@orderdetail');
+Route::get('order/report/{id}','OrderController@report');
 
 //=======================================Subway Store 
-Route::get('/store','StoreController@index');
+Route::get('store','StoreController@index');
 
 //insert route
 //Route::get('/category/add','CategoryController@insertform');
-Route::post('/store/add','StoreController@insert');
+Route::post('store/add','StoreController@insert');
 
 //update route
-Route::get('/store/edit/{id}','StoreController@edit');
-Route::post('/store/update','StoreController@update');
+Route::get('store/edit/{id}','StoreController@edit');
+Route::post('store/update','StoreController@update');
 
 //delete route
-Route::get('/store/delete/{id}','StoreController@delete');
+Route::get('store/delete/{id}','StoreController@delete');
 
 //=======================================User
-Route::get('/user','UserController@index');
+Route::get('user','UserController@index');
 
 //Insert route
-Route::post('/user/add','UserController@add');
+Route::post('user/add','UserController@add');
 
 //delete route
-Route::get('/user/delete/{id}','UserController@delete');
+Route::get('user/delete/{id}','UserController@delete');
 
 //update route
-Route::get('/user/edit/{id}','UserController@editfetch');
-Route::post('/user/update','UserController@update');
-
-//subway customer 
-Route::post('/subwaycustomer/add','SubwayController@customerinsert');
-
-
-
+Route::get('user/edit/{id}','UserController@editfetch');
+Route::post('user/update','UserController@update');
 
 Auth::routes();
 

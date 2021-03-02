@@ -1,4 +1,4 @@
-@extends('subway.subwaydashboard')
+@extends('subway.subwaylayout')
 
 @section('maincontent')
 
@@ -24,7 +24,6 @@
                   </ol>
                 </div>
               </div>
-              
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -104,10 +103,19 @@
                 <input type="email" name="txt_email" id="txt_email" class="form-control" value="" placeholder="Enter Email">
             </div>
 
-            <div class="form-group">
+            <div class="form-group" id="passdiv">
                 <label for="exampleInputEmail1">Password</label>
                 <input type="text" name="password" id="password" class="form-control" value="" placeholder="Enter Password">
             </div>
+
+            <div id="passcheck" class="custom-control custom-checkbox custom-control-inline">
+              <input type="checkbox" class="custom-control-input data" value="newpassword" name="newpass" id="newpass">
+              <label class="custom-control-label" for="newpass">If password is change?</label>
+            </div>
+            <div class="form-group" id="npass">
+              <label for="exampleInputEmail1">New Password</label>
+              <input type="text" name="newpassword" id="newpassword" class="form-control" value="" placeholder="Enter New Password">
+          </div>
 
             <div class="form-group">
                     <label for="">User Type</label>
@@ -134,7 +142,8 @@
       </div>
         </div>
             <input type="hidden" name="did" id="did">
-          <input type="hidden" name="action" id="action" value="">
+            <input type="hidden" name="pass" id="pass">
+            <input type="hidden" name="action" id="action" value="">
         </form>
         <div class="modal-footer justify-content-between">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -187,22 +196,39 @@
 <script>
 
 $(document).ready(function(){
-
 // Set insert model
     $('#addmodal').click(function(){
         $('#usermodal').modal('show');
         $('.modal-title').text('Add User');
         $('#btnsubmit').html('Insert Record');
         $('#action').val('Add');
+        $('#passcheck').hide();
+        $('#npass').hide();
+        $('#passdiv').show();
+        $("#userform").get(0).reset();
     });
 
 // Set update model
     $('#example1 tbody').on('click','.editmodal',function(){
-        
+      $("#result").load(location.href + " #result");
+      
+      $('#passdiv').hide();
+      $('#passcheck').show();
+      $('#newpass').change(function(){
+       if($(this).is(':checked')) 
+       {
+         $('#npass').show();
+       }
+       else 
+       {
+         $('#npass').hide();
+       }
+      }).change();
+     
         var userid;
         userid = $(this).attr('id');
         $.ajax({
-            url: '/user/edit/' + userid,
+            url: 'user/edit/' + userid,
             datatype: 'json',
             success:function(data)
             {
@@ -211,7 +237,7 @@ $(document).ready(function(){
                 $('#password').val(data.result.password);
                 $('#role').val(data.result.role);
                 $('#store').val(data.result.store);
-
+                $('#pass').val(data.result.password);
                 $('#did').val(userid);
 
                 $('#usermodal').modal('show');
@@ -229,11 +255,11 @@ $(document).ready(function(){
 
         if ($('#action').val() == 'Add')
         {
-            route_url = '/user/add';            
+            route_url = 'user/add';            
         }
         if ($('#action').val() == 'Edit')
         {
-            route_url = '/user/update';            
+            route_url = 'user/update';            
         }
         $.ajax({
             type: 'POST',
@@ -274,14 +300,13 @@ $(document).ready(function(){
     userid = $(this).attr('id');
     $('#deletebtn').click(function(){
       $.ajax({
-          url: '/user/delete/' + userid,
+          url: 'user/delete/' + userid,
           success:function(data)
           {
-            setTimeout(function()
-            {
-              $('#deletemodal').modal('hide');
+            
+            $('#deletemodal').modal('hide');
               location.reload();
-            },1000);           
+                      
           }
       })
     });

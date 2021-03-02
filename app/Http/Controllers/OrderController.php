@@ -10,7 +10,6 @@ use App\Store;
 use Auth;
 use DataTables;
 
-
 use DB;
 
 class OrderController extends Controller
@@ -157,7 +156,7 @@ class OrderController extends Controller
         WHERE
         orders.orderid = $id        
         ");
-        return response()->json($orderdetail);
+        return view('subway.demo',['data' =>$orderdetail]);
     }
     public function report($id)
     {

@@ -155,15 +155,18 @@ $(document).ready(function(){
         $('.modal-title').text('Add Store');
         $('#btnsubmit').html('Insert Record');
         $('#action').val('Add');
+        $("#storeform").get(0).reset();
     });
 
 // Set update model
     $('#example1 tbody').on('click','.editmodal',function(){
+      $("#result").load(location.href + " #result");
+
         
         var storeid;
         storeid = $(this).attr('id');
         $.ajax({
-            url: '/store/edit/' + storeid,
+            url: 'store/edit/' + storeid,
             datatype: 'json',
             success:function(data)
             {
@@ -185,11 +188,11 @@ $(document).ready(function(){
 
         if ($('#action').val() == 'Add')
         {
-            route_url = '/store/add';            
+            route_url = 'store/add';            
         }
         if ($('#action').val() == 'Edit')
         {
-            route_url = '/store/update';            
+            route_url = 'store/update';            
         }
         $.ajax({
             type: 'POST',
@@ -230,15 +233,11 @@ $(document).ready(function(){
     storeid = $(this).attr('id');
     $('#deletebtn').click(function(){
         $.ajax({
-            url: '/store/delete/' + storeid,
+            url: 'store/delete/' + storeid,
             success:function(data)
             {
-            setTimeout(function()
-            {
-                $('#storedeletemodal').modal('hide');
-                location.reload();
-                alert('Data Deleted');
-            },2000);           
+              $('#storedeletemodal').modal('hide');
+              location.reload();           
             }
         })
     });

@@ -28,7 +28,7 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <table id="example1" class="table table-bordered table-striped">
+              <table id="example2" class="table table-bordered table-striped">
                 <thead>
                     <tr>
                         <th>Id</th>
@@ -194,16 +194,19 @@ $(document).ready(function(){
         $('.modal-title').text('Add Item');
         $('#btnsubmit').html('Insert Record');
         $('#action').val('Add');
-        $('#proform')[0].reset();
+        //$('#proform')[0].reset();
+        $("#proform").get(0).reset();
     });
 
 // Set update model
-    $('#example1 tbody').on('click','.editmodal',function(){
+    $('#example2 tbody').on('click','.editmodal',function(){
+      $("#result").load(location.href + " #result");
+
         
         var prouid;
         prouid = $(this).attr('id');
         $.ajax({
-            url: '/item/edit/' + prouid,
+            url: 'item/edit/' + prouid,
             datatype: 'json',
             success:function(data)
             {
@@ -229,11 +232,11 @@ $(document).ready(function(){
 
         if ($('#action').val() == 'Add')
         {
-            route_url = '/item/add';            
+            route_url = 'item/add';            
         }
         if ($('#action').val() == 'Edit')
         {
-            route_url = '/item/update';            
+            route_url = 'item/update';            
         }
         var form_data = new FormData(document.getElementById('proform'));
         console.log(form_data);
@@ -273,21 +276,17 @@ $(document).ready(function(){
     });
 
 //Set delete modal
-  $('#example1 tbody').on('click','.deletemodal',function(){
+  $('#example2 tbody').on('click','.deletemodal',function(){
     $('#prodeletemodal').modal('show');
     var prodid;
     prodid = $(this).attr('id');
     $('#deletebtn').click(function(){
         $.ajax({
-            url: '/item/delete/' + prodid,
+            url: 'item/delete/' + prodid,
             success:function(data)
             {
-            setTimeout(function()
-            {
-                $('#prodeletemodal').modal('hide');
-                location.reload();
-                alert('Data Deleted');
-            },2000);           
+              $('#prodeletemodal').modal('hide');
+              location.reload();           
             }
         })
     });

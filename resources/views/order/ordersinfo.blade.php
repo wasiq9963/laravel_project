@@ -36,7 +36,7 @@
             </div>
             <!-- /.card-header -->
             <div class="card-body">
-              <table id="mytable" class="table table-bordered table-striped">
+              <table id="example2" class="table table-bordered table-striped">
                 <thead>
                   <tr>
                     <th>Order No</th>
@@ -49,7 +49,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                 {{-- @if ($order)
+                  @if ($order)
                     @foreach ($order as $item)
                     <tr>
                       <td>{{$item -> orderid}}</td>
@@ -70,10 +70,11 @@
                         @endif
                         </td>
                         <td>
-                          <a target="_blank" href="{{url('order/report/'.$item -> orderid)}}" class="btn btn-block btn-primary btn-sm"><i class="fa fa-print"></i> Print</a>
+                          <a target="_blank" href="{{url('orderdetail/'.$item -> orderid)}}" class="btn btn-block btn-primary btn-sm"><i class="fa fa-print"></i> Print</a>
+                        </td>
                     </tr>
                     @endforeach
-                  @endif --}}
+                  @endif 
                 </tbody>
                 <tfoot>
                 <tr>
@@ -134,20 +135,21 @@ $(document).ready(function(){
         location.reload();
   },60000);
 
-  fetch();
-  /*$('#store').change(function(){
+  /*fetch();
+  $('#store').change(function(){
     var store = $(this).val();
     fetch(store);
-  });*/
+  });
   function fetch(data = '')
   {
     $('#mytable').DataTable({
       serverside : true,
       ajax:{
-              url: '/order/info',
+              url: 'order/info',
               data:{query:data},
               dataSrc: ""
               },
+              
         "column":[
             {order : "orderid", name: "orderid"},
             {order : "store", name: "store"},
@@ -158,9 +160,9 @@ $(document).ready(function(){
             {order  : "action", name: "action", orderable: false, searchable: false},
 
         ]
-    });
+    });*/
     /*$.ajax({
-      url: '/order/info',
+      url: 'order/info',
       data:{query:data},
       datatype: 'json',
       success: function(response)
@@ -202,8 +204,8 @@ $(document).ready(function(){
         }
       }
 
-    });*/
-  }
+    });
+  }*/
 });
 
 </script>

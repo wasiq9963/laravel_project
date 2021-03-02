@@ -44,7 +44,9 @@
     </div>
     <div class="col-md-4">
       <p class="font-weight-bold text-danger" id="result"></p>
-      <div id="info"></div>
+      <div id="info">
+        
+      </div>
     
     </div>
     <div class="col-md-4">
@@ -505,28 +507,18 @@
   
   <script>
 $(document).ready(function(){
+    
     fetchproduct();
+    
     $(document).on('keyup','#searchproduct',function(){
       var query = $(this).val();
       fetchproduct(null,query);
-    });
-    
-    //fetch record using dropdown change  event
-    /*$('#category').change(function(){
-      var catid = $(this).val();
-      fetchproduct(catid,null);
-    });*/
-
-    //fetch record using click event
-    $('.catid').click(function(){
-      var catid = $(this).data('postId');
-      fetchproduct(catid,null);
     });
 
     function fetchproduct(data = '' , query = '')
     {
       $.ajax({
-        url: '/subway/items',
+        url: 'subway/items',
         data: {data:data, query:query},
         datatype: 'json',
         success:function(response)
@@ -561,8 +553,22 @@ $(document).ready(function(){
           }
           else
           {
-            alert('No Record');
-            //('#result').text();
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                  toast.addEventListener('mouseenter', Swal.stopTimer)
+                  toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+              })
+
+              Toast.fire({
+                icon: 'info',
+                title: 'No Record Found'
+              });
           }   
           $('[data-toggle="tooltip"]').tooltip();
         }
@@ -570,12 +576,25 @@ $(document).ready(function(){
       });
       
     }
+    
+    //fetch record using dropdown change  event
+    /*$('#category').change(function(){
+      var catid = $(this).val();
+      fetchproduct(catid,null);
+    });*/
+
+    //fetch record using click event
+    $('.catid').click(function(){
+      var catid = $(this).data('postId');
+      fetchproduct(catid,null);
+    });
+
     //single product work
     $(document).on('click','.imgclick',function(){
 
         var id = $(this).attr('id');
         $.ajax({
-            url: '/subway/singleitem',
+            url: 'subway/singleitem',
             data: {id:id},
             datatype: 'json',
             success: function(data)
@@ -595,7 +614,7 @@ $(document).ready(function(){
         var id = $(this).attr('id');
 
         $.ajax({
-            url: '/subway/add-to-cart',
+            url: 'subway/add-to-cart',
             data: {id:id},
             datatype: 'json',
             success:function(data)
@@ -622,60 +641,60 @@ $(document).ready(function(){
         });
     });
 //get cart items
-function fetchcart()
-{
-  $.ajax({
-          url: '/subway/get-cart-items',
-          datatype: 'json',
-          success:function(data)
+    function fetchcart()
+    {
+      $.ajax({
+        url: 'subway/get-cart-items',
+        datatype: 'json',
+        success:function(data)
+        {
+          var len = 0;
+          var html = '';
+          if (data.result != '')
           {
-            var len = 0;
-            var html = '';
-            if (data.result != '')
-            {
-              len = data.result.length;
-            }
-            if (len >0)
-            {
-              var a = 0;
-              var total = 0;
-              for (let i = 0; i < len; i++)
-              {
-                a++;
-                html += '<tr><td>'+data.result[i].item_name+'</td>';
-                html += '<td>'+data.result[i].price+'</td>';
-                html += '<td> <div class="input-group number-spinner"><span class="input-group-btn">';
-                html += '<button id="'+data.result[i].id+'" class="btn btn-sm btn-outline-info" data-dir="dwn"><span class="fa fa-minus"></span></button></span>';
-                html += '<input type="text" min="1" class="form-control form-control-sm" value="'+data.result[i].quantity+'"><span class="input-group-btn">';
-                html += '<button id="'+data.result[i].id+'" class="btn btn-sm btn-outline-info" data-dir="up"><span class="fa fa-plus"></span></button></span></div> </td>';
-                html += '<td>'+(data.result[i].price)*(data.result[i].quantity)+'</td>';
-                html += '<td><button type="button" id="'+data.result[i].cartid+'" data-id="'+data.result[i].item_id+'" class="btn btn-info btn-sm detail">Detail</button>';
-                html += '<button type="button" id="'+data.result[i].id+'" class="btn btn-danger btn-sm remove"><i class="fa fa-remove"></i></button></td>';
-                  
-                  var subtotal = (data.result[i].price)*(data.result[i].quantity);
-                  total += subtotal;
-              }
-                html += '<tr class="bg-success"><td colspan="3"><h5>Total Items:</b> '+ a +' Total Qty: '+data.qtys+'</h5></td>';
-                html += '<td colspan="2"><h5>Total: '+total+'</h5></td></tr>';
-                html += '<tr><td colspan="2"><button id="btnclear" class="btn btn-block btn-outline-dark">Clear</button></td>';
-                html += '<td colspan="3"><button id="btnorder" data-id="'+total+'" class="btn btn-block btn-outline-primary">Order Place</button></td></tr>';
-              $('#cartitems').html(html);
-            }
-            else
-            {
-              html += '<tr><td class="font-weight-bold text-center text-danger" colspan="5">Cart Is Empty</td></tr>'
-              $('#cartitems').html(html);
-            }
+            len = data.result.length;
           }
+          if (len >0)
+          {
+            var a = 0;
+            var total = 0;
+            for (let i = 0; i < len; i++)
+            {
+              a++;
+              html += '<tr><td>'+data.result[i].item_name+'</td>';
+              html += '<td>'+data.result[i].price+'</td>';
+              html += '<td> <div class="input-group number-spinner"><span class="input-group-btn">';
+              html += '<button id="'+data.result[i].id+'" class="btn btn-sm btn-outline-info" data-dir="dwn"><span class="fa fa-minus"></span></button></span>';
+              html += '<input disabled type="text" min="1" class="form-control form-control-sm" value="'+data.result[i].quantity+'"><span class="input-group-btn">';
+              html += '<button id="'+data.result[i].id+'" class="btn btn-sm btn-outline-info" data-dir="up"><span class="fa fa-plus"></span></button></span></div> </td>';
+              html += '<td>'+(data.result[i].price)*(data.result[i].quantity)+'</td>';
+              html += '<td><button type="button" id="'+data.result[i].cartid+'" data-id="'+data.result[i].item_id+'" class="btn btn-info btn-sm detail"><i class="fa fa-edit"></i></button>';
+              html += '<button type="button" id="'+data.result[i].id+'" class="btn btn-danger btn-sm remove"><i class="fa fa-trash"></i></button></td>';
+                
+              var subtotal = (data.result[i].price)*(data.result[i].quantity);
+                  total += subtotal;
+            }
+              html += '<tr class="bg-success"><td colspan="3"><h5>Total Items:</b> '+ a +' Total Qty: '+data.qtys+'</h5></td>';
+              html += '<td colspan="2"><h5>Total: '+total+'</h5></td></tr>';
+              html += '<tr><td colspan="2"><button id="btnclear" class="btn btn-block btn-outline-dark">Clear</button></td>';
+              html += '<td colspan="3"><button id="btnorder" data-id="'+total+'" class="btn btn-block btn-outline-primary">Order Place</button></td></tr>';
+              $('#cartitems').html(html);
+          }
+          else
+          {
+            html += '<tr><td class="font-weight-bold text-center text-danger" colspan="5">Cart Is Empty</td></tr>'
+            $('#cartitems').html(html);
+          }
+        }
       });
-}
+    }
 
     //remove cart
     $(document).on('click','.remove',function(){
 
         var id = $(this).attr('id');
         $.ajax({
-            url: '/subway/remove-cart',
+            url: 'subway/remove-cart',
             data: {id:id},
             datatype: 'json',
             success:function(data)
@@ -727,7 +746,7 @@ function fetchcart()
       btn.closest('.number-spinner').find('input').val(newVal);
         //update cart
       $.ajax({
-          url: '/subway/update-cart',
+          url: 'subway/update-cart',
           data: {id:id, qty:newVal},
           datatype: 'json',
           success:function(data)
@@ -801,7 +820,7 @@ function fetchcart()
       else
       {
           $.ajax({
-          url: '/subway/order-place',
+          url: 'subway/order-place',
           data:{data:store,id:cusid},
           datatype: 'json',
           success:function(data)
@@ -838,7 +857,7 @@ function fetchcart()
     //cart clear work
     $(document).on('click','#btnclear',function(){
       $.ajax({
-        url: '/subway/cart-clear',
+        url: 'subway/cart-clear',
         datatype: 'json',
         success:function(data)
         {
@@ -889,7 +908,7 @@ function fetchcart()
     function customerinfo(number='')
     {
       $.ajax({
-          url: '/subway/customer',
+          url: 'subway/customer',
           data: {data:number},
           datatype: 'json',
           success:function(response)
@@ -935,45 +954,45 @@ function fetchcart()
         });
     }
 // Set customer insert model
-  $('#btncustomer').click(function(){
-    $('#customermodal').modal('show');
-    $('#btnsubmit').html('Insert Record');
-    $('#action').val('Add');
-  });
+    $('#btncustomer').click(function(){
+      $('#customermodal').modal('show');
+      $('#btnsubmit').html('Insert Record');
+      $('#action').val('Add');
+    });
     //insert request using ajax
-  $('#btnsubmit').click(function(e){
-    e.preventDefault();
-      $.ajax({
-        type: 'POST',
-        url: '/subwaycustomer/add',
-        data: $('#customerform').serialize(),
-        datatype: 'json',
-        success: function(response)
-        {
-          var html = '';
-          if (response.errors) 
+    $('#btnsubmit').click(function(e){
+      e.preventDefault();
+        $.ajax({
+          type: 'POST',
+          url: 'subwaycustomer/add',
+          data: $('#customerform').serialize(),
+          datatype: 'json',
+          success: function(response)
           {
-            html = "<div class ='alert alert-danger'>";
-            for (var count = 0; count < response.errors.length; count++) 
+            var html = '';
+            if (response.errors) 
             {
-              html += '<p>' +response.errors[count] + '</p>';  
+              html = "<div class ='alert alert-danger'>";
+              for (var count = 0; count < response.errors.length; count++) 
+              {
+                html += '<p>' +response.errors[count] + '</p>';  
+              }
+              html += '</div>';
             }
-            html += '</div>';
+            if (response.success)
+            {
+              html = '<div class = "alert alert-success">' +response.success+ '</div>';
+              $('#customerform')[0].reset();
+              setTimeout(function(){
+                $('#customermodal').modal('hide');
+              },2000); 
+            }
+              $('#cusresult').html(html);
+              
           }
-          if (response.success)
-          {
-            html = '<div class = "alert alert-success">' +response.success+ '</div>';
-            $('#customerform')[0].reset();
-            setTimeout(function(){
-              $('#customermodal').modal('hide');
-            },2000); 
-          }
-            $('#cusresult').html(html);
-            
-        }
 
-      });
-  });
+        });
+    });
 
     //detail work
     $(document).on('click','.detail',function(){
@@ -986,7 +1005,7 @@ function fetchcart()
 
 
       $.ajax({
-        url: '/subway/fetch-sub-detail',
+        url: 'subway/fetch-sub-detail',
         data:{cartid:cartid, itemid:itemid},
         datatype: 'json',
         success:function(data)
@@ -1040,7 +1059,7 @@ function fetchcart()
     $(document).on('click','.btnadd',function(e){
       e.preventDefault();
       $.ajax({
-        url: '/subway/sub-detail',
+        url: 'subway/sub-detail',
         data: $('#detail').serialize(),
         datatype: 'json',
         success: function(response)
@@ -1083,6 +1102,6 @@ function fetchcart()
         }
         btn.closest('.number-spinner').find('input').val(newVal);
     });*/
-    });
+});
   </script>
 @endsection

@@ -159,11 +159,12 @@ $(document).ready(function(){
 
 // Set update model
     $('#example1 tbody').on('click','.editmodal',function(){
-        
+      $("#result").load(location.href + " #result");
+
         var catuid;
         catuid = $(this).attr('id');
         $.ajax({
-            url: '/category/edit/' + catuid,
+            url: 'category/edit/' + catuid,
             datatype: 'json',
             success:function(data)
             {
@@ -185,11 +186,11 @@ $(document).ready(function(){
 
         if ($('#action').val() == 'Add')
         {
-            route_url = '/category/add';            
+            route_url = 'category/add';            
         }
         if ($('#action').val() == 'Edit')
         {
-            route_url = '/category/update';            
+            route_url = 'category/update';            
         }
         $.ajax({
             type: 'POST',
@@ -230,15 +231,11 @@ $(document).ready(function(){
     catid = $(this).attr('id');
     $('#deletebtn').click(function(){
         $.ajax({
-            url: '/category/delete/' + catid,
+            url: 'category/delete/' + catid,
             success:function(data)
             {
-            setTimeout(function()
-            {
-                $('#catdeletemodal').modal('hide');
-                location.reload();
-                alert('Data Deleted');
-            },2000);           
+              $('#catdeletemodal').modal('hide');
+              location.reload();           
             }
         })
     });

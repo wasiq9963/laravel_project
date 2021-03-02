@@ -12,11 +12,11 @@
     />
     <script src="{{asset('assets/plugins/jquery/jquery.min.js')}}"></script>
     <script src="{{asset('style/bootstrap.min.js')}}"></script>
-    <script src="https://cdn.grapecity.com/activereportsjs/2.latest/dist/ar-js-core.js"></script>
-	<script src="https://cdn.grapecity.com/activereportsjs/2.latest/dist/ar-js-viewer.js"></script>
-	<script src="https://cdn.grapecity.com/activereportsjs/2.latest/dist/ar-js-pdf.js"></script>
-	<script src="https://cdn.grapecity.com/activereportsjs/2.latest/dist/ar-js-xlsx.js"></script>
-	<script src="https://cdn.grapecity.com/activereportsjs/2.latest/dist/ar-js-html.js"></script>
+    <script src="{{asset('activereportsjs/ar-js-core.js')}}"></script>
+	<script src="{{asset('activereportsjs/ar-js-viewer.js')}}"></script>
+	<script src="{{asset('activereportsjs/ar-js-pdf.js')}}"></script>
+	<script src="{{asset('activereportsjs/ar-js-xlsx.js')}}"></script>
+	<script src="{{asset('activereportsjs/ar-js-html.js')}}"></script>
 
 
     <link
@@ -25,12 +25,12 @@
     />
     <link
 	  rel="stylesheet"
-	  href="https://cdn.grapecity.com/activereportsjs/2.latest/styles/ar-js-ui.css"
+	  href="{{asset('activereportsjs/ar-js-ui.css')}}"
 	  type="text/css"
 	/>
 	<link
 	  rel="stylesheet"
-	  href="https://cdn.grapecity.com/activereportsjs/2.latest/styles/ar-js-viewer.css"
+	  href="{{asset('activereportsjs/ar-js-viewer.css')}}"
 	  type="text/css"
 	/>
     <style>
@@ -49,28 +49,11 @@
         const headers = new Headers();
         
               const dataRequest = new Request(
-                '{{url('/orderdetail/'.$id)}}',      
+                '{{url('orderdetail/'.$id)}}',      
                  {
                   headers: headers,
                  }
               );
-
-        // var id = {{$id}};
-        // $.ajax({
-        //     url: '/subway/orderdetail',
-        //     data: {id:id},
-        //     datatype: 'json',
-        //     success:function(data)
-        //     {
-        //       const dataRequest = new Request(
-        //         'data.result',//?id={{$id}}
-        //         {
-        //           headers: headers,
-        //         }
-        //       );
-        //     }
-        // });
-
         const response = await fetch(dataRequest);
         const data = await response.json();
         return data;
