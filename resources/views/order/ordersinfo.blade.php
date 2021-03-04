@@ -69,7 +69,7 @@
                         </div>
                         @endif
                         </td>
-                        <td>
+                        <td>                       {{--url order/report/--}}
                           <a target="_blank" href="{{url('orderdetail/'.$item -> orderid)}}" class="btn btn-block btn-primary btn-sm"><i class="fa fa-print"></i> Print</a>
                         </td>
                     </tr>

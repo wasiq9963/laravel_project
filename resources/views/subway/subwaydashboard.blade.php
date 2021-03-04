@@ -24,8 +24,7 @@
             <div class="info-box-content">
               <span class="info-box-text">Orders</span>
               <span class="info-box-number">
-                {{--$count--}}
-                <small>%</small>
+                {{$orderscount->count()}}
               </span>
             </div>
             <!-- /.info-box-content -->
@@ -38,8 +37,8 @@
             <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-thumbs-up"></i></span>
 
             <div class="info-box-content">
-              <span class="info-box-text">Likes</span>
-              <span class="info-box-number">41,410</span>
+              <span class="info-box-text">Items</span>
+              <span class="info-box-number">{{$itemscount}}</span>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -95,9 +94,9 @@
               </div>
             </div>
             <!-- /.card-header -->
-            <div class="card-body p-0">
+            <div class="card-body">
               <div class="table-responsive">
-                <table id="" class="table table-bordered table-striped">
+                <table id="example3" class="table table-bordered table-striped">
                   <thead>
                     <tr>
                       <th>Order No</th>

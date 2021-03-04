@@ -207,6 +207,16 @@
       "autoWidth": false,
       "responsive": true,
     });
+    $('#example3').DataTable({
+      "paging": true,
+      "lengthChange": true,
+      "lengthMenu": [5, 10, 20, 50 ],
+      "searching": true,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
     
   });
 </script>

@@ -118,7 +118,7 @@
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label for="exampleInputEmail1">Name</label>
+                      <label for="exampleInputEmail1">Contact Person</label>
                       <input type="text" name="name" id="" class="form-control" value="" placeholder="Enter Name">
                     </div>
                   </div>
@@ -143,10 +143,6 @@
                 <div class="row">
                   <div class="col-md-6">
                         <div class="form-group">
-                          <label for="exampleInputEmail1">Contact Person</label>
-                          <input type="number" name="contact_person" id="" class="form-control" value="" placeholder="Enter Contact Person">
-                        </div>
-                        <div class="form-group">
                           <label for="exampleInputEmail1">Landmark</label>
                           <input type="text" name="landmark" id="" class="form-control" value="" placeholder="Enter Landmark">
                         </div>
@@ -155,51 +151,6 @@
                     <div class="form-group">
                       <label for="exampleInputEmail1">Delivery Address</label>
                       <textarea name="address" class="form-control" id="" cols="30" rows="5" placeholder="Type Delivert Address"></textarea>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="row">
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="exampleInputEmail1">Select Store</label>
-                          <select class="form-control" name="store" id="">
-                              <option value="">Select Store</option>
-                              <option value="Store 1">Store 1</option>
-                              <option value="Store 2">Store 2</option>
-                              <option value="Store 3">Store 3</option>
-                              <option value="Store 4">Store 4</option>
-                              <option value="Store 5">Store 5</option>
-                          </select>
-                    </div>
-                      </div>
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label for="exampleInputEmail1">Select Area</label>
-                          <select class="form-control" name="area" id="" >
-                              <option value="">Select Area</option>
-                              <option value="a">a</option>
-                              <option value="b">b</option>
-                              <option value="c">c</option>
-                              <option value="d">d</option>
-
-                          </select>
-                    </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="form-group">
-                      <label for="exampleInputEmail1">Foodpanda Order?</label><br>
-                      <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" class="custom-control-input" id="customRadio" name="example" value="Yes" checked>
-                        <label class="custom-control-label" for="customRadio">Yes</label>
-                      </div>
-                      <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" class="custom-control-input" id="customRadio2" name="example" value="No">
-                        <label class="custom-control-label" for="customRadio2">No</label>
-                      </div>                   
                     </div>
                   </div>
                 </div>

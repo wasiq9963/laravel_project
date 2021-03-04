@@ -129,7 +129,7 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <img src="" id="proimg" class="img-thumbnail" width="250" height="250">
+                    <img  src="" id="proimg" class="img-thumbnail" width="250" height="250">
                 </div>
               </div>
             </div>
@@ -196,11 +196,14 @@ $(document).ready(function(){
         $('#action').val('Add');
         //$('#proform')[0].reset();
         $("#proform").get(0).reset();
+        $('#proimg').hide();
     });
 
 // Set update model
     $('#example2 tbody').on('click','.editmodal',function(){
       $("#result").load(location.href + " #result");
+      $('#proimg').hide();
+
 
         
         var prouid;
@@ -298,6 +301,8 @@ $(document).ready(function(){
 <script>
 
     function readURL(input) {
+      $('#proimg').show();
+
         if (input.files && input.files[0]) {
             var reader = new FileReader();
             reader.onload = function (e) {

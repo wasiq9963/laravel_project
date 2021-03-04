@@ -140,15 +140,15 @@ class OrderController extends Controller
         orders.quantity,
         orders.price,
         orders.itemdate,
-        orders.`status`,
+        orders.status,
         orderdetails.cheese,
         orderdetails.extra_cheese,
         orderdetails.sauces,
         orderdetails.vegetables,
         orderdetails.extra_meat_topping_is_free,
-        subwaycustomers.`name`,
+        subwaycustomers.name,
         subwaycustomers.mobile_number,
-            subwaycustomers.delivery_address
+        subwaycustomers.delivery_address
         FROM
         orders
         INNER JOIN orderdetails ON orders.orderid = orderdetails.orderid AND orderdetails.itemid = orders.itemid
@@ -157,6 +157,7 @@ class OrderController extends Controller
         orders.orderid = $id        
         ");
         return view('subway.demo',['data' =>$orderdetail]);
+        //return response()->json($orderdetail);
     }
     public function report($id)
     {

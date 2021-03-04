@@ -15,6 +15,7 @@ use App\Order;
 use App\Orderdetail;
 use App\Store;
 use DB;
+use Auth;
 class SubwayController extends Controller
 {
     //auth name set work
@@ -73,6 +74,7 @@ class SubwayController extends Controller
     //add to cart
     public function addtocart(Request $req)
     {
+        $name = Auth::user()->name;
         $sessionid =Session()->getId();
         if ($req -> ajax())
         {
@@ -80,7 +82,7 @@ class SubwayController extends Controller
 
             $cartitem = Cart::where('item_id',$id)->
             where('status','temporary')->
-            where('username','wasiq')->
+            where('username',$name)->
             where('session_id',$sessionid)->first();
             if ($cartitem != null)
             {
@@ -104,7 +106,7 @@ class SubwayController extends Controller
                     $cart->price = $item -> price;
                     $cart->quantity = 1;
                     $cart->status = 'temporary';
-                    $cart->username = 'wasiq';
+                    $cart->username = $name;
                     $cart->save();
                     return response()->json(['result' => 'Item Added']);
                 }
@@ -122,7 +124,7 @@ class SubwayController extends Controller
                     $cart->price = $item -> price;
                     $cart->quantity = 1;
                     $cart->status = 'temporary';
-                    $cart->username = 'wasiq';
+                    $cart->username = $name;
                     $cart->save();
                     return response()->json(['result' => 'Item Added']);
                 }
@@ -133,10 +135,11 @@ class SubwayController extends Controller
     public function getcartitems(Request $req)
     {
         if($req -> ajax())
-        {
+        {   
+            $name = Auth::user()->name;
             $sessionid = Session()->getId();
             $carts = Cart::where('status','temporary')->
-            where('username','wasiq')->
+            where('username',$name)->
             where('session_id',$sessionid)->get();
             $totalqty = $carts->sum('quantity');
             //$total = $carts->sum('quantity * price');
@@ -353,28 +356,17 @@ class SubwayController extends Controller
     //subway customer insert
     public function customerinsert(Request $req)
     {
-        $insertform = array(
-            'name' => 'required',
-            'mobile_number' => 'required',
-            'landline_number' => 'required',
-            'contact_person' => 'required',
-            'landmark' => 'required',
-            'address' => 'required',
-            'store' => 'required',
-            'area' => 'required',
-            'example' => 'required',
-
-
-            /*[
-                'txt_name.required' => 'Full Name Is Required',
-                'txt_phoneno.required' => 'Phone No Is Required',
-                'txt_email.required' => 'Email Is Required',
-                'txt_address.required' => 'Address Is Required',
-                'txt_ntn.required' => 'NTN Number Is Required',
-                'txt_openbalance.required' => 'Upening Balance is Required Is Required',
-            ]*/
-        );
-        $validator = Validator::make($req->all(),$insertform);
+        $validator = Validator::make($req->all(),[
+            'name' => 'required','max:255',
+            'mobile_number' => 'required | min:11 | max:11',
+            'address' => 'required','max:350',
+            'landline_number' => 'required | min:11 | max:11',
+        ],
+        [
+            'name.required' => '*Full Name Is Required',
+            'mobile_number.required' => '*Mobile Number Is Required',
+            'address.required' => '*Delivery Address Is Required',
+        ]);
 
         if ($validator -> passes())
         {
@@ -382,12 +374,8 @@ class SubwayController extends Controller
             $customerinser->name = $req->name;
             $customerinser->mobile_number = $req->mobile_number;
             $customerinser->landline_number = $req->landline_number;
-            $customerinser->contact_person = $req->contact_person;
             $customerinser->delivery_address = $req->address;
             $customerinser->landmark = $req->landmark;
-            $customerinser->store = $req->store;
-            $customerinser->area = $req->area;
-            $customerinser->foodorder = $req->example;
             $customerinser->save();
             return response()->json(['success' => 'Record Inserted Successfully']);
         }
