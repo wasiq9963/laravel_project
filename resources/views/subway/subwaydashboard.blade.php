@@ -24,7 +24,7 @@
             <div class="info-box-content">
               <span class="info-box-text">Orders</span>
               <span class="info-box-number">
-                {{$orderscount->count()}}
+                <h1>{{$orderscount->count()}}</h1>
               </span>
             </div>
             <!-- /.info-box-content -->
@@ -38,7 +38,7 @@
 
             <div class="info-box-content">
               <span class="info-box-text">Items</span>
-              <span class="info-box-number">{{$itemscount}}</span>
+              <span class="info-box-number"><h1>{{$itemscount}}</h1></span>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -54,8 +54,8 @@
             <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
 
             <div class="info-box-content">
-              <span class="info-box-text">Sales</span>
-              <span class="info-box-number">760</span>
+              <span class="info-box-text">Sale Amount</span>
+              <span class="info-box-number"><h1>{{$amount->total}}</h1></span>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -67,8 +67,8 @@
             <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
 
             <div class="info-box-content">
-              <span class="info-box-text">New Members</span>
-              <span class="info-box-number">2,000</span>
+              <span class="info-box-text">Customers</span>
+              <span class="info-box-number"><h1>{{$customer}}</h1></span>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -81,7 +81,7 @@
       <!-- Main row -->
       <div class="row">
         <!-- Left col -->
-        <div class="col-md-8">
+        <div class="col-md-12">
           <!-- TABLE: LATEST ORDERS -->
           <div class="card">
             <div class="card-header border-transparent">
@@ -149,51 +149,6 @@
             <!-- /.card-body -->
           </div>
           <!-- /.card -->
-        </div>
-        <!-- /.col -->
-
-        <div class="col-md-4">
-          <!-- Info Boxes Style 2 -->
-          <div class="info-box mb-3 bg-warning">
-            <span class="info-box-icon"><i class="fas fa-tag"></i></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">Inventory</span>
-              <span class="info-box-number">5,200</span>
-            </div>
-            <!-- /.info-box-content -->
-          </div>
-          <!-- /.info-box -->
-          <div class="info-box mb-3 bg-success">
-            <span class="info-box-icon"><i class="far fa-heart"></i></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">Mentions</span>
-              <span class="info-box-number">92,050</span>
-            </div>
-            <!-- /.info-box-content -->
-          </div>
-          <!-- /.info-box -->
-          <div class="info-box mb-3 bg-danger">
-            <span class="info-box-icon"><i class="fas fa-cloud-download-alt"></i></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">Downloads</span>
-              <span class="info-box-number">114,381</span>
-            </div>
-            <!-- /.info-box-content -->
-          </div>
-          <!-- /.info-box -->
-          <div class="info-box mb-3 bg-info">
-            <span class="info-box-icon"><i class="far fa-comment"></i></span>
-
-            <div class="info-box-content">
-              <span class="info-box-text">Direct Messages</span>
-              <span class="info-box-number">163,921</span>
-            </div>
-            <!-- /.info-box-content -->
-          </div>
-          <!-- /.info-box -->
         </div>
         <!-- /.col -->
       </div>

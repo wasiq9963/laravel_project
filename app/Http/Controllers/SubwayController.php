@@ -365,6 +365,7 @@ class SubwayController extends Controller
         [
             'name.required' => '*Full Name Is Required',
             'mobile_number.required' => '*Mobile Number Is Required',
+            'landline_number.required' => '*Landline Number Is Required',
             'address.required' => '*Delivery Address Is Required',
         ]);
 

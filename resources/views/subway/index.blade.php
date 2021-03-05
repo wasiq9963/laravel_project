@@ -141,13 +141,15 @@
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-md-6">
+                  <div class="col-md-12">
                         <div class="form-group">
                           <label for="exampleInputEmail1">Landmark</label>
                           <input type="text" name="landmark" id="" class="form-control" value="" placeholder="Enter Landmark">
                         </div>
                   </div>
-                  <div class="col-md-6">
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
                     <div class="form-group">
                       <label for="exampleInputEmail1">Delivery Address</label>
                       <textarea name="address" class="form-control" id="" cols="30" rows="5" placeholder="Type Delivert Address"></textarea>

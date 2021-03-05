@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Order;
 use Auth;
 use DB;
+use App\Subwaycustomer;
+use App\Item;
 
 class DashboardController extends Controller
 {
@@ -38,13 +40,6 @@ class DashboardController extends Controller
             WHERE orders.itemdate = '$date'
             GROUP BY(orders.orderid) 
             ");
-
-            //count order
-            $itemscount = Order::count();
-            $orderscount = DB::table('orders')
-            ->select('orderid', DB::raw('count(orderid) as total'))
-            ->groupBy('orderid')
-            ->get();
             
         }
         else
@@ -68,21 +63,40 @@ class DashboardController extends Controller
             ");
 
             //count order
-            $itemscount = Order::where('store',$data)->count();
+           /* $itemscount = Order::where('store',$data)->count();
             $orderscount = DB::table('orders')
             ->select('orderid', DB::raw('count(orderid) as total'))
             ->groupBy('orderid')
             ->where('store',$data)
             ->get();
+            //total amount
+            $amount = Order::select(DB::raw('sum(quantity * price) as total'))
+            ->where('store',$data)
+            ->first();*/
+
+
         }
+
+        //total customer
+        $customer = Subwaycustomer::count();
+
+        //count order
+        $itemscount = Order::count();
+        $orderscount = DB::table('orders')
+            ->select('orderid', DB::raw('count(orderid) as total'))
+            ->groupBy('orderid')
+            ->get();
+ 
+        //total amount
+        $amount = Order::select(DB::raw('sum(quantity * price) as total'))->first();
 
         return view('subway.subwaydashboard',['orderinfo' => $orderdetail,
         'itemscount' => $itemscount,
         'orderscount' => $orderscount,
+        'customer' => $customer,
+        'amount' => $amount,
         ]);
+
+        
     }
-
-    //total drink
-
-    //$cat = Category::where('categoryname','Drink Item');
 }
