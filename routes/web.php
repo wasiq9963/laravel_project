@@ -84,6 +84,7 @@ Route::get('order/info','OrderController@orders');
 Route::get('orderdetail/{id}','OrderController@orderdetail');
 Route::get('order/report/{id}','OrderController@report');
 
+
 //=======================================Subway Store 
 Route::get('store','StoreController@index');
 
@@ -110,6 +111,14 @@ Route::get('user/delete/{id}','UserController@delete');
 //update route
 Route::get('user/edit/{id}','UserController@editfetch');
 Route::post('user/update','UserController@update');
+
+//=======================================Store Report
+Route::get('storereport','StorereportController@index');
+Route::get('storereport/fetch','StorereportController@storefetch');
+//Route::get('orderslist/report','StorereportController@report');
+
+
+
 
 Auth::routes();
 

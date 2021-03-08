@@ -23,77 +23,35 @@ class OrderController extends Controller
     {
         $store = Store::all();  
         
-        $data = $req->get('query');
+        //$data = $req->get('query');
+        $date = date('Y-m-d');
+        $storedata = Auth::user()->store;
         if (Auth::user()->role == 'Admin')
         {
-            if ($data != '')
-            {
-                $orderdetail = DB::select("SELECT
-                orders.id,
-                orders.orderid,
-                orders.itemid,
-                orders.store,
-                orders.itemname,
-                SUM(orders.quantity) as quantity,
-                SUM(orders.price * orders.quantity) as price,
-                orders.itemdate,
-                orders.status
-                FROM
-                orders
-                WHERE orders.store = '$data'
-                GROUP BY(orders.orderid) 
-                ");
+            $orderdetail = DB::table('orders')->where('itemdate',$date)
+                    ->select('*',DB::raw('SUM(quantity) as quantity'),DB::raw('SUM(price) as price'))
+                    ->groupby('orderid')
+                    ->orderby('orderid','DESC')
+                    ->get();
                 return view('order.ordersinfo',['order' => $orderdetail,'store' =>$store]);
-
+                //orders.store = '$data' AND
                 //return response()->json(['order' => $orderdetail]);
-            }
-            else
-            {
-                $orderdetail = DB::select("SELECT
-                orders.id,
-                orders.orderid,
-                orders.itemid,
-                orders.store,
-                orders.itemname,
-                SUM(orders.quantity) as quantity,
-                SUM(orders.price * orders.quantity) as price,
-                orders.itemdate,
-                orders.status
-                FROM
-                orders
-                GROUP BY(orders.orderid) 
-                ");
-                return view('order.ordersinfo',['order' => $orderdetail,'store' =>$store]);
-
-                //return response()->json(['order' => $orderdetail]);
-            }
         }
         else
         {
-            $data = Auth::user()->store;
-            $orderdetail = DB::select("SELECT
-            orders.id,
-            orders.orderid,
-            orders.itemid,
-            orders.store,
-            orders.itemname,
-            SUM(orders.quantity) as quantity,
-            SUM(orders.price * orders.quantity) as price,
-            orders.itemdate,
-            orders.status
-            FROM
-            orders
-            WHERE orders.store = '$data'
-            GROUP BY(orders.orderid) 
-            ");
+            $orderdetail = DB::table('orders')
+            ->where('itemdate',$date)
+            ->where('store',$storedata)
+            ->select('*',DB::raw('SUM(quantity) as quantity'),DB::raw('SUM(price) as price'))
+            ->groupby('orderid')
+            ->orderby('orderid','DESC')
+            ->get();
             return view('order.ordersinfo',['order' => $orderdetail,'store' =>$store]);
-                //return response()->json(['order' => $orderdetail]);
         }
 
-        //return view('order.ordersinfo',['store' =>$store]);
     }
     //view orders in admin panel
-    public function orders(Request $req)
+    /*public function orders(Request $req)
     {
         $query = $req->get('query');
         if ($req->ajax()) {
@@ -126,41 +84,32 @@ class OrderController extends Controller
         }
         
         return view('order.ordersinfo');
-    }
+    }*/
 
     //order fetch
     public function orderdetail(Request $req,$id)
     {
-        $orderdetail = DB::select("SELECT
-        orders.id,
-        orders.orderid,
-        orders.itemid,
-        orders.store,
-        orders.itemname,
-        orders.quantity,
-        orders.price,
-        orders.itemdate,
-        orders.status,
-        orderdetails.cheese,
-        orderdetails.extra_cheese,
-        orderdetails.sauces,
-        orderdetails.vegetables,
-        orderdetails.extra_meat_topping_is_free,
-        subwaycustomers.name,
-        subwaycustomers.mobile_number,
-        subwaycustomers.delivery_address
-        FROM
-        orders
-        INNER JOIN orderdetails ON orders.orderid = orderdetails.orderid AND orderdetails.itemid = orders.itemid
-        INNER JOIN subwaycustomers ON orders.customerid = subwaycustomers.id
-        WHERE
-        orders.orderid = $id        
-        ");
-        return view('subway.demo',['data' =>$orderdetail]);
-        //return response()->json($orderdetail);
+        $orderdetail = DB::table('orders')
+        ->select('*')
+        ->join('orderdetails',function($join){
+            $join->on("orderdetails.orderid","=","orders.orderid")
+                ->on("orderdetails.itemid","=","orders.itemid");}) 
+        ->join('subwaycustomers','subwaycustomers.id', '=', 'orders.customerid')
+        ->where('orders.orderid', $id)
+        ->get();
+        return response()->json($orderdetail);
     }
     public function report($id)
     {
+
+        $order = Order::where('orderid',$id)->get();
+
+        foreach ($order as $value)
+        {
+            $value->status = 'Viewed';
+            $value->save();
+        }
+
         return view('subway.report',['id' =>$id]);
     }
 }

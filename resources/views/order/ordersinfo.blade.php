@@ -63,14 +63,14 @@
                           {{$item -> status}}
                         </div> 
                         @endif
-                        @if ($item -> status == 'old')
+                        @if ($item -> status == 'Viewed')
                         <div class="badge badge-warning">
                           {{$item -> status}}
                         </div>
                         @endif
                         </td>
                         <td>                       {{--url order/report/--}}
-                          <a target="_blank" href="{{url('orderdetail/'.$item -> orderid)}}" class="btn btn-block btn-primary btn-sm"><i class="fa fa-print"></i> Print</a>
+                          <a target="_blank" href="{{url('order/report/'.$item -> orderid)}}" class="btn btn-block btn-primary btn-sm"><i class="fa fa-print"></i> Print</a>
                         </td>
                     </tr>
                     @endforeach
@@ -78,7 +78,7 @@
                 </tbody>
                 <tfoot>
                 <tr>
-                  <th>Sno</th>
+                  <th>Order No</th>
                   <th>Store</th>
                   <th>Quantities</th>
                   <th>Total Amount</th>

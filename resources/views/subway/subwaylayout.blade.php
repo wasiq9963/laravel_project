@@ -25,6 +25,8 @@
   <!-- Select2 -->
   <link rel="stylesheet" href="{{asset('assets/plugins/select2/css/select2.min.css')}}">
   <link rel="stylesheet" href="{{asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
+  <!-- daterange picker -->
+  <link rel="stylesheet" href="{{asset('assets/plugins/daterangepicker/daterangepicker.css')}}">
 </head>
 <body class="hold-transition sidebar-mini">
 <!-- Site wrapper -->
@@ -191,6 +193,11 @@
 <script src="{{asset('assets/plugins/datatables-buttons/js/buttons.print.min.js')}}"></script>
 <script src="{{asset('assets/plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
 <!-- Page specific script -->
+
+<!-- date-range-picker -->
+<script src="{{asset('assets/plugins/daterangepicker/daterangepicker.js')}}"></script>
+
+
 <script>
   $(function () {
     $("#example1").DataTable({
@@ -202,7 +209,7 @@
       "lengthChange": true,
       "lengthMenu": [25, 50, 75, 100 ],
       "searching": true,
-      "ordering": true,
+      "ordering": false,
       "info": true,
       "autoWidth": false,
       "responsive": true,
@@ -212,7 +219,7 @@
       "lengthChange": true,
       "lengthMenu": [5, 10, 20, 50 ],
       "searching": true,
-      "ordering": true,
+      "ordering": false,
       "info": true,
       "autoWidth": false,
       "responsive": true,
@@ -342,6 +349,13 @@
       })
     });
   });
+
+  $(function () {
+  $("#datepicker").datepicker({ 
+        autoclose: true, 
+        todayHighlight: true
+  }).datepicker('update', new Date());
+});
 </script>
 @show
 </body>

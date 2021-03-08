@@ -5,7 +5,7 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
-          <h1 class="m-0">Dashboard</h1>
+          <h1 class="m-0">Dashboard For <span class="text-primary">{{date('Y-m-d')}}</span></h1>
         </div><!-- /.col -->
       </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -113,7 +113,7 @@
                       <tr>
                         <td>{{$item -> orderid}}</td>
                         <td>{{$item -> store}}</td>
-                        <td>{{$item -> id}}</td>
+                        <td>{{$item -> items}}</td>
                         <td>{{$item -> price}}</td>
                         <td>{{$item -> itemdate}}</td>
                         <td>
@@ -122,7 +122,7 @@
                             {{$item -> status}}
                           </div> 
                           @endif
-                          @if ($item -> status == 'old')
+                          @if ($item -> status == 'Viewed')
                           <div class="badge badge-warning">
                             {{$item -> status}}
                           </div>
@@ -134,7 +134,7 @@
                   </tbody>
                   <tfoot>
                   <tr>
-                    <th>Sno</th>
+                    <th>Order No</th>
                     <th>Store</th>
                     <th>Items</th>
                     <th>Total Amount</th>

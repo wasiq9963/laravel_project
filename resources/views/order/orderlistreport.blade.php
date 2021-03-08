@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Order Report</title>
+    <title>Orders List Report</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <link
@@ -48,13 +48,13 @@
         // Use the Fetch Api to pull the data https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
         const headers = new Headers();
         
-              const dataRequest = new Request(
-                '{{url('orderdetail/'.$id)}}',      
+               const dataRequest = new Request(
+                //'{{'storereport/fetch'}}',   
                  {
                   headers: headers,
                  }
               );
-        const response = await fetch(dataRequest);
+        const response = await fetch({{$data}});
         const data = await response.json();
         return data;
       }
@@ -62,7 +62,7 @@
       async function loadReport() {
         // load report definition from the file
         const reportResponse = await fetch(
-          '{{asset('assets/report.rdlx-json')}}'
+          '{{asset('assets/storerecord.rdlx-json')}}'
           // 'proreport.rdlx-json'
         );
         const report = await reportResponse.json();

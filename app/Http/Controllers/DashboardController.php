@@ -24,71 +24,39 @@ class DashboardController extends Controller
         //Fetch order
         if (Auth::user()->role == 'Admin')
         {
-            $orderdetail = DB::select("SELECT
-            orders.id,
-            orders.orderid,
-            orders.itemid,
-            orders.store,
-            orders.itemname,
-            COUNT(orders.id) as id,
-            SUM(orders.quantity) as quantity,
-            SUM(orders.price * orders.quantity) as price,
-            orders.itemdate,
-            orders.status
-            FROM
-            orders
-            WHERE orders.itemdate = '$date'
-            GROUP BY(orders.orderid) 
-            ");
-            
+            $orderdetail = DB::table('orders')
+            ->where('itemdate',$date)
+            ->select('*',DB::raw('count(itemid) as items'),DB::raw('SUM(quantity) as quantity'),DB::raw('SUM(price) as price'))
+            ->groupby('orderid')
+            ->orderby('orderid','DESC')
+            ->get();
         }
         else
         {
-            $date = date('Y-m-d');
-            $orderdetail = DB::select("SELECT
-            orders.id,
-            orders.orderid,
-            orders.itemid,
-            orders.store,
-            orders.itemname,
-            COUNT(orders.id) as id,
-            SUM(orders.quantity) as quantity,
-            SUM(orders.price * orders.quantity) as price,
-            orders.itemdate,
-            orders.status
-            FROM
-            orders
-            WHERE orders.store = '$data' AND orders.itemdate = '$date'
-            GROUP BY(orders.orderid) 
-            ");
-
-            //count order
-           /* $itemscount = Order::where('store',$data)->count();
-            $orderscount = DB::table('orders')
-            ->select('orderid', DB::raw('count(orderid) as total'))
-            ->groupBy('orderid')
+            $orderdetail = DB::table('orders')
+            ->where('itemdate',$date)
             ->where('store',$data)
+            ->select('*',DB::raw('count(itemid) as items'),DB::raw('SUM(quantity) as quantity'),DB::raw('SUM(price) as price'))
+            ->groupby('orderid')
+            ->orderby('orderid','DESC')
             ->get();
-            //total amount
-            $amount = Order::select(DB::raw('sum(quantity * price) as total'))
-            ->where('store',$data)
-            ->first();*/
-
-
         }
 
         //total customer
         $customer = Subwaycustomer::count();
 
         //count order
-        $itemscount = Order::count();
+        $date = date('Y-m-d');
+        $itemscount = Order::where('itemdate',$date)->count();
         $orderscount = DB::table('orders')
+            ->where('itemdate',$date)
             ->select('orderid', DB::raw('count(orderid) as total'))
             ->groupBy('orderid')
             ->get();
  
         //total amount
-        $amount = Order::select(DB::raw('sum(quantity * price) as total'))->first();
+        $amount = Order::where('itemdate',$date)
+        ->select(DB::raw('sum(quantity * price) as total'))->first();
 
         return view('subway.subwaydashboard',['orderinfo' => $orderdetail,
         'itemscount' => $itemscount,
