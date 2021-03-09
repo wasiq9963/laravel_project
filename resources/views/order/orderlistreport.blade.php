@@ -49,13 +49,16 @@
         const headers = new Headers();
         
                const dataRequest = new Request(
-                //'{{'storereport/fetch'}}',   
+                "{{url('storereport/fetch?store='.$store.'&from='.$from.'&to='.$to')}}",   
+
+                //'{{'/storereport/fetch?store='.$store.'&from='.$from.'&to='.$to}}',   
                  {
                   headers: headers,
                  }
               );
-        const response = await fetch({{$data}});
+        const response = await fetch(dataRequest);
         const data = await response.json();
+        console.log(data);
         return data;
       }
 

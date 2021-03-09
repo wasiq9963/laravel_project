@@ -19,7 +19,7 @@
     <div class="row">
         <div class="col-md-8">
             <div class="card">
-                <form action="{{url('storereport/fetch')}}">
+                <form action="{{url('orderslist/report')}}">
                     @csrf
                     <!-- /.card-header -->
                     <div class="card-body">
@@ -28,7 +28,7 @@
                                 <div class="form-group">
                                     <label>Store</label>
                                     <select class="form-control" name="store" style="width: 100%;">
-                                        <option selected="selected">All Stores</option>
+                                        <option value="" selected="selected">All Stores</option>
                                         @foreach ($store as $item)
                                         <option value="{{$item -> storename}}">{{$item -> storename}}</option>
                                         

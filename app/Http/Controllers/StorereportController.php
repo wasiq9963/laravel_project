@@ -24,17 +24,31 @@ class StorereportController extends Controller
         $from = $req->from;
         $to = $req->to;
 
-        $order = DB::table('orders')->where('store',$store)
-        ->orwhereBetween('itemdate', array($from, $to))
-        ->select('*',DB::raw('count(orderid) as num'),DB::raw('SUM(quantity * price) as amount'))
-        ->groupby('orderid')
-        ->orderby('store')
-        ->orderby('itemdate')
-        ->get();
+        if ($store == null)
+        {
+            $order = DB::table('orders')
+            ->whereBetween('itemdate', array($from, $to))
+            ->select('*',DB::raw('count(orderid) as num'),DB::raw('SUM(quantity * price) as amount'))
+            ->groupby('orderid')
+            ->orderby('store')
+            ->orderby('itemdate')
+            ->get();
+            return response()->json($order); 
+        }
+        else
+        {
+            dd($from);
 
-
-        //return response()->json($order);
-        return view('order.orderlistreport',['data' => $order]);
+            $order = DB::table('orders1')
+            ->where('store',$store)
+            ->whereBetween('itemdate', array($from, $to))
+            ->select('*',DB::raw('count(orderid) as num'),DB::raw('SUM(quantity * price) as amount'))
+            ->groupby('orderid')
+            ->orderby('store')
+            ->orderby('itemdate')
+            ->get();
+            return response()->json($order);
+        }
 
          /*$filename = "order.json";
          $handle = fopen($filename, 'w+');
@@ -42,5 +56,14 @@ class StorereportController extends Controller
          fclose($handle);
          $headers = array('Content-type'=> 'application/json');
          return response()->download($filename,'order.json',$headers);*/
+    }
+
+    public function report(Request $req)
+    {
+        //dd($req->all());
+        $storename = $req->store;
+        $fromdate = $req->from;
+        $todate = $req->to;
+        return view('order.orderlistreport',['store' => $storename, 'from' => $fromdate, 'to' => $todate]);
     }
 }

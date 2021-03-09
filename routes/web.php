@@ -115,7 +115,7 @@ Route::post('user/update','UserController@update');
 //=======================================Store Report
 Route::get('storereport','StorereportController@index');
 Route::get('storereport/fetch','StorereportController@storefetch');
-//Route::get('orderslist/report','StorereportController@report');
+Route::get('orderslist/report','StorereportController@report');
 
 
 
