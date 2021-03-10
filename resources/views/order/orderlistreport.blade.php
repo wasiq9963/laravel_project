@@ -47,16 +47,19 @@
       async function loadData() {
         // Use the Fetch Api to pull the data https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
         const headers = new Headers();
-        
-               const dataRequest = new Request(
-                "{{url('storereport/fetch?store='.$store.'&from='.$from.'&to='.$to')}}",   
 
-                //'{{'/storereport/fetch?store='.$store.'&from='.$from.'&to='.$to}}',   
+        const url = '{{'/storereport/fetch?store='.$store.'&from='.$from.'&to='.$to}}';
+        const parseResult = new DOMParser().parseFromString(url, "text/html");
+        const parsedUrl = parseResult.documentElement.textContent;
+        
+               /*const dataRequest = new Request(
+
+                '{{'/storereport/fetch?store='.$store.'&from='.$from.'&to='.$to}}',   
                  {
                   headers: headers,
                  }
-              );
-        const response = await fetch(dataRequest);
+              );*/
+        const response = await fetch(parsedUrl);
         const data = await response.json();
         console.log(data);
         return data;

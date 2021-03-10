@@ -37,9 +37,9 @@ class StorereportController extends Controller
         }
         else
         {
-            dd($from);
+            //dd($from);
 
-            $order = DB::table('orders1')
+            $order = DB::table('orders')
             ->where('store',$store)
             ->whereBetween('itemdate', array($from, $to))
             ->select('*',DB::raw('count(orderid) as num'),DB::raw('SUM(quantity * price) as amount'))
@@ -64,6 +64,7 @@ class StorereportController extends Controller
         $storename = $req->store;
         $fromdate = $req->from;
         $todate = $req->to;
+        $input   = $req->getQueryString();
         return view('order.orderlistreport',['store' => $storename, 'from' => $fromdate, 'to' => $todate]);
     }
 }

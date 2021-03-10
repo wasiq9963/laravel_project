@@ -6,7 +6,14 @@
       <div class="row mb-2">
         <div class="col-sm-6">
           <h1 class="m-0">Dashboard For <span class="text-primary">{{date('Y-m-d')}}</span></h1>
-        </div><!-- /.col -->
+        </div>
+        @if (Auth::user()->role != 'Admin')
+        <div class="col-sm-6">
+          <h1 class="m-0">Store <span class="text-primary">{{Auth::user()->store}}</span></h1>
+        </div>
+            
+        @endif
+        
       </div><!-- /.row -->
     </div><!-- /.container-fluid -->
   </div>
@@ -24,7 +31,14 @@
             <div class="info-box-content">
               <span class="info-box-text">Orders</span>
               <span class="info-box-number">
+                @if ($orderscount->count() == 0)
+                <h4>{{$orderscount->count()}}</h4>
+
+                @else
                 <h1>{{$orderscount->count()}}</h1>
+
+                    
+                @endif
               </span>
             </div>
             <!-- /.info-box-content -->
@@ -38,7 +52,14 @@
 
             <div class="info-box-content">
               <span class="info-box-text">Items</span>
-              <span class="info-box-number"><h1>{{$itemscount}}</h1></span>
+              <span class="info-box-number">
+              @if ($itemscount == 0)
+              <h4>{{$itemscount}}</h4>   
+              @else
+              <h1>{{$itemscount}}</h1>
+
+              @endif
+            </span>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -55,7 +76,14 @@
 
             <div class="info-box-content">
               <span class="info-box-text">Sale Amount</span>
-              <span class="info-box-number"><h1>{{$amount->total}}</h1></span>
+              <span class="info-box-number">
+                @if ($amount->total == null)
+                <h4>0</h4></span>
+
+                @else
+                <h1>{{$amount->total}}</h1></span>
+
+                @endif
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -114,7 +142,7 @@
                         <td>{{$item -> orderid}}</td>
                         <td>{{$item -> store}}</td>
                         <td>{{$item -> items}}</td>
-                        <td>{{$item -> price}}</td>
+                        <td>{{$item -> total}}</td>
                         <td>{{$item -> itemdate}}</td>
                         <td>
                           @if ($item -> status == 'New Order')

@@ -11,12 +11,11 @@
           <div class="card">
             <div class="card-header">
               <div class="row">
-                <div class="col-sm-4">
-                  <h1 class="card-title">Active Orders</h1>
+                <div class="col-sm-8">
+                  <h1 class="card-title">Active Orders For <span class="text-primary">{{date('Y-m-d')}}</span></h1>
                 </div>
                 <div class="col-sm-4">
-                </div>
-                <div class="col-sm-4">
+                  {{--
                   @if(Auth::user()->role != 'Admin')
                     <h1 class="card-title">Store: <span>{{Auth::user()->store}}</span></h3>
                   @else
@@ -27,7 +26,7 @@
                       @endforeach
                     </select>
                       
-                  @endif
+                  @endif--}}
                   
                 </div>
                 

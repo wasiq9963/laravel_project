@@ -29,7 +29,7 @@ class OrderController extends Controller
         if (Auth::user()->role == 'Admin')
         {
             $orderdetail = DB::table('orders')->where('itemdate',$date)
-                    ->select('*',DB::raw('SUM(quantity) as quantity'),DB::raw('SUM(price) as price'))
+                    ->select('*',DB::raw('SUM(quantity) as quantity'),DB::raw('SUM(quantity * price) as price'))
                     ->groupby('orderid')
                     ->orderby('orderid','DESC')
                     ->get();
@@ -42,7 +42,7 @@ class OrderController extends Controller
             $orderdetail = DB::table('orders')
             ->where('itemdate',$date)
             ->where('store',$storedata)
-            ->select('*',DB::raw('SUM(quantity) as quantity'),DB::raw('SUM(price) as price'))
+            ->select('*',DB::raw('SUM(quantity) as quantity'),DB::raw('SUM(quantity * price) as price'))
             ->groupby('orderid')
             ->orderby('orderid','DESC')
             ->get();
