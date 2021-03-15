@@ -134,6 +134,7 @@
               </div>
             </div>
             <input type="hidden" name="did" id="did">
+            <input type="hidden" name="status" id="status">
           <input type="hidden" name="action" id="action" value="">
         </form>
         <div class="modal-footer justify-content-between">
@@ -218,6 +219,7 @@ $(document).ready(function(){
                 $('#stor_image').html("<img src={{URL::to('/')}}/images/" + data.result.image + " width='70' class='img-thumbnail'>");
                 $('#stor_image').append('<input type="hidden" name="hidden_image" value="'+data.result.image+'"/>');
                 $('#category').val(data.result.categoryid);
+                $('#status').val(data.result.status);
                 $('#did').val(prouid);
 
                 $('#promodal').modal('show');
@@ -279,22 +281,46 @@ $(document).ready(function(){
     });
 
 //Set delete modal
-  $('#example2 tbody').on('click','.deletemodal',function(){
-    $('#prodeletemodal').modal('show');
-    var prodid;
-    prodid = $(this).attr('id');
-    $('#deletebtn').click(function(){
-        $.ajax({
-            url: 'item/delete/' + prodid,
-            success:function(data)
-            {
-              $('#prodeletemodal').modal('hide');
-              location.reload();           
-            }
-        })
-    });
+    $('#example2 tbody').on('click','.deletemodal',function(){
+      $('#prodeletemodal').modal('show');
+      var prodid;
+      prodid = $(this).attr('id');
+      $('#deletebtn').click(function(){
+          $.ajax({
+              url: 'item/delete/' + prodid,
+              success:function(data)
+              {
+                if (data.msg)
+                {
+                  const Toast = Swal.mixin({
+                  toast: true,
+                  position: 'top',
+                  showConfirmButton: false,
+                  timer: 3000,
+                  timerProgressBar: true,
+                  didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                    }
+                  })
 
-});
+                  Toast.fire({
+                    icon: 'info',
+                    title: data.msg
+                  })
+                  $('#prodeletemodal').modal('hide');
+                }
+                else
+                {
+                  $('#prodeletemodal').modal('hide');
+                  location.reload();
+                }
+                           
+              }
+          })
+      });
+
+    });
 });
 </script>
 

@@ -14,26 +14,10 @@
                 <div class="col-sm-8">
                   <h1 class="card-title">Active Orders For <span class="text-primary">{{date('Y-m-d')}}</span></h1>
                 </div>
-                <div class="col-sm-4">
-                  {{--
-                  @if(Auth::user()->role != 'Admin')
-                    <h1 class="card-title">Store: <span>{{Auth::user()->store}}</span></h3>
-                  @else
-                    <select class="form-control" name="store" id="store">
-                      <option value="">Select Store</option>
-                      @foreach ($store as $item)
-                        <option value="{{$item -> storename}}">{{$item -> storename}}</option>
-                      @endforeach
-                    </select>
-                      
-                  @endif--}}
-                  
+                <div class="col-sm-4"> 
                 </div>
-                
               </div>
-              
             </div>
-            <!-- /.card-header -->
             <div class="card-body">
               <table id="example2" class="table table-bordered table-striped">
                 <thead>
@@ -58,17 +42,33 @@
                       <td>{{$item -> itemdate}}</td>
                       <td>
                         @if ($item -> status == 'New Order')
-                        <div class="badge badge-success">
+                        <div class="badge badge-danger">
                           {{$item -> status}}
                         </div> 
-                        @endif
-                        @if ($item -> status == 'Viewed')
+                        @elseif ($item -> status == 'Processing')
                         <div class="badge badge-warning">
                           {{$item -> status}}
                         </div>
-                        @endif
+                        @elseif ($item -> status == 'Order Send')
+                        <div class="badge badge-info">
+                          {{$item -> status}}
+                        </div>
+                        @else 
+                        <div class="badge badge-success">
+                          {{$item -> status}}
+                        </div>
+                        @endif 
+                          <span class="dropdown">
+                            <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
+                              Status
+                            </button>
+                            <div class="dropdown-menu">
+                              <button class="dropdown-item status" id="{{$item -> orderid}}" data-id="Order Send">Order Send</a>
+                              <button class="dropdown-item status" id="{{$item -> orderid}}" data-id="Delivered">Order Delivered</a>
+                            </div>
+                          </span>
                         </td>
-                        <td>                       {{--url order/report/--}}
+                        <td>
                           <a target="_blank" href="{{url('order/report/'.$item -> orderid)}}" class="btn btn-block btn-primary btn-sm"><i class="fa fa-print"></i> Print</a>
                         </td>
                     </tr>
@@ -82,7 +82,7 @@
                   <th>Quantities</th>
                   <th>Total Amount</th>
                   <th>Order Date</th>
-                  <th>Progress</th>
+                  <th>Progress</th>'
                   <th>Action</th>
                 </tr>
                 </tfoot>
@@ -133,6 +133,24 @@ $(document).ready(function(){
   {
         location.reload();
   },60000);
+
+  $('#example2 tbody').on('click','.status',function(){
+
+    var id = $(this).attr('id');
+    var status = $(this).data('id');
+    
+    $.ajax({
+      url: 'order/status',
+      data: {id:id,status:status},
+      success: function()
+      {
+        location.reload();
+      }
+
+    });
+
+
+  });
 
   /*fetch();
   $('#store').change(function(){

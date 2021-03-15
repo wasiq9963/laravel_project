@@ -9,7 +9,11 @@
         </div>
         @if (Auth::user()->role != 'Admin')
         <div class="col-sm-6">
-          <h1 class="m-0">Store <span class="text-primary">{{Auth::user()->store}}</span></h1>
+          <h1 class="m-0">Store: <span class="text-primary">{{Auth::user()->store}}</span></h1>
+        </div>
+        @else 
+        <div class="col-sm-6">
+          <h1 class="m-0">All <span class="text-primary">Stores</span></h1>
         </div>
             
         @endif
@@ -26,7 +30,7 @@
       <div class="row">
         <div class="col-12 col-sm-6 col-md-3">
           <div class="info-box">
-            <span class="info-box-icon bg-info elevation-1"><i class="fas fa-cog"></i></span>
+            <span class="info-box-icon bg-info elevation-1"><i class="fas fa-inbox"></i></span>
 
             <div class="info-box-content">
               <span class="info-box-text">Orders</span>
@@ -48,7 +52,7 @@
         <!-- /.col -->
         <div class="col-12 col-sm-6 col-md-3">
           <div class="info-box mb-3">
-            <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-thumbs-up"></i></span>
+            <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-tag"></i></span>
 
             <div class="info-box-content">
               <span class="info-box-text">Items</span>
@@ -146,15 +150,22 @@
                         <td>{{$item -> itemdate}}</td>
                         <td>
                           @if ($item -> status == 'New Order')
-                          <div class="badge badge-success">
-                            {{$item -> status}}
-                          </div> 
-                          @endif
-                          @if ($item -> status == 'Viewed')
-                          <div class="badge badge-warning">
-                            {{$item -> status}}
-                          </div>
-                          @endif
+                        <div class="badge badge-danger">
+                          {{$item -> status}}
+                        </div> 
+                        @elseif ($item -> status == 'Processing')
+                        <div class="badge badge-warning">
+                          {{$item -> status}}
+                        </div>
+                        @elseif ($item -> status == 'Order Send')
+                        <div class="badge badge-info">
+                          {{$item -> status}}
+                        </div>
+                        @else 
+                        <div class="badge badge-success">
+                          {{$item -> status}}
+                        </div>
+                        @endif
                           </td>
                       </tr>
                       @endforeach

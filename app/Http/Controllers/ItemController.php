@@ -48,6 +48,7 @@ class ItemController extends Controller
             $item->price = $req->item_price;
             $item->image = $new_name;
             $item->categoryid = $req->category;
+            $item->status = 'Inactive';
             $item->save();
             //$req->session()->flash('msgsuccess','Record Inserted Successfully');
             //return redirect('/product/add');
@@ -63,7 +64,14 @@ class ItemController extends Controller
     public function delete(Request $req, $id)
     {
         $iteminfo = Item::where('itemid',$id)->first();
-        $iteminfo->delete();
+        if ($iteminfo->status == 'Active')
+        {
+            return response()->json(['msg' => 'Item is not deleted because item Is Active']);
+        }
+        else
+        {
+            $iteminfo->delete();
+        }
     }
     //update work
     public function editfetch(Request $req,$id)
@@ -114,6 +122,7 @@ class ItemController extends Controller
             $itempdate->price = $req->item_price;
             $itempdate->image = $image_name;
             $itempdate->categoryid = $req->category;
+            $itempdate->status = $req->status;
             $itempdate->save();
             return response()->json(['success' => 'Record Updated Successfully']);
     }

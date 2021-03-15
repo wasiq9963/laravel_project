@@ -84,6 +84,11 @@ Route::get('order/info','OrderController@orders');
 Route::get('orderdetail/{id}','OrderController@orderdetail');
 Route::get('order/report/{id}','OrderController@report');
 
+//order status update
+Route::get('order/status','OrderController@statusupdate');
+
+
+
 
 //=======================================Subway Store 
 Route::get('store','StoreController@index');
@@ -116,6 +121,34 @@ Route::post('user/update','UserController@update');
 Route::get('storereport','StorereportController@index');
 Route::get('storereport/fetch','StorereportController@storefetch');
 Route::get('orderslist/report','StorereportController@report');
+
+
+//=======================================SubDetail
+Route::get('subdetail','SubdetailController@index');
+
+
+//===========vegetable
+Route::post('vegetable/add','VegetableController@insert');
+
+//update route
+Route::get('vegetable/edit/{id}','VegetableController@edit');
+Route::post('vegetable/update','VegetableController@update');
+
+//delete
+Route::get('vegetable/delete/{id}','VegetableController@delete');
+
+//===========sauce
+Route::post('sauce/add','SauceController@insert');
+
+//update route
+Route::get('sauce/edit/{id}','SauceController@edit');
+Route::post('sauce/update','SauceController@update');
+
+//delete
+Route::get('sauce/delete/{id}','SauceController@delete');
+
+
+
 
 
 

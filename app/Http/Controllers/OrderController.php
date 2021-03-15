@@ -106,10 +106,27 @@ class OrderController extends Controller
 
         foreach ($order as $value)
         {
-            $value->status = 'Viewed';
-            $value->save();
+            if ($value->status == 'New Order')
+            {
+                $value->status = 'Processing';
+                $value->save();
+            }
+            
         }
 
         return view('subway.report',['id' =>$id]);
+    }
+
+    public function statusupdate(Request $req)
+    {
+        $id = $req->get('id');
+        $status = $req->get('status');
+
+        $order = Order::where('orderid',$id)->get();
+        foreach ($order as $value) 
+        {
+            $value->status = $status;
+            $value->save();
+        }
     }
 }

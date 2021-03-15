@@ -290,103 +290,26 @@
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="exampleInputEmail1">Vegetables?</label><br> 
+                      @foreach ($vegetable as $item)
                       <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input data" value="Lettuc" name="vegetable[]" id="vegetable1">
-                        <label class="custom-control-label" for="vegetable1">Lettuc</label>
+                        <input type="checkbox" class="custom-control-input data" value="{{$item -> vegetable}}" name="sauces[]" id="{{$item -> vegetable}}">
+                        <label class="custom-control-label" for="{{$item -> vegetable}}">{{$item -> vegetable}}</label>
                       </div>
-                      <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input data" value="Tomato" name="vegetable[]" id="vegetable2">
-                        <label class="custom-control-label" for="vegetable2">Tomato</label>
-                      </div>
-                      <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input data" value="Capsicum" name="vegetable[]" id="vegetable3">
-                        <label class="custom-control-label" for="vegetable3">Capsicum</label>
-                      </div>
-                      <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input data" value="Onion" name="vegetable[]" id="vegetable4">
-                        <label class="custom-control-label" for="vegetable4">Onion</label>
-                      </div>   
-                      <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input data" value="Cucumber" name="vegetable[]" id="vegetable5">
-                        <label class="custom-control-label" for="vegetable5">Cucumber</label>
-                      </div>
-                      <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input data" value="Jalapenos" name="vegetable[]" id="vegetable6">
-                        <label class="custom-control-label" for="vegetable6">Jalapenos</label>
-                      </div>   
-                      <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input data" value="Olives" name="vegetable[]" id="vegetable7">
-                        <label class="custom-control-label" for="vegetable7">Olives</label>
-                      </div>
-                      <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input data" value="Coleslaw" name="vegetable[]" id="vegetable8">
-                        <label class="custom-control-label" for="vegetable8">Coleslaw</label>
-                      </div>   
-                      <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input data" value="Pickles" name="vegetable[]" id="vegetable9">
-                        <label class="custom-control-label" for="vegetable9">Pickles</label>
-                      </div>                  
+                          
+                      @endforeach
+                                        
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="exampleInputEmail1">Sauces?</label><br> 
+                      @foreach ($sauce as $item)
                       <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input" value="Thousand Island" name="sauces[]" id="customCheck1">
-                        <label class="custom-control-label" for="customCheck1">Thousand Island</label>
+                        <input type="checkbox" class="custom-control-input data" value="{{$item -> sauce}}" name="vegetable[]" id="{{$item -> sauce}}">
+                        <label class="custom-control-label" for="{{$item -> sauce}}">{{$item -> sauce}}</label>
                       </div>
-                      <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input" value="Mayonaise" name="sauces[]" id="customCheck2">
-                        <label class="custom-control-label" for="customCheck2">Mayonaise</label>
-                      </div>
-                      <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input" value="Ketchup" name="sauces[]" id="customCheck3">
-                        <label class="custom-control-label" for="customCheck3">Ketchup</label>
-                      </div>
-                      <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input" value="Chilli Garlic" name="sauces[]" id="customCheck4">
-                        <label class="custom-control-label" for="customCheck4">Chilli Garlic</label>
-                      </div>   
-                      <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input" value="Southwest" name="sauces[]" id="customCheck5">
-                        <label class="custom-control-label" for="customCheck5">Southwest</label>
-                      </div>
-                      <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input" value="Honey mustard" name="sauces[]" id="customCheck6">
-                        <label class="custom-control-label" for="customCheck6">Honey mustard</label>
-                      </div>   
-                      <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input" value="Mustard" name="sauces[]" id="customCheck7">
-                        <label class="custom-control-label" for="customCheck7">Mustard</label>
-                      </div>
-                      <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input" value="Ceaser garlic" name="sauces[]" id="customCheck8">
-                        <label class="custom-control-label" for="customCheck8">Ceaser garlic</label>
-                      </div>   
-                      <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input" value="Sweet onion" name="sauces[]" id="customCheck9">
-                        <label class="custom-control-label" for="customCheck9">Sweet onion</label>
-                      </div>
-                      <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input" value="BBQ sauce" name="sauces[]" id="customCheck10">
-                        <label class="custom-control-label" for="customCheck10">BBQ sauce</label>
-                      </div>   
-                      <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input" value="Hot sauce" name="sauces[]" id="customCheck11">
-                        <label class="custom-control-label" for="customCheck11">Hot sauce</label>
-                      </div>
-                      <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input" value="Olive oil" name="sauces[]" id="customCheck12">
-                        <label class="custom-control-label" for="customCheck12">Olive oil</label>
-                      </div>   
-                      <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input" value="Cheesy Mayo" name="sauces[]" id="customCheck13">
-                        <label class="custom-control-label" for="customCheck13">Cheesy Mayo</label>
-                      </div>
-                      <div class="custom-control custom-checkbox custom-control-inline">
-                        <input type="checkbox" class="custom-control-input" value="Vinegar Sauce" name="sauces[]" id="customCheck14">
-                        <label class="custom-control-label" for="customCheck14">Vinegar Sauce</label>
-                      </div>                  
+                          
+                      @endforeach                  
                     </div>
                   </div>
                 </div>

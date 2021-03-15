@@ -27,6 +27,10 @@
   <link rel="stylesheet" href="{{asset('assets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css')}}">
   <!-- daterange picker -->
   <link rel="stylesheet" href="{{asset('assets/plugins/daterangepicker/daterangepicker.css')}}">
+
+  <script src="{{asset('assets/plugins/sweetalert2/sweetalert2.min.js')}}"></script>
+  <link rel="stylesheet" href="{{asset('assets/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css')}}">
+
 </head>
 <body class="hold-transition sidebar-mini">
 <!-- Site wrapper -->
@@ -215,6 +219,17 @@
       "responsive": true,
     });
     $('#example3').DataTable({
+      "paging": true,
+      "lengthChange": true,
+      "lengthMenu": [5, 10, 20, 50 ],
+      "searching": true,
+      "ordering": false,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+
+    $('.example4').DataTable({
       "paging": true,
       "lengthChange": true,
       "lengthMenu": [5, 10, 20, 50 ],

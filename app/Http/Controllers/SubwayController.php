@@ -14,6 +14,8 @@ use App\Subwaycustomer;
 use App\Order;
 use App\Orderdetail;
 use App\Store;
+use App\Vegetable;
+use App\Sauce;
 use DB;
 use Auth;
 class SubwayController extends Controller
@@ -30,8 +32,12 @@ class SubwayController extends Controller
 
         //fetch store
         $store = Store::all();
+        $vegetable = Vegetable::all();
+        $sauce = Sauce::all();
         
-        return view('subway.index',['categories' => $categories, 'store' => $store]);
+        return view('subway.index',['categories' => $categories, 
+        'store' => $store,'vegetable' => $vegetable,
+        'sauce' => $sauce]);
     }
     public function items(Request $req)
     {
@@ -200,6 +206,14 @@ class SubwayController extends Controller
                 $order->itemdate = $value->cart_date; 
                 $order->status = 'New Order';
                 $order->save();
+
+                //item status update work
+
+                $itemstatus = Item::where('itemid',$value->item_id)->first();
+                $itemstatus->status = 'Active';
+                $itemstatus->save();
+
+                //item delete from cart
                 $itemdelete = Cart::where('item_id',$value->item_id)->
                 where('session_id',$sessionid)->delete();
 

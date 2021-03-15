@@ -37,8 +37,6 @@ class StorereportController extends Controller
         }
         else
         {
-            //dd($from);
-
             $order = DB::table('orders')
             ->where('store',$store)
             ->whereBetween('itemdate', array($from, $to))
