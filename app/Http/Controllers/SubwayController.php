@@ -51,18 +51,22 @@ class SubwayController extends Controller
                 if ($query !='') 
                 {
                     $items = Item::where('categoryid', $id)->
+                    where('status','Active')->
                     orwhere('itemname','LIKE', '%'.$query.'%')->limit(12)->get();
                     return response()->json(['result' => $items]);
                 }
                 else
                 {
-                    $items = Item::where('categoryid', $id)->limit(12)->get();
+                    $items = Item::where('categoryid', $id)->
+                    where('status','Active')
+                    ->limit(12)->get();
                     return response()->json(['result' => $items]);
                 }
             }
             else
             {
-                    $items = Item::where('itemname','LIKE', '%'.$query.'%')->limit(12)->get();
+                    $items = Item::where('itemname','LIKE', '%'.$query.'%')->
+                    where('status','Active')->limit(12)->get();
                     return response()->json(['result' => $items]);
             }
         }
@@ -73,7 +77,8 @@ class SubwayController extends Controller
         {
             $id = $req->get('id');
             $singleitem = DB::table('items')
-            ->join('categories','items.categoryid','categories.id')->where('itemid',$id)->first();
+            ->join('categories','items.categoryid','categories.id')->where('itemid',$id)->
+            where('status','Active')->first();
             return response()->json(['result' => $singleitem]);
         }
     }
@@ -159,8 +164,13 @@ class SubwayController extends Controller
         {
             $sessionid = Session()->getId();
             $id = $req->get('id');
-            $cartitem = Cart::where('id',$id);
+            $cartitem = Cart::where('id',$id)->first();
+            $item = $cartitem->item_id;
+
+            $subdetail = Subdetail::where('itemid',$item)->first();
+            $subdetail->delete();
             $cartitem->delete();
+
             return response()->json(['result' => 'Item Removed']);
         }
     }
@@ -206,12 +216,6 @@ class SubwayController extends Controller
                 $order->itemdate = $value->cart_date; 
                 $order->status = 'New Order';
                 $order->save();
-
-                //item status update work
-
-                $itemstatus = Item::where('itemid',$value->item_id)->first();
-                $itemstatus->status = 'Active';
-                $itemstatus->save();
 
                 //item delete from cart
                 $itemdelete = Cart::where('item_id',$value->item_id)->

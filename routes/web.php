@@ -122,12 +122,10 @@ Route::get('storereport','StorereportController@index');
 Route::get('storereport/fetch','StorereportController@storefetch');
 Route::get('orderslist/report','StorereportController@report');
 
+//=======================================vegetable
+Route::get('vegetable','VegetableController@index');
 
-//=======================================SubDetail
-Route::get('subdetail','SubdetailController@index');
 
-
-//===========vegetable
 Route::post('vegetable/add','VegetableController@insert');
 
 //update route
@@ -137,7 +135,10 @@ Route::post('vegetable/update','VegetableController@update');
 //delete
 Route::get('vegetable/delete/{id}','VegetableController@delete');
 
-//===========sauce
+//=======================================sauce
+Route::get('sauce','SauceController@index');
+
+
 Route::post('sauce/add','SauceController@insert');
 
 //update route

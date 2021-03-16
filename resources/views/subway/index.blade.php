@@ -276,12 +276,12 @@
                     <div class="form-group">
                       <label for="exampleInputEmail1">Extra Meat Topping Is Free</label><br>
                       <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" id="extra3" id="extra" name="extra" class="custom-control-input" value="No" checked>
-                        <label class="custom-control-label" for="extra3">No</label>
+                        <input type="radio" id="no" name="extra" class="custom-control-input" value="No">
+                        <label class="custom-control-label" for="no">No</label>
                       </div>
                       <div class="custom-control custom-radio custom-control-inline">
-                        <input type="radio" id="extra4" id="extra" name="extra" value="Yes" class="custom-control-input">
-                        <label class="custom-control-label" for="extra4">Yes</label>
+                        <input type="radio" id="yes" name="extra" value="Yes" class="custom-control-input">
+                        <label class="custom-control-label" for="yes">Yes</label>
                       </div>                  
                     </div>
                   </div>
@@ -294,8 +294,7 @@
                       <div class="custom-control custom-checkbox custom-control-inline">
                         <input type="checkbox" class="custom-control-input data" value="{{$item -> vegetable}}" name="sauces[]" id="{{$item -> vegetable}}">
                         <label class="custom-control-label" for="{{$item -> vegetable}}">{{$item -> vegetable}}</label>
-                      </div>
-                          
+                      </div> 
                       @endforeach
                                         
                     </div>
@@ -891,6 +890,18 @@ $(document).ready(function(){
             $('#id').val(data.result.cartitem_id);
             $('#cheese').val(data.result.cheese);
             $('#extracheese').val(data.result.extra_cheese);
+
+            if($('#no').val() == data.result.extra_meat_topping_is_free)
+                {
+                  $('#no').prop('checked',true);
+                }
+                else
+                {
+                  $('#yes').prop('checked',true);
+
+                }
+
+
             var b=data.result.sauces;
             var arr = b.split(",");
             //alert(arr.length);
@@ -917,9 +928,6 @@ $(document).ready(function(){
                 }
               })
             }
-            /*$('#sauces').val(data.result.sauces);
-            $('#extratopping').val(data.result.extra_topping);*/
-            $('[name="extra"]').val(data.result.extra_meat_topping_is_free).prop("checked", true);
             $('#detailmodal').modal('show');
           }
           if (data.error)

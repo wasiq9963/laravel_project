@@ -15,6 +15,12 @@ class VegetableController extends Controller
     {
         $this->middleware('auth');
     }
+    public function index(Request $req)
+    {
+        $vegetable = Vegetable::all();
+
+        return view('subdetail.vegetable',['vegetable' => $vegetable]);
+    }
     //insert
     public function insert(Request $req)
     {

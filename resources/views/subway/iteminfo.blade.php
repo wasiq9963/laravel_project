@@ -127,6 +127,18 @@
                               @endif
                           </select>
                     </div>
+
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Status</label><br>
+                      <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" id="active" name="status" class="custom-control-input" value="Active">
+                        <label class="custom-control-label" for="active">Active</label>
+                      </div>
+                      <div class="custom-control custom-radio custom-control-inline">
+                        <input type="radio" id="inactive" name="status" value="Inactive" class="custom-control-input">
+                        <label class="custom-control-label" for="inactive">Inactive</label>
+                      </div>                  
+                    </div>
                 </div>
                 <div class="col-md-4">
                     <img  src="" id="proimg" class="img-thumbnail" width="250" height="250">
@@ -134,7 +146,6 @@
               </div>
             </div>
             <input type="hidden" name="did" id="did">
-            <input type="hidden" name="status" id="status">
           <input type="hidden" name="action" id="action" value="">
         </form>
         <div class="modal-footer justify-content-between">
@@ -219,7 +230,17 @@ $(document).ready(function(){
                 $('#stor_image').html("<img src={{URL::to('/')}}/images/" + data.result.image + " width='70' class='img-thumbnail'>");
                 $('#stor_image').append('<input type="hidden" name="hidden_image" value="'+data.result.image+'"/>');
                 $('#category').val(data.result.categoryid);
-                $('#status').val(data.result.status);
+
+
+                if($('#active').val() == data.result.status)
+                {
+                  $('#active').prop('checked',true);
+                }
+                else
+                {
+                  $('#inactive').prop('checked',true);
+
+                }
                 $('#did').val(prouid);
 
                 $('#promodal').modal('show');

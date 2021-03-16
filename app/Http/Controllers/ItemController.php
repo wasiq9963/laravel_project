@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Item;
 use App\Category;
+use App\Order;
 use DB;
 
 class ItemController extends Controller
@@ -48,7 +49,7 @@ class ItemController extends Controller
             $item->price = $req->item_price;
             $item->image = $new_name;
             $item->categoryid = $req->category;
-            $item->status = 'Inactive';
+            $item->status = $req->status;
             $item->save();
             //$req->session()->flash('msgsuccess','Record Inserted Successfully');
             //return redirect('/product/add');
@@ -63,13 +64,14 @@ class ItemController extends Controller
     //delete work
     public function delete(Request $req, $id)
     {
-        $iteminfo = Item::where('itemid',$id)->first();
-        if ($iteminfo->status == 'Active')
+        $order = Order::where('itemid',$id)->first();
+        if ($order != null)
         {
             return response()->json(['msg' => 'Item is not deleted because item Is Active']);
         }
         else
         {
+            $iteminfo = Item::where('itemid',$id)->first();
             $iteminfo->delete();
         }
     }

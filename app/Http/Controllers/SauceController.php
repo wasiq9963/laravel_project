@@ -14,6 +14,12 @@ class SauceController extends Controller
     {
         $this->middleware('auth');
     }
+    public function index(Request $req)
+    {
+        $sauce = Sauce::all();
+
+        return view('subdetail.sauce',['sauce' => $sauce]);
+    }
     //insert
     public function insert(Request $req)
     {
